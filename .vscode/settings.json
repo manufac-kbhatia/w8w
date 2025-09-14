@@ -1,0 +1,29 @@
+{
+  "eslint.workingDirectories": [
+    {
+      "mode": "auto"
+    }
+  ],
+  "editor.formatOnSave": true,
+  "prettier.prettierPath": "./node_modules/prettier",
+  "actionButtons": {
+    "loadNpmCommands": false,
+    "commands": [
+      {
+        "name": "Lint",
+        "singleInstance": true,
+        "command": "npm run lint" // This is executed in the terminal.
+      },
+      {
+        "name": "Prettify",
+        "singleInstance": true,
+        "command": "npm run format" // This is executed in the terminal.
+      },
+      {
+        "name": "web",
+        "singleInstance": true,
+        "command": "cd apps/web && npm run dev" // This is executed in the terminal.
+      }
+    ]
+  }
+}
