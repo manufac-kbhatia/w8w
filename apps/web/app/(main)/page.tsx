@@ -7,7 +7,7 @@ import { Tab, TABS } from "@/utils";
 
 export default function Page() {
   const [rootRef, setRootRef] = useState<HTMLDivElement | null>(null);
-  const [tab, setTab] = useState<Tab>(TABS.workflow);
+  const [tab, setTab] = useState<Tab>(TABS.credential);
   const [controlsRefs, setControlsRefs] = useState<
     Record<string, HTMLButtonElement | null>
   >({});

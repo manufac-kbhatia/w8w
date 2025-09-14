@@ -11,11 +11,12 @@ import {
   NumberInput,
   Title,
 } from "@mantine/core";
+import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { ICredentialType, NodePropertyTypes } from "@w8w/db/types";
 import Image from "next/image";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 
 export const Credentials = () => {
   const [credTypes, setCredTypes] = useState<ICredentialType[]>([]);
@@ -28,7 +29,15 @@ export const Credentials = () => {
     addCredModalOpened,
     { open: openAddCredModal, close: closeAddCredModal },
   ] = useDisclosure(false);
-  const [selectedCred, setSelectedCred] = useState<ICredentialType | null>(null);
+  const [selectedCred, setSelectedCred] = useState<ICredentialType | null>(
+    null,
+  );
+
+
+
+  const form = useForm({
+    mode: "uncontrolled",
+  });
 
   useEffect(() => {
     const getCredentialsJson = async () => {
@@ -56,15 +65,27 @@ export const Credentials = () => {
   const handleSelectCredType = (credName: string | null) => {
     if (credName) {
       const cred = credTypes.find((credType) => credType.name === credName);
-      if (cred)
-      setSelectedCred(cred);
+      if (cred) {
+        setSelectedCred(cred);
+        const values = Object.fromEntries(
+        cred.properties.map((property) => [
+          property.name,
+          // property.default ??
+            (property.type === NodePropertyTypes.multiSelect ? [property.default ?? ""] : property.default ?? ""),
+        ]),
+      )
+
+        form.initialize(values);
+      };
     }
   };
 
   const handleCancel = () => {
     setSelectedCred(null);
     closeAddCredModal();
-  }
+    form.reset();
+  };
+  
 
   return (
     <Fragment>
@@ -115,49 +136,70 @@ export const Credentials = () => {
         }
       >
         <Stack>
-          <Stack>
-            {selectedCred?.properties.map((property) => {
-              {
-                console.log(property.name);
-              }
-              switch (property.type) {
-                case NodePropertyTypes.string:
-                  return (
-                    <TextInput
-                      key={property.id}
-                      label={property.displayName}
-                      placeholder={property.placeholder}
-                      required={property.required}
-                      description={property.description}
-                      defaultValue={property.default}
-                    />
-                  );
+           {/* TODO: send the value to backend */}
+          <form onSubmit={form.onSubmit((values) => console.log(values))}>
+            <Stack>
+              {selectedCred?.properties.map((property) => {
+                switch (property.type) {
+                  case NodePropertyTypes.string:
+                    return (
+                      <TextInput
+                        label={property.displayName}
+                        placeholder={property.placeholder}
+                        required={property.required}
+                        description={property.description}
+                        key={form.key(property.name)}
+                        name={property.name}
+                        {...form.getInputProps(property.name)}
+                      />
+                    );
 
-                case NodePropertyTypes.number: 
-                return (
-                  <NumberInput
-                      key={property.id}
-                      label={property.displayName}
-                      placeholder={property.placeholder}
-                      required={property.required}
-                      description={property.description}
-                      defaultValue={property.default}
-                    />
-                )
-                
-              }
-            })}
-          </Stack>
-            <Group justify="flex-end">
-               <Button>Save</Button>
-               <Button color="red" onClick={handleCancel}>Cancel</Button>
+                  case NodePropertyTypes.number:
+                    return (
+                      <NumberInput
+                        key={form.key(property.name)}
+                        label={property.displayName}
+                        placeholder={property.placeholder}
+                        required={property.required}
+                        description={property.description}
+                        name={property.name}
+                        {...form.getInputProps(property.name)}
+                      />
+                    );
+                  case NodePropertyTypes.multiSelect:
+                    return (
+                      <MultiSelect
+                        key={form.key(property.name)}
+                        data={property.options?.map((option) => ({
+                          value: option.name ?? "",
+                          label: option.description ?? "",
+                        }))}
+                        label={property.displayName}
+                        placeholder={property.placeholder}
+                        required={property.required}
+                        description={property.description}
+                        name={property.name}
+                        {...form.getInputProps(property.name)}
+                      />
+                    );
+                }
+              })}
+            </Stack>
+            <Group justify="flex-end" mt="lg">
+              <Button type="submit">Save</Button>
+              <Button color="red" onClick={handleCancel}>
+                Cancel
+              </Button>
             </Group>
+          </form>
         </Stack>
       </Modal>
 
-      <Button variant="default" onClick={openCreateCredModal}>
-        Create Credentials
-      </Button>
+      <Group justify="flex-end">
+        <Button variant="default" onClick={openCreateCredModal}>
+          Create Credentials
+        </Button>
+      </Group>
     </Fragment>
   );
 };

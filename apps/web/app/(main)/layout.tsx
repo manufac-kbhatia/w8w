@@ -1,6 +1,10 @@
 "use client";
 import { ActionIcon, AppShell, Stack, Text, ThemeIcon } from "@mantine/core";
-import { IconAutomaticGearboxFilled, IconPlus } from "@tabler/icons-react";
+import {
+  IconAutomaticGearboxFilled,
+  IconHome,
+  IconPlus,
+} from "@tabler/icons-react";
 
 export default function Layout({
   children,
@@ -22,7 +26,10 @@ export default function Layout({
             <IconAutomaticGearboxFilled />
           </ThemeIcon>
           <ActionIcon variant="light">
-            <IconPlus />
+            <IconHome size={20} />
+          </ActionIcon>
+          <ActionIcon variant="light">
+            <IconPlus size={20} />
           </ActionIcon>
         </Stack>
       </AppShell.Navbar>

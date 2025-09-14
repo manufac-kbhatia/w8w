@@ -80,6 +80,7 @@ export interface INodeProperties {
   displayName: string;
   name: string;
   type: NodePropertyType;
+  options?: Array<INodeProperties>;
   description?: string;
   placeholder?: string;
   required?: boolean;
@@ -91,7 +92,7 @@ export const NodePropertyTypes = {
   button: "button",
   dateTime: "dateTime",
   json: "json",
-  multiSelect: "options", // fixed typo from "mutiSelect"
+  multiSelect: "options",
   number: "number",
   select: "option",
   string: "string",

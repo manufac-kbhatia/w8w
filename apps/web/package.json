@@ -12,12 +12,13 @@
   },
   "dependencies": {
     "@mantine/core": "^8.3.1",
+    "@mantine/form": "^8.3.1",
     "@mantine/hooks": "^8.3.1",
     "@repo/ui": "*",
+    "@w8w/db": "*",
     "next": "^15.5.0",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "@w8w/db": "*"
+    "react-dom": "^19.1.0"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
