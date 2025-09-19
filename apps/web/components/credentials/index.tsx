@@ -15,7 +15,7 @@ import {
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { ICredentialType, NodePropertyTypes } from "@w8w/db/types";
+import { ICredentialType, NodePropertyTypes } from "@w8w/typeorm/types";
 import axios from "axios";
 import Image from "next/image";
 import { Fragment, useEffect, useState } from "react";
@@ -163,8 +163,7 @@ export const Credentials = () => {
           />
           <form
             onSubmit={form.onSubmit((values) =>
-              // handleCredSubmit(JSON.stringify(values)),
-              console.log(values)
+              handleCredSubmit(JSON.stringify(values))
             )}
           >
             <Stack>
