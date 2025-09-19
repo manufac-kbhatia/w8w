@@ -71,7 +71,6 @@ export const Credentials = () => {
         const values = Object.fromEntries(
           cred.properties.map((property) => [
             property.name,
-            // property.default ??
             property.type === NodePropertyTypes.multiSelect
               ? [property.default ?? ""]
               : (property.default ?? ""),
