@@ -14,7 +14,7 @@ export default function Layout({
   return (
     <AppShell
       header={{ height: 50 }}
-      navbar={{ width: 70, breakpoint: "sm" }}
+      navbar={{ width: 70, breakpoint: "xs" }}
       padding="md"
     >
       <AppShell.Header>
@@ -33,7 +33,13 @@ export default function Layout({
           </ActionIcon>
         </Stack>
       </AppShell.Navbar>
-      <AppShell.Main>{children}</AppShell.Main>
+      <AppShell.Main
+        style={{
+          height: "100%",
+        }}
+      >
+        {children}
+      </AppShell.Main>
     </AppShell>
   );
 }

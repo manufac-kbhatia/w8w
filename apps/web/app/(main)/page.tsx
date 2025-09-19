@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { FloatingIndicator, Stack, Tabs, Text, Title } from "@mantine/core";
-import classes from "./Demo.module.css";
+import classes from "./Tabs.module.css";
 import { Credentials } from "@/components/credentials";
 import { Tab, TABS } from "@/utils";
 

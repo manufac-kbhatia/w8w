@@ -15,15 +15,19 @@
     "@mantine/form": "^8.3.1",
     "@mantine/hooks": "^8.3.1",
     "@repo/ui": "*",
-    "@w8w/db": "*",
+    "@w8w/typeorm": "*",
+    "@xyflow/react": "^12.8.4",
+    "axios": "^1.12.2",
     "next": "^15.5.0",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "reflect-metadata": "^0.2.2",
+    "zod": "^4.1.8"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
-    "@types/node": "^22.15.3",
+    "@types/node": "^22.18.4",
     "@types/react": "19.1.0",
     "@types/react-dom": "19.1.1",
     "eslint": "^9.34.0",

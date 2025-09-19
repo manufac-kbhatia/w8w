@@ -1,10 +1,16 @@
 import { Entity, ObjectIdColumn, ObjectId, Column } from "typeorm";
 
 @Entity()
-export class User {
+export class Credential {
   @ObjectIdColumn()
   id: ObjectId;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
+
+  @Column()
+  type: string;
+
+  @Column()
+  data: string;
 }

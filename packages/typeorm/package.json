@@ -1,5 +1,5 @@
 {
-  "name": "@w8w/db",
+  "name": "@w8w/typeorm",
   "version": "0.0.1",
   "description": "Awesome project developed with TypeORM.",
   "devDependencies": {
@@ -12,8 +12,11 @@
     "typeorm": "0.3.26",
     "mongodb": "^6.15.0"
   },
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "typeorm": "typeorm-ts-node-commonjs"
+  },
   "exports": {
-    ".": "./src/index.ts",
-    "./types": "./src/types/interface.ts"
+    ".": "./src/index.ts"
   }
 }

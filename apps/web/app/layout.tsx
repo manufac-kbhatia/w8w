@@ -34,7 +34,10 @@ export default function RootLayout({
       <head>
         <ColorSchemeScript />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable}`}
+        style={{ height: "100vh", overflow: "hidden" }}
+      >
         <MantineProvider>
           <Notifications />
           {children}

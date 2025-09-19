@@ -10,13 +10,15 @@ import {
   MultiSelect,
   NumberInput,
   Title,
+  PasswordInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { ICredentialType, NodePropertyTypes } from "@w8w/db/types";
+import axios from "axios";
 import Image from "next/image";
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 export const Credentials = () => {
   const [credTypes, setCredTypes] = useState<ICredentialType[]>([]);
@@ -32,8 +34,7 @@ export const Credentials = () => {
   const [selectedCred, setSelectedCred] = useState<ICredentialType | null>(
     null,
   );
-
-
+  const [credName, setCredName] = useState<string>("");
 
   const form = useForm({
     mode: "uncontrolled",
@@ -68,24 +69,36 @@ export const Credentials = () => {
       if (cred) {
         setSelectedCred(cred);
         const values = Object.fromEntries(
-        cred.properties.map((property) => [
-          property.name,
-          // property.default ??
-            (property.type === NodePropertyTypes.multiSelect ? [property.default ?? ""] : property.default ?? ""),
-        ]),
-      )
+          cred.properties.map((property) => [
+            property.name,
+            // property.default ??
+            property.type === NodePropertyTypes.multiSelect
+              ? [property.default ?? ""]
+              : (property.default ?? ""),
+          ]),
+        );
 
         form.initialize(values);
-      };
+      }
     }
   };
 
   const handleCancel = () => {
     setSelectedCred(null);
     closeAddCredModal();
+    setCredName("");
     form.reset();
   };
-  
+
+  const handleCredSubmit = async (data: string) => {
+    const type = selectedCred?.name;
+    const response = await axios.post("/api/credential", {
+      data,
+      type,
+      name: credName,
+    });
+    console.log(response);
+  };
 
   return (
     <Fragment>
@@ -108,13 +121,17 @@ export const Credentials = () => {
             })}
             onChange={(value) => handleSelectCredType(value)}
           />
-          <Button
-            w="fit-content"
-            disabled={selectedCred ? false : true}
-            onClick={handleConfirm}
-          >
-            confirm
-          </Button>
+          <Group justify="flex-end">
+            <Button
+              disabled={selectedCred ? false : true}
+              onClick={handleConfirm}
+            >
+              Confirm
+            </Button>
+            <Button color="red" onClick={closeCreateCredModal}>
+              Cancel
+            </Button>
+          </Group>
         </Stack>
       </Modal>
 
@@ -136,14 +153,36 @@ export const Credentials = () => {
         }
       >
         <Stack>
-           {/* TODO: send the value to backend */}
-          <form onSubmit={form.onSubmit((values) => console.log(values))}>
+          {/* TODO: send the value to backend */}
+          <TextInput
+            label="Name for the credential"
+            placeholder="Please enter a name for the credential"
+            required
+            value={credName}
+            onChange={(e) => setCredName(e.currentTarget.value)}
+          />
+          <form
+            onSubmit={form.onSubmit((values) =>
+              // handleCredSubmit(JSON.stringify(values)),
+              console.log(values)
+            )}
+          >
             <Stack>
               {selectedCred?.properties.map((property) => {
                 switch (property.type) {
                   case NodePropertyTypes.string:
-                    return (
+                    return !property.typeOptions?.password ? (
                       <TextInput
+                        label={property.displayName}
+                        placeholder={property.placeholder}
+                        required={property.required}
+                        description={property.description}
+                        key={form.key(property.name)}
+                        name={property.name}
+                        {...form.getInputProps(property.name)}
+                      />
+                    ) : (
+                      <PasswordInput
                         label={property.displayName}
                         placeholder={property.placeholder}
                         required={property.required}
