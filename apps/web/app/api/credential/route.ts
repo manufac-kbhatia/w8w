@@ -1,5 +1,4 @@
-import { MongoDbConnection } from "@/lib/DbInstance";
-import { Credential } from "@w8w/typeorm";
+import { prisma } from "@w8w/db";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -19,14 +18,6 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const client = await MongoDbConnection.getConnection();
-
-  const credential = new Credential();
-  credential.data = parsedData.data.data;
-  credential.name = parsedData.data.name;
-  credential.type = parsedData.data.type;
-
-  const data = await client.manager.save(credential);
-
-  return NextResponse.json({ credential: data }, { status: 200 });
+  const credential = await prisma.credential.create({ data: parsedData.data });
+  return NextResponse.json({ credential }, { status: 200 });
 }

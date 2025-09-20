@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Workflow {
+  id          String  @id @default(uuid()) @map("_id")
+  name        String  @unique
+  active      Boolean @default(true)
+  nodes       INode[]
+  connections Json
+}
+
+model Credential {
+  id   String @id @default(uuid()) @map("_id")
+  name String @unique
+  data String
+  type String
+}
+
+type INode {
+  id               String
+  name             String
+  type             String
+  positionX        Float
+  positionY        Float
+  disabled         Boolean?
+  retryOnFail      Boolean?
+  maxTries         Int?
+  waitBetweenTries Int?
+  alwaysOutputData Boolean?
+  executeOnce      Boolean?
+  continueOnFail   Boolean?
+  parameters       Json
+  credentials      Json
+  webhookId        String?
+}
