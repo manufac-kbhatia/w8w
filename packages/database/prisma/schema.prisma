@@ -15,18 +15,22 @@ datasource db {
 }
 
 model Workflow {
-  id          String  @id @default(uuid()) @map("_id")
-  name        String  @unique
-  active      Boolean @default(true)
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String    @unique
+  active      Boolean   @default(true)
   nodes       INode[]
   connections Json
+  updatedAt   DateTime? @updatedAt
+  createdAt   DateTime  @default(now())
 }
 
 model Credential {
-  id   String @id @default(uuid()) @map("_id")
-  name String @unique
-  data String
-  type String
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name      String    @unique
+  data      String
+  type      String
+  updatedAt DateTime? @updatedAt
+  createdAt DateTime  @default(now())
 }
 
 type INode {

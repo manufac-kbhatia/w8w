@@ -11,14 +11,32 @@ import {
   NumberInput,
   Title,
   PasswordInput,
+  Card,
+  Divider,
+  ActionIcon,
+  Menu,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { ICredentialType, NodePropertyTypes } from "@w8w/typeorm/types";
+import { IconDotsVertical, IconTrash } from "@tabler/icons-react";
+import { Credential } from "@w8w/db";
+import { ICredentialType, NodePropertyTypes } from "@w8w/types";
 import axios from "axios";
 import Image from "next/image";
 import { Fragment, useEffect, useState } from "react";
+
+export function formatUpdatedAt(date: Date | null): string {
+  if (!date) return "";
+  const d = typeof date === "string" ? new Date(date) : date;
+  return d.toLocaleString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
 
 export const Credentials = () => {
   const [credTypes, setCredTypes] = useState<ICredentialType[]>([]);
@@ -35,6 +53,7 @@ export const Credentials = () => {
     null,
   );
   const [credName, setCredName] = useState<string>("");
+  const [credentials, setCredentials] = useState<Credential[]>([]);
 
   const form = useForm({
     mode: "uncontrolled",
@@ -90,17 +109,32 @@ export const Credentials = () => {
   };
 
   const handleCredSubmit = async (data: string) => {
-    const type = selectedCred?.name;
-    const response = await axios.post("/api/credential", {
-      data,
-      type,
-      name: credName,
-    });
-    console.log(response);
+    try {
+      const type = selectedCred?.name;
+      const response = await axios.post("/api/credential", {
+        data,
+        type,
+        name: credName,
+      });
+      console.log(response.data);
+      setCredentials((prev) => [...prev, response.data.credential]);
+    } catch (error) {
+      console.log(error);
+    }
+    closeAddCredModal();
   };
 
+  useEffect(() => {
+    const getCredentials = async () => {
+      const response = await axios.get("/api/credential");
+      setCredentials(response.data.credentials);
+      console.log(response.data);
+    };
+    getCredentials();
+  }, []);
+
   return (
-    <Fragment>
+    <Stack>
       <Modal
         title={<Text fw={800}>Add new credential</Text>}
         h={700}
@@ -152,7 +186,6 @@ export const Credentials = () => {
         }
       >
         <Stack>
-          {/* TODO: send the value to backend */}
           <TextInput
             label="Name for the credential"
             placeholder="Please enter a name for the credential"
@@ -162,7 +195,7 @@ export const Credentials = () => {
           />
           <form
             onSubmit={form.onSubmit((values) =>
-              handleCredSubmit(JSON.stringify(values))
+              handleCredSubmit(JSON.stringify(values)),
             )}
           >
             <Stack>
@@ -237,6 +270,46 @@ export const Credentials = () => {
           Create Credentials
         </Button>
       </Group>
-    </Fragment>
+      <Stack>
+        {credentials.map((credential) => (
+          <Card key={credential.id} withBorder style={{ cursor: "pointer " }}>
+            <Group justify="space-between" align="center">
+              <Group>
+                <Image
+                  src={`./${credential.type}.svg`}
+                  alt={credential.name}
+                  width={40}
+                  height={40}
+                />
+                <Stack gap={0}>
+                  <Text>{credential.name}</Text>
+                  <Group>
+                    <Text>
+                      Last updated at {formatUpdatedAt(credential.updatedAt)}
+                    </Text>
+                    <Divider orientation="vertical" size="sm" />
+                    <Text>
+                      Last updated at {formatUpdatedAt(credential.createdAt)}
+                    </Text>
+                  </Group>
+                </Stack>
+              </Group>
+              <Menu trigger="click" openDelay={100} closeDelay={400}>
+                <Menu.Target>
+                  <ActionIcon variant="light">
+                    <IconDotsVertical size={20} />
+                  </ActionIcon>
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <Menu.Item leftSection={<IconTrash size={14} />}>
+                    Delete credential
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
+            </Group>
+          </Card>
+        ))}
+      </Stack>
+    </Stack>
   );
 };

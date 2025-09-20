@@ -14,10 +14,15 @@ export async function POST(req: NextRequest) {
   if (!parsedData.success) {
     return NextResponse.json(
       { success: false, error: z.treeifyError(parsedData.error) },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
   const credential = await prisma.credential.create({ data: parsedData.data });
   return NextResponse.json({ credential }, { status: 200 });
+}
+
+export async function GET() {
+  const credentials = await prisma.credential.findMany();
+  return NextResponse.json({ credentials }, { status: 200 });
 }

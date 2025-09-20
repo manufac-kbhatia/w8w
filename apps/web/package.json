@@ -22,7 +22,8 @@
     "react-dom": "^19.1.0",
     "reflect-metadata": "^0.2.2",
     "zod": "^4.1.8",
-    "@w8w/db": "*"
+    "@w8w/db": "*",
+    "@w8w/types": "*"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
