@@ -124,6 +124,11 @@ export const Credentials = () => {
     closeAddCredModal();
   };
 
+  const handleDelete = async (id: string) => {
+    await axios.delete(`/api/credential/${id}`);
+    setCredentials((prev) => {return prev.filter((cred) => cred.id != id)});
+  };
+
   useEffect(() => {
     const getCredentials = async () => {
       const response = await axios.get("/api/credential");
@@ -301,7 +306,14 @@ export const Credentials = () => {
                   </ActionIcon>
                 </Menu.Target>
                 <Menu.Dropdown>
-                  <Menu.Item leftSection={<IconTrash size={14} />}>
+                  <Menu.Item
+                    onClick={() => handleDelete(credential.id)}
+                    leftSection={
+                      <IconTrash
+                        size={14}
+                      />
+                    }
+                  >
                     Delete credential
                   </Menu.Item>
                 </Menu.Dropdown>
