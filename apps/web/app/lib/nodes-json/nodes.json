@@ -1,0 +1,47 @@
+[
+  {
+    "name": "When clicking ‘Execute workflow’",
+    "displayName": "Manual Trigger",
+    "description": "Runs the flow on clicking a button in w8w",
+    "nodeType": "trigger",
+    "properties": [],
+    "iconUrl": "./mannual.svg"
+  },
+  {
+    "name": "Webhoook",
+    "displayName": "Webhoook",
+    "description": "Starts the workflow when a webhook is called",
+    "nodeType": "trigger",
+    "properties": [
+      {
+        "id": "1",
+        "displayName": "HTTP Method",
+        "name": "httpMethod",
+        "type": "options",
+        "options": [
+          {
+            "displayName": "GET",
+            "name": "GET"
+          },
+          {
+            "displayName": "POST",
+            "name": "POST"
+          },
+          {
+            "displayName": "DELETE",
+            "name": "DELETE"
+          }
+        ],
+        "default": "GET"
+      },
+      {
+        "id": "2",
+        "displayName": "Path",
+        "name": "baseUrl",
+        "type": "string",
+        "default": ""
+      }
+    ],
+    "iconUrl": "./webhook.svg"
+  }
+]

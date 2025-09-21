@@ -24,7 +24,7 @@ import { Credential } from "@w8w/db";
 import { ICredentialType, NodePropertyTypes } from "@w8w/types";
 import axios from "axios";
 import Image from "next/image";
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export function formatUpdatedAt(date: Date | null): string {
   if (!date) return "";
@@ -126,7 +126,9 @@ export const Credentials = () => {
 
   const handleDelete = async (id: string) => {
     await axios.delete(`/api/credential/${id}`);
-    setCredentials((prev) => {return prev.filter((cred) => cred.id != id)});
+    setCredentials((prev) => {
+      return prev.filter((cred) => cred.id != id);
+    });
   };
 
   useEffect(() => {
@@ -308,11 +310,7 @@ export const Credentials = () => {
                 <Menu.Dropdown>
                   <Menu.Item
                     onClick={() => handleDelete(credential.id)}
-                    leftSection={
-                      <IconTrash
-                        size={14}
-                      />
-                    }
+                    leftSection={<IconTrash size={14} />}
                   >
                     Delete credential
                   </Menu.Item>

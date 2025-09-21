@@ -15,15 +15,16 @@
     "@mantine/form": "^8.3.1",
     "@mantine/hooks": "^8.3.1",
     "@repo/ui": "*",
+    "@w8w/db": "*",
+    "@w8w/types": "*",
     "@xyflow/react": "^12.8.4",
     "axios": "^1.12.2",
     "next": "^15.5.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "reflect-metadata": "^0.2.2",
-    "zod": "^4.1.8",
-    "@w8w/db": "*",
-    "@w8w/types": "*"
+    "uuid": "^13.0.0",
+    "zod": "^4.1.8"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",

@@ -10,9 +10,18 @@ export interface INode {
   alwaysOutputData?: boolean;
   executeOnce?: boolean;
   continueOnFail?: boolean;
-  parameters: INodeParameters;
+  parameters: Properties;
   credentials?: INodeCredentials;
   webhookId?: string;
+}
+
+export interface INodeType {
+  name: string;
+  displayName: string;
+  iconUrl?: string;
+  nodeType: "trigger" | "action";
+  properties: Properties[];
+  description?: string;
 }
 
 export interface IConnections {
@@ -54,28 +63,28 @@ export interface INodeCredentialsDetails {
   name: string; // name of the credential
 }
 
-export interface INodeParameters {
-  [key: string]: NodeParameterValueType;
-}
+// export interface INodeParameters {
+//   [key: string]: NodeParameterValueType;
+// }
 
-export type NodeParameterValueType =
-  | NodeParameterValue
-  | INodeParameters
-  | NodeParameterValue[]
-  | INodeParameters[];
+// export type NodeParameterValueType =
+//   | NodeParameterValue
+//   | INodeParameters
+//   | NodeParameterValue[]
+//   | INodeParameters[];
 
-export type NodeParameterValue = string | number | boolean | undefined | null;
+// export type NodeParameterValue = string | number | boolean | undefined | null;
 
 export interface ICredentialType {
   name: string;
   displayName: string;
   iconUrl?: string;
-  properties: INodeProperties[];
+  properties: Properties[];
   documentationUrl?: string;
   supportedNodes?: string[];
 }
 
-export interface INodeProperties {
+export interface Properties {
   id: string;
   displayName: string;
   name: string;
@@ -83,7 +92,7 @@ export interface INodeProperties {
   typeOptions?: {
     password?: boolean;
   };
-  options?: Array<INodeProperties>;
+  options?: Array<Properties>;
   description?: string;
   placeholder?: string;
   required?: boolean;
