@@ -17,6 +17,8 @@ export type CustomNodeData = {
   nodeType: "trigger" | "action";
   properties: Properties[];
   description?: string;
+  parameter?: Record<string, unknown>;
+  type: string;
 };
 export type CustomNodeType = Node<CustomNodeData, "custom">;
 

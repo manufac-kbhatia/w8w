@@ -22,6 +22,7 @@ export interface INodeType {
   nodeType: "trigger" | "action";
   properties: Properties[];
   description?: string;
+  type: string;
 }
 
 export interface IConnections {

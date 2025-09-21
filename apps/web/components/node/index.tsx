@@ -15,15 +15,21 @@ import {
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { NodePropertyTypes } from "@w8w/types";
-import { Handle, Position, type NodeProps } from "@xyflow/react";
+import { Handle, Position, useReactFlow, type NodeProps } from "@xyflow/react";
 import Image from "next/image";
 
-export default function CustomNode({ data }: NodeProps<CustomNodeType>) {
+export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
+  console.log("data", data);
+  const {updateNodeData} = useReactFlow();
   const theme = useMantineTheme();
   const [opened, { close, open }] = useDisclosure();
   const form = useForm({
     mode: "uncontrolled",
-  });
+  });   
+
+  const handleSubmit = (values: Record<string, unknown>) => {
+    updateNodeData(id, {...data, parameter: values});
+  }
 
   return (
     <>
@@ -46,7 +52,11 @@ export default function CustomNode({ data }: NodeProps<CustomNodeType>) {
         <Handle type="source" position={Position.Right} />
       </Group>
       <Modal opened={opened} onClose={close} title={<Title component={"div"} order={5}>{data.displayName}</Title>}>
-        <form>
+        <form
+        onSubmit={form.onSubmit((values) =>
+              handleSubmit(values),
+            )}
+         >
           <Stack>
             {data?.properties.map((property) => {
               switch (property.type) {

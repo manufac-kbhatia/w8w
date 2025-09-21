@@ -4,6 +4,7 @@
     "displayName": "Manual Trigger",
     "description": "Runs the flow on clicking a button in w8w",
     "nodeType": "trigger",
+    "type": "n8n-nodes-base.manualTrigger",
     "properties": [],
     "iconUrl": "./mannual.svg"
   },
@@ -12,6 +13,7 @@
     "displayName": "Webhoook",
     "description": "Starts the workflow when a webhook is called",
     "nodeType": "trigger",
+    "type": "n8n-nodes-base.webhook",
     "properties": [
       {
         "id": "1",

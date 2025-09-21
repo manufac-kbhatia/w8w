@@ -78,14 +78,12 @@ export default function App() {
     const newNode: CustomNodeType = {
       id: uuidv4(),
       position: { x: 100 * (nodes.length + 1), y: 0 },
-      data: node,
+      data: {...node, parameter: {}},
       type: "custom",
     };
     setNodes((prev) => [...prev, newNode]);
     close();
   };
-
-  console.log(edges);
 
   return (
     <Fragment>
