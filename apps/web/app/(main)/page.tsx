@@ -1,9 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FloatingIndicator, Stack, Tabs, Text, Title } from "@mantine/core";
 import classes from "./Tabs.module.css";
 import { Credentials } from "@/components/credentials";
 import { Tab, TABS } from "@/utils";
+import { Workflows } from "@/components/workflows";
+import { usePathname, useSearchParams } from "next/navigation";
 
 export default function Page() {
   const [rootRef, setRootRef] = useState<HTMLDivElement | null>(null);
@@ -15,6 +17,13 @@ export default function Page() {
     controlsRefs[val] = node;
     setControlsRefs(controlsRefs);
   };
+
+  const defaultTab = useSearchParams().get("tab");
+  useEffect(() => {
+    if (defaultTab) {
+      setTab(defaultTab as Tab);
+    }
+  }, [defaultTab]);
 
   return (
     <Stack>
@@ -59,7 +68,9 @@ export default function Page() {
           />
         </Tabs.List>
 
-        <Tabs.Panel value={TABS.workflow}>First tab content</Tabs.Panel>
+        <Tabs.Panel value={TABS.workflow}>
+          <Workflows />
+        </Tabs.Panel>
         <Tabs.Panel value={TABS.credential}>
           <Credentials />
         </Tabs.Panel>

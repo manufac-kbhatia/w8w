@@ -50,7 +50,7 @@ export const Credentials = () => {
     { open: openAddCredModal, close: closeAddCredModal },
   ] = useDisclosure(false);
   const [selectedCred, setSelectedCred] = useState<ICredentialType | null>(
-    null,
+    null
   );
   const [credName, setCredName] = useState<string>("");
   const [credentials, setCredentials] = useState<Credential[]>([]);
@@ -93,7 +93,7 @@ export const Credentials = () => {
             property.type === NodePropertyTypes.multiSelect
               ? [property.default ?? ""]
               : (property.default ?? ""),
-          ]),
+          ])
         );
 
         form.initialize(values);
@@ -111,12 +111,13 @@ export const Credentials = () => {
   const handleCredSubmit = async (data: string) => {
     try {
       const type = selectedCred?.name;
+      const supportedNodes = selectedCred?.supportedNodes;
       const response = await axios.post("/api/credential", {
         data,
         type,
         name: credName,
+        supportedNodes,
       });
-      console.log(response.data);
       setCredentials((prev) => [...prev, response.data.credential]);
     } catch (error) {
       console.log(error);
@@ -135,7 +136,6 @@ export const Credentials = () => {
     const getCredentials = async () => {
       const response = await axios.get("/api/credential");
       setCredentials(response.data.credentials);
-      console.log(response.data);
     };
     getCredentials();
   }, []);
@@ -202,7 +202,7 @@ export const Credentials = () => {
           />
           <form
             onSubmit={form.onSubmit((values) =>
-              handleCredSubmit(JSON.stringify(values)),
+              handleCredSubmit(JSON.stringify(values))
             )}
           >
             <Stack>

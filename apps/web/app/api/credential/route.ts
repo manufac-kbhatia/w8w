@@ -6,6 +6,7 @@ const BodySchema = z.object({
   data: z.string(),
   type: z.string(),
   name: z.string(),
+  supportedNodes: z.array(z.string()).min(1),
 });
 
 export async function POST(req: NextRequest) {
@@ -14,7 +15,7 @@ export async function POST(req: NextRequest) {
   if (!parsedData.success) {
     return NextResponse.json(
       { success: false, error: z.treeifyError(parsedData.error) },
-      { status: 400 },
+      { status: 400 }
     );
   }
 

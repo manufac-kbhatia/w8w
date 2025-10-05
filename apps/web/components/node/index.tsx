@@ -1,4 +1,4 @@
-import { CustomNodeType } from "@/utils";
+import { CustomNodeType, SupportedCredential } from "@/utils";
 import {
   ActionIcon,
   Button,
@@ -7,6 +7,7 @@ import {
   MultiSelect,
   NumberInput,
   PasswordInput,
+  Select,
   Stack,
   TextInput,
   Title,
@@ -16,20 +17,50 @@ import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { NodePropertyTypes } from "@w8w/types";
 import { Handle, Position, useReactFlow, type NodeProps } from "@xyflow/react";
+import axios from "axios";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
-  console.log("data", data);
-  const {updateNodeData} = useReactFlow();
+  console.log(data.type);
+  console.log(data.requiredCredential);
+  const { updateNodeData } = useReactFlow();
   const theme = useMantineTheme();
   const [opened, { close, open }] = useDisclosure();
+  const [selectedCredential, setSelectedCredendtial] = useState<string | null>(
+    null
+  );
   const form = useForm({
     mode: "uncontrolled",
-  });   
+  });
+
+  const [supportedCredentials, setSupportedCredentials] = useState<
+    SupportedCredential[]
+  >([]);
 
   const handleSubmit = (values: Record<string, unknown>) => {
-    updateNodeData(id, {...data, parameter: values});
-  }
+    if (selectedCredential) {
+      updateNodeData(id, {
+        ...data,
+        parameter: values,
+        credentialId: selectedCredential,
+      });
+    }
+  };
+
+  useEffect(() => {
+    const getSupportedCredentials = async () => {
+      const response = await axios.get(
+        `/api/credential/supported?type=${data.type}`
+      );
+      const supportedCredentials = response.data
+        .supportedCredentials as SupportedCredential[];
+
+      setSupportedCredentials(supportedCredentials);
+    };
+
+    getSupportedCredentials();
+  }, [data.type]);
 
   return (
     <>
@@ -51,13 +82,29 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
         <Handle type="target" position={Position.Left} />
         <Handle type="source" position={Position.Right} />
       </Group>
-      <Modal opened={opened} onClose={close} title={<Title component={"div"} order={5}>{data.displayName}</Title>}>
-        <form
-        onSubmit={form.onSubmit((values) =>
-              handleSubmit(values),
-            )}
-         >
+      <Modal
+        opened={opened}
+        onClose={close}
+        title={
+          <Title component={"div"} order={5}>
+            {data.displayName}
+          </Title>
+        }
+      >
+        <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
           <Stack>
+            {data.requiredCredential ? (
+              <Select
+                label="Credential"
+                data={supportedCredentials.map((cred) => ({
+                  value: cred.id,
+                  label: cred.name,
+                }))}
+                value={selectedCredential}
+                onChange={setSelectedCredendtial}
+                required
+              />
+            ) : null}
             {data?.properties.map((property) => {
               switch (property.type) {
                 case NodePropertyTypes.string:

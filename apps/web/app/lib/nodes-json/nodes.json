@@ -6,7 +6,8 @@
     "nodeType": "trigger",
     "type": "n8n-nodes-base.manualTrigger",
     "properties": [],
-    "iconUrl": "./mannual.svg"
+    "requiredCredential": false,
+    "iconUrl": "/mannual.svg"
   },
   {
     "name": "Webhoook",
@@ -44,6 +45,7 @@
         "default": ""
       }
     ],
-    "iconUrl": "./webhook.svg"
+    "requiredCredential": true,
+    "iconUrl": "/webhook.svg"
   }
 ]

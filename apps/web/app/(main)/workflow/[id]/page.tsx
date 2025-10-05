@@ -24,6 +24,7 @@ import {
   Stack,
   Text,
   Title,
+  Button,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
@@ -31,8 +32,10 @@ import { INodeType } from "@w8w/types";
 import Image from "next/image";
 import { CustomNodeData, CustomNodeType, nodeTypes } from "@/utils";
 import { v4 as uuidv4 } from "uuid";
+import { use } from "react";
 
-export default function App() {
+export default function Page({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const [nodes, setNodes] = useState<CustomNodeType[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
   const [opened, { open, close }] = useDisclosure(false);
@@ -48,7 +51,7 @@ export default function App() {
           else if (node.nodeType === "action") acc.actions.push(node);
           return acc;
         },
-        { triggers: [] as CustomNodeData[], actions: [] as CustomNodeData[] },
+        { triggers: [] as CustomNodeData[], actions: [] as CustomNodeData[] }
       );
 
       setTriggerNodes(triggers);
@@ -58,31 +61,57 @@ export default function App() {
     getNodesJson();
   }, []);
 
+  useEffect(() => {
+    const getWorkflow = async () => {
+      const workflow = await axios.get(`/api/workflow/${id}`);
+      console.log(workflow);
+    };
+
+    getWorkflow();
+  }, [id]);
+
+  useEffect(() => {
+    console.log({ nodes, edges });
+  }, [nodes, edges]);
+
   const onNodesChange: OnNodesChange<CustomNodeType> = useCallback(
     (changes) =>
       setNodes((nodesSnapshot) => applyNodeChanges(changes, nodesSnapshot)),
-    [],
+    []
   );
   const onEdgesChange = useCallback(
     (changes: EdgeChange<Edge>[]) =>
       setEdges((edgesSnapshot) => applyEdgeChanges(changes, edgesSnapshot)),
-    [],
+    []
   );
+
   const onConnect = useCallback(
     (params: Connection) =>
       setEdges((edgesSnapshot) => addEdge(params, edgesSnapshot)),
-    [],
+    []
   );
 
   const addNode = (node: INodeType) => {
     const newNode: CustomNodeType = {
       id: uuidv4(),
       position: { x: 100 * (nodes.length + 1), y: 0 },
-      data: {...node, parameter: {}},
+      data: { ...node, parameter: {} },
       type: "custom",
     };
     setNodes((prev) => [...prev, newNode]);
     close();
+  };
+
+  const handleSave = () => {
+    const transformedNodes = nodes.map((node) => ({
+      id: node.id,
+      name: node.data.name,
+      type: node.data.nodeType,
+      parameters: node.data.parameter,
+      credentialId: node.data.credentialId ?? null,
+    }));
+
+    console.log(transformedNodes);
   };
 
   return (
@@ -98,9 +127,12 @@ export default function App() {
           fitView
         >
           <Panel position="top-right" style={{ background: "white" }}>
-            <ActionIcon variant="light" onClick={open}>
-              <IconPlus size={40} />
-            </ActionIcon>
+            <Group>
+              <Button onClick={handleSave}>Save</Button>
+              <ActionIcon variant="light" onClick={open}>
+                <IconPlus size={40} />
+              </ActionIcon>
+            </Group>
           </Panel>
           <Controls position="top-left" />
           <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
