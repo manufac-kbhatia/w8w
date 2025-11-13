@@ -1,68 +1,69 @@
-export interface INode {
-  id: string;
-  name: string;
-  type: string;
-  position: [number, number];
-  disabled?: boolean;
-  retryOnFail?: boolean;
-  maxTries?: number;
-  waitBetweenTries?: number;
-  alwaysOutputData?: boolean;
-  executeOnce?: boolean;
-  continueOnFail?: boolean;
-  parameters: Properties;
-  credentials?: INodeCredentials;
-  webhookId?: string;
-}
+// export interface INode {
+//   id: string;
+//   name: string;
+//   type: string;
+//   position: [number, number];
+//   disabled?: boolean;
+//   retryOnFail?: boolean;
+//   maxTries?: number;
+//   waitBetweenTries?: number;
+//   alwaysOutputData?: boolean;
+//   executeOnce?: boolean;
+//   continueOnFail?: boolean;
+//   parameters: Properties;
+//   credentialsId?: INodeCredentials;
+//   webhookId?: string;
+// }
 
-export interface INodeType {
-  name: string;
-  displayName: string;
-  iconUrl?: string;
-  nodeType: "trigger" | "action";
+export interface NodeSchema {
+  type: string; //  "type": "n8n-nodes-base.manualTrigger",
+  name: string; // "name": "When clicking ‘Execute workflow’",
+  displayName: string; // "displayName": "Manual Trigger",
+  description?: string; // "description": "Runs the flow on clicking a button in w8w",
+  executionType: "trigger" | "action"; //  "executionType": "trigger",
   properties: Properties[];
-  description?: string;
-  type: string;
+  requiredCredential?: boolean; // "requiredCredential": false,
+  iconUrl?: string;
 }
 
-export interface IConnections {
-  // Node name
-  [key: string]: INodeConnections;
-}
+// export interface IConnections {
+//   // Node name
+//   [key: string]: INodeConnections;
+// }
 
-export interface INodeConnections {
-  // Input name : main
-  [key: string]: NodeInputConnections;
-}
+// export interface INodeConnections {
+//   // Input name : main
+//   [key: string]: NodeInputConnections;
+// }
 
-export type NodeInputConnections = Array<IConnection[] | null>;
+// export type NodeInputConnections = Array<IConnection[] | null>;
 
-export interface IConnection {
-  // The node the connection is to
-  node: string;
+// export interface IConnection {
+//   // The node the connection is to
+//   node: string;
 
-  // The type of the input on destination node (for example "main")
-  type: NodeConnectionType;
+//   // The type of the input on destination node (for example "main")
+//   type: NodeConnectionType;
 
-  // The output/input-index of destination node (if node has multiple inputs/outputs of the same type)
-  index: number;
-}
+//   // The output/input-index of destination node (if node has multiple inputs/outputs of the same type)
+//   index: number;
+// }
 
-export type NodeConnectionType =
-  (typeof NodeConnectionTypes)[keyof typeof NodeConnectionTypes];
+// export type NodeConnectionType =
+//   (typeof NodeConnectionTypes)[keyof typeof NodeConnectionTypes];
 
-export const NodeConnectionTypes = {
-  Main: "main",
-} as const;
+// export const NodeConnectionTypes = {
+//   Main: "main",
+// } as const;
 
-export interface INodeCredentials {
-  [key: string]: INodeCredentialsDetails; // key here is the name of credential
-}
+// export interface INodeCredentials {
+//   [key: string]: INodeCredentialsDetails; // key here is the name of credential
+// }
 
-export interface INodeCredentialsDetails {
-  id: string | null; // credentials id from db
-  name: string; // name of the credential
-}
+// export interface INodeCredentialsDetails {
+//   id: string | null; // credentials id from db
+//   name: string; // name of the credential
+// }
 
 // export interface INodeParameters {
 //   [key: string]: NodeParameterValueType;
@@ -76,12 +77,12 @@ export interface INodeCredentialsDetails {
 
 // export type NodeParameterValue = string | number | boolean | undefined | null;
 
-export interface ICredentialType {
-  name: string;
-  displayName: string;
-  iconUrl?: string;
-  properties: Properties[];
+export interface CredentialSchema {
+  name?: string;
+  displayName?: string;
   documentationUrl?: string;
+  properties?: Properties[];
+  iconUrl?: string;
   supportedNodes?: string[];
 }
 
@@ -89,7 +90,7 @@ export interface Properties {
   id: string;
   displayName: string;
   name: string;
-  type: NodePropertyType;
+  type: PropertyType;
   typeOptions?: {
     password?: boolean;
   };
@@ -100,7 +101,7 @@ export interface Properties {
   default?: string;
 }
 
-export const NodePropertyTypes = {
+export const PropertyTypes = {
   boolean: "boolean",
   button: "button",
   dateTime: "dateTime",
@@ -114,5 +115,4 @@ export const NodePropertyTypes = {
   credentials: "credentials",
 } as const;
 
-export type NodePropertyType =
-  (typeof NodePropertyTypes)[keyof typeof NodePropertyTypes];
+export type PropertyType = (typeof PropertyTypes)[keyof typeof PropertyTypes];

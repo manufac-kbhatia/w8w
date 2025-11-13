@@ -14,6 +14,8 @@ import {
   OnNodesChange,
   Edge,
   EdgeChange,
+  Node,
+  XYPosition,
 } from "@xyflow/react";
 import axios from "axios";
 import {
@@ -28,30 +30,31 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
-import { INodeType } from "@w8w/types";
 import Image from "next/image";
-import { CustomNodeData, CustomNodeType, nodeTypes } from "@/utils";
-import { v4 as uuidv4 } from "uuid";
+import { CustomNodeType, InitialNodeType, nodeTypes } from "@/utils";
 import { use } from "react";
+import { NodeType, Workflow } from "@w8w/db";
+import { NodeSchema } from "@w8w/types";
+import { v4 as uuidv4 } from "uuid";
 
 export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const [nodes, setNodes] = useState<CustomNodeType[]>([]);
+  const [nodes, setNodes] = useState<Node[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
   const [opened, { open, close }] = useDisclosure(false);
-  const [triggerNodes, setTriggerNodes] = useState<CustomNodeData[]>([]);
-  const [actionNodes, setActionNodes] = useState<CustomNodeData[]>([]);
+  const [triggerNodes, setTriggerNodes] = useState<NodeSchema[]>([]);
+  const [actionNodes, setActionNodes] = useState<NodeSchema[]>([]);
 
   useEffect(() => {
     const getNodesJson = async () => {
-      const response = await axios.get<CustomNodeData[]>("/api/nodes-json");
+      const response = await axios.get<NodeSchema[]>("/api/nodes-json");
       const { triggers, actions } = response.data.reduce(
         (acc, node) => {
-          if (node.nodeType === "trigger") acc.triggers.push(node);
-          else if (node.nodeType === "action") acc.actions.push(node);
+          if (node.executionType === "trigger") acc.triggers.push(node);
+          else if (node.executionType === "action") acc.actions.push(node);
           return acc;
         },
-        { triggers: [] as CustomNodeData[], actions: [] as CustomNodeData[] }
+        { triggers: [] as NodeSchema[], actions: [] as NodeSchema[] }
       );
 
       setTriggerNodes(triggers);
@@ -63,18 +66,40 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
 
   useEffect(() => {
     const getWorkflow = async () => {
-      const workflow = await axios.get(`/api/workflow/${id}`);
-      console.log(workflow);
+      const { data } = await axios.get<{ workflow: Workflow }>(
+        `/api/workflow/${id}`
+      );
+      const transformedNodes = data.workflow.nodes.map((node) => {
+        let transformedNode: InitialNodeType | CustomNodeType;
+        if (node.type === NodeType.INITIAL) {
+          transformedNode = {
+            id: node.id,
+            position: node.position as XYPosition,
+            type: node.type,
+            data:
+              node.type === NodeType.INITIAL
+                ? { onClick: open }
+                : (node.data as Record<string, unknown>),
+          } as InitialNodeType;
+        } else {
+          transformedNode = {
+            id: node.id,
+            position: node.position as XYPosition,
+            type: node.type,
+            data: { nodeSchema: node.data.nodeSchema as unknown as NodeSchema },
+          };
+        }
+
+        return transformedNode;
+      });
+
+      setNodes(transformedNodes);
     };
 
     getWorkflow();
-  }, [id]);
+  }, [id, open]);
 
-  useEffect(() => {
-    console.log({ nodes, edges });
-  }, [nodes, edges]);
-
-  const onNodesChange: OnNodesChange<CustomNodeType> = useCallback(
+  const onNodesChange: OnNodesChange<Node> = useCallback(
     (changes) =>
       setNodes((nodesSnapshot) => applyNodeChanges(changes, nodesSnapshot)),
     []
@@ -91,25 +116,31 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
     []
   );
 
-  const addNode = (node: INodeType) => {
+  const addNode = (nodeSchema: NodeSchema) => {
     const newNode: CustomNodeType = {
       id: uuidv4(),
       position: { x: 100 * (nodes.length + 1), y: 0 },
-      data: { ...node, parameter: {} },
-      type: "custom",
+      data: { nodeSchema },
+      type: NodeType.CUSTOM,
     };
     setNodes((prev) => [...prev, newNode]);
     close();
   };
 
   const handleSave = () => {
-    const transformedNodes = nodes.map((node) => ({
-      id: node.id,
-      name: node.data.name,
-      type: node.data.nodeType,
-      parameters: node.data.parameter,
-      credentialId: node.data.credentialId ?? null,
-    }));
+    const nodesToTransform = nodes as CustomNodeType[];
+    console.log(nodes);
+    const transformedNodes = nodesToTransform.map((node) => {
+      if (node.type === NodeType.CUSTOM) {
+        return {
+          id: node.id,
+          name: node.data.nodeSchema.name,
+          type: node.type,
+          data: node.data,
+          position: node.position as { x: number; y: number },
+        };
+      }
+    });
 
     console.log(transformedNodes);
   };

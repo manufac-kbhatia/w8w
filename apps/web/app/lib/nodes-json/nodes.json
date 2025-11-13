@@ -1,20 +1,20 @@
 [
   {
+    "type": "n8n-nodes-base.manualTrigger",
     "name": "When clicking ‘Execute workflow’",
     "displayName": "Manual Trigger",
     "description": "Runs the flow on clicking a button in w8w",
-    "nodeType": "trigger",
-    "type": "n8n-nodes-base.manualTrigger",
+    "executionType": "trigger",
     "properties": [],
     "requiredCredential": false,
     "iconUrl": "/mannual.svg"
   },
   {
+    "type": "n8n-nodes-base.webhook",
     "name": "Webhoook",
     "displayName": "Webhoook",
     "description": "Starts the workflow when a webhook is called",
-    "nodeType": "trigger",
-    "type": "n8n-nodes-base.webhook",
+    "executionType": "action",
     "properties": [
       {
         "id": "1",

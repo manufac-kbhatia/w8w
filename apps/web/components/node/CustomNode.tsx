@@ -15,15 +15,13 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
-import { NodePropertyTypes } from "@w8w/types";
+import { PropertyTypes } from "@w8w/types";
 import { Handle, Position, useReactFlow, type NodeProps } from "@xyflow/react";
 import axios from "axios";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
-  console.log(data.type);
-  console.log(data.requiredCredential);
   const { updateNodeData } = useReactFlow();
   const theme = useMantineTheme();
   const [opened, { close, open }] = useDisclosure();
@@ -51,7 +49,7 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
   useEffect(() => {
     const getSupportedCredentials = async () => {
       const response = await axios.get(
-        `/api/credential/supported?type=${data.type}`
+        `/api/credential/supported?type=${data.nodeSchema.type}`
       );
       const supportedCredentials = response.data
         .supportedCredentials as SupportedCredential[];
@@ -60,7 +58,7 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
     };
 
     getSupportedCredentials();
-  }, [data.type]);
+  }, [data.nodeSchema.type]);
 
   return (
     <>
@@ -73,8 +71,8 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
           size={40}
         >
           <Image
-            src={data.iconUrl ?? ""}
-            alt={data.name}
+            src={data.nodeSchema.iconUrl ?? ""}
+            alt={data.nodeSchema.name}
             width={20}
             height={20}
           />
@@ -87,13 +85,13 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
         onClose={close}
         title={
           <Title component={"div"} order={5}>
-            {data.displayName}
+            {data.nodeSchema.displayName}
           </Title>
         }
       >
         <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
           <Stack>
-            {data.requiredCredential ? (
+            {data.nodeSchema.requiredCredential ? (
               <Select
                 label="Credential"
                 data={supportedCredentials.map((cred) => ({
@@ -105,9 +103,9 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
                 required
               />
             ) : null}
-            {data?.properties.map((property) => {
+            {data.nodeSchema.properties.map((property) => {
               switch (property.type) {
-                case NodePropertyTypes.string:
+                case PropertyTypes.string:
                   return !property.typeOptions?.password ? (
                     <TextInput
                       label={property.displayName}
@@ -130,7 +128,7 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
                     />
                   );
 
-                case NodePropertyTypes.number:
+                case PropertyTypes.number:
                   return (
                     <NumberInput
                       key={form.key(property.name)}
@@ -142,7 +140,7 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
                       {...form.getInputProps(property.name)}
                     />
                   );
-                case NodePropertyTypes.multiSelect:
+                case PropertyTypes.multiSelect:
                   return (
                     <MultiSelect
                       key={form.key(property.name)}

@@ -9,13 +9,13 @@ datasource db {
 }
 
 model Workflow {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  name        String?   @default("untitled-workflow")
-  active      Boolean   @default(true)
-  nodes       INode[]
-  connections IEdge[]
-  updatedAt   DateTime? @updatedAt
-  createdAt   DateTime  @default(now())
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  name        String?      @default("untitled-workflow")
+  active      Boolean      @default(true)
+  nodes       Node[]
+  connections Connection[]
+  updatedAt   DateTime?    @updatedAt
+  createdAt   DateTime     @default(now())
 }
 
 model Credential {
@@ -28,19 +28,30 @@ model Credential {
   createdAt      DateTime  @default(now())
 }
 
-type INode {
+enum NodeType {
+  INITIAL
+  CUSTOM
+}
+
+type Node {
   id           String
   name         String
-  type         String
+  type         NodeType
   position     Position
-  parameters   Json
+  data         NodeData
   credentialId String?
 }
 
-type IEdge {
-  id     String
-  source String
-  target String
+type NodeData {
+  nodeSchema Json
+}
+
+type Connection {
+  id         String
+  fromNodeId String
+  toNodeId   String
+  fromOutput String
+  toInput    String
 }
 
 type Position {

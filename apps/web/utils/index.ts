@@ -1,5 +1,7 @@
-import CustomNode from "@/components/node";
-import { Properties } from "@w8w/types";
+import CustomNode from "@/components/node/CustomNode";
+import InitialNode from "@/components/node/InitialNode";
+import { NodeType } from "@w8w/db";
+import { NodeSchema, Properties } from "@w8w/types";
 import { Node, NodeTypes } from "@xyflow/react";
 import axios from "axios";
 import { redirect } from "next/navigation";
@@ -13,21 +15,18 @@ export const TABS = {
 export type Tab = (typeof TABS)[keyof typeof TABS];
 
 export type CustomNodeData = {
-  name: string;
-  displayName: string;
-  iconUrl?: string;
-  nodeType: "trigger" | "action";
-  properties: Properties[];
-  description?: string;
-  parameter?: Record<string, unknown>;
-  credentialId?: string;
-  requiredCredential?: boolean;
-  type: string;
+  nodeSchema: NodeSchema;
 };
-export type CustomNodeType = Node<CustomNodeData, "custom">;
+
+export type InitialNodeData = {
+  onClick: () => void;
+};
+export type CustomNodeType = Node<CustomNodeData, "CUSTOM">;
+export type InitialNodeType = Node<InitialNodeData, "INITIAL">;
 
 export const nodeTypes: NodeTypes = {
-  custom: CustomNode,
+  [NodeType.INITIAL]: InitialNode,
+  [NodeType.CUSTOM]: CustomNode,
 };
 
 export const createWorkflow = async () => {

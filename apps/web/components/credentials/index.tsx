@@ -21,7 +21,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconDotsVertical, IconTrash } from "@tabler/icons-react";
 import { Credential } from "@w8w/db";
-import { ICredentialType, NodePropertyTypes } from "@w8w/types";
+import { CredentialSchema, PropertyTypes } from "@w8w/types";
 import axios from "axios";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -39,20 +39,22 @@ export function formatUpdatedAt(date: Date | null): string {
 }
 
 export const Credentials = () => {
-  const [credTypes, setCredTypes] = useState<ICredentialType[]>([]);
+  const [credentialSchemas, setCredentialSchemas] = useState<
+    CredentialSchema[]
+  >([]);
   const [
-    createCredModalOpened,
-    { open: openCreateCredModal, close: closeCreateCredModal },
+    createCredentialModalOpened,
+    { open: openCreateCredModal, close: closeCreateCredentialModal },
   ] = useDisclosure(false);
 
   const [
-    addCredModalOpened,
-    { open: openAddCredModal, close: closeAddCredModal },
+    addCredentialModalOpened,
+    { open: openAddCredentialModal, close: closeAddCredentialModal },
   ] = useDisclosure(false);
-  const [selectedCred, setSelectedCred] = useState<ICredentialType | null>(
-    null
-  );
-  const [credName, setCredName] = useState<string>("");
+  const [selectedCredentialSchema, setSelectedCredentialSchema] =
+    useState<CredentialSchema | null>(null);
+
+  const [credentialName, setCredentialName] = useState<string>("");
   const [credentials, setCredentials] = useState<Credential[]>([]);
 
   const form = useForm({
@@ -63,8 +65,9 @@ export const Credentials = () => {
     const getCredentialsJson = async () => {
       const response = await fetch("/api/credentials-json", { method: "GET" });
       if (response.ok) {
-        const credsTypesData = (await response.json()) as ICredentialType[];
-        setCredTypes(credsTypesData);
+        const credentialSchemasData =
+          (await response.json()) as CredentialSchema[];
+        setCredentialSchemas(credentialSchemasData);
       } else {
         notifications.show({
           title: "Something went wrong",
@@ -78,19 +81,23 @@ export const Credentials = () => {
   }, []);
 
   const handleConfirm = () => {
-    closeCreateCredModal();
-    openAddCredModal();
+    closeCreateCredentialModal();
+    openAddCredentialModal();
   };
 
-  const handleSelectCredType = (credName: string | null) => {
-    if (credName) {
-      const cred = credTypes.find((credType) => credType.name === credName);
-      if (cred) {
-        setSelectedCred(cred);
+  const handleSelectCredentialSchema = (
+    credentialSchemaName: string | null
+  ) => {
+    if (credentialSchemaName) {
+      const selectedCredentialSchema = credentialSchemas.find(
+        (credentialSchema) => credentialSchema.name === credentialSchemaName
+      );
+      if (selectedCredentialSchema && selectedCredentialSchema.properties) {
+        setSelectedCredentialSchema(selectedCredentialSchema);
         const values = Object.fromEntries(
-          cred.properties.map((property) => [
+          selectedCredentialSchema.properties.map((property) => [
             property.name,
-            property.type === NodePropertyTypes.multiSelect
+            property.type === PropertyTypes.multiSelect
               ? [property.default ?? ""]
               : (property.default ?? ""),
           ])
@@ -102,27 +109,27 @@ export const Credentials = () => {
   };
 
   const handleCancel = () => {
-    setSelectedCred(null);
-    closeAddCredModal();
-    setCredName("");
+    setSelectedCredentialSchema(null);
+    closeAddCredentialModal();
+    setCredentialName("");
     form.reset();
   };
 
-  const handleCredSubmit = async (data: string) => {
+  const handleCredentialSubmit = async (data: string) => {
     try {
-      const type = selectedCred?.name;
-      const supportedNodes = selectedCred?.supportedNodes;
+      const type = selectedCredentialSchema?.name;
+      const supportedNodes = selectedCredentialSchema?.supportedNodes;
       const response = await axios.post("/api/credential", {
         data,
         type,
-        name: credName,
+        name: credentialName,
         supportedNodes,
       });
       setCredentials((prev) => [...prev, response.data.credential]);
     } catch (error) {
       console.log(error);
     }
-    closeAddCredModal();
+    closeAddCredentialModal();
   };
 
   const handleDelete = async (id: string) => {
@@ -145,30 +152,30 @@ export const Credentials = () => {
       <Modal
         title={<Text fw={800}>Add new credential</Text>}
         h={700}
-        opened={createCredModalOpened}
-        onClose={closeCreateCredModal}
+        opened={createCredentialModalOpened}
+        onClose={closeCreateCredentialModal}
         centered
       >
         <Stack gap={"xl"}>
           <Select
             label="Select an app or service to connect to"
             placeholder="Search for an app"
-            data={credTypes.map((credType) => {
+            data={credentialSchemas.map((credentialSchema) => {
               return {
-                value: credType.name,
-                label: credType.displayName,
+                value: credentialSchema.name ?? "",
+                label: credentialSchema.displayName ?? "",
               };
             })}
-            onChange={(value) => handleSelectCredType(value)}
+            onChange={(value) => handleSelectCredentialSchema(value)}
           />
           <Group justify="flex-end">
             <Button
-              disabled={selectedCred ? false : true}
+              disabled={selectedCredentialSchema ? false : true}
               onClick={handleConfirm}
             >
               Confirm
             </Button>
-            <Button color="red" onClick={closeCreateCredModal}>
+            <Button color="red" onClick={closeCreateCredentialModal}>
               Cancel
             </Button>
           </Group>
@@ -176,19 +183,19 @@ export const Credentials = () => {
       </Modal>
 
       <Modal
-        opened={addCredModalOpened}
-        onClose={closeAddCredModal}
+        opened={addCredentialModalOpened}
+        onClose={closeAddCredentialModal}
         title={
           <Group>
-            {selectedCred?.iconUrl && (
+            {selectedCredentialSchema?.iconUrl && (
               <Image
-                alt={selectedCred.displayName}
-                src={selectedCred.iconUrl}
+                alt={selectedCredentialSchema.displayName ?? ""}
+                src={selectedCredentialSchema.iconUrl}
                 height={30}
                 width={35}
               />
             )}
-            <Title order={4}>{selectedCred?.displayName}</Title>
+            <Title order={4}>{selectedCredentialSchema?.displayName}</Title>
           </Group>
         }
       >
@@ -197,18 +204,18 @@ export const Credentials = () => {
             label="Name for the credential"
             placeholder="Please enter a name for the credential"
             required
-            value={credName}
-            onChange={(e) => setCredName(e.currentTarget.value)}
+            value={credentialName}
+            onChange={(e) => setCredentialName(e.currentTarget.value)}
           />
           <form
             onSubmit={form.onSubmit((values) =>
-              handleCredSubmit(JSON.stringify(values))
+              handleCredentialSubmit(JSON.stringify(values))
             )}
           >
             <Stack>
-              {selectedCred?.properties.map((property) => {
+              {selectedCredentialSchema?.properties?.map((property) => {
                 switch (property.type) {
-                  case NodePropertyTypes.string:
+                  case PropertyTypes.string:
                     return !property.typeOptions?.password ? (
                       <TextInput
                         label={property.displayName}
@@ -231,7 +238,7 @@ export const Credentials = () => {
                       />
                     );
 
-                  case NodePropertyTypes.number:
+                  case PropertyTypes.number:
                     return (
                       <NumberInput
                         key={form.key(property.name)}
@@ -243,7 +250,7 @@ export const Credentials = () => {
                         {...form.getInputProps(property.name)}
                       />
                     );
-                  case NodePropertyTypes.multiSelect:
+                  case PropertyTypes.multiSelect:
                     return (
                       <MultiSelect
                         key={form.key(property.name)}

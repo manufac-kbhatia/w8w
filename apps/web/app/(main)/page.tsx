@@ -5,7 +5,7 @@ import classes from "./Tabs.module.css";
 import { Credentials } from "@/components/credentials";
 import { Tab, TABS } from "@/utils";
 import { Workflows } from "@/components/workflows";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 export default function Page() {
   const [rootRef, setRootRef] = useState<HTMLDivElement | null>(null);
