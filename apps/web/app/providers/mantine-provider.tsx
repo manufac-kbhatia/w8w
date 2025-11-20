@@ -11,7 +11,7 @@ import "./style.css";
 export function MantineCustomProvider({ children }: { children: React.ReactNode }) {
     return (
         <MantineProvider
-            defaultColorScheme="auto"
+            defaultColorScheme="dark"
             theme={shadcnTheme}
             cssVariablesResolver={shadcnCssVariableResolver}
         >

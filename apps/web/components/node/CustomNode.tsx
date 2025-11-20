@@ -65,9 +65,8 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
             <Group>
                 <ActionIcon
                     onClick={open}
-                    variant="filled"
+                    variant="white"
                     bd={"1px solid black"}
-                    bg={theme.colors.blue[1]}
                     size={40}
                 >
                     <Image
@@ -162,7 +161,7 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
                     </Stack>
                     <Group justify="flex-end" mt="lg">
                         <Button type="submit">Save</Button>
-                        <Button color="lime" onClick={() => close()}>
+                        <Button color="red" onClick={() => close()}>
                             Cancel
                         </Button>
                     </Group>

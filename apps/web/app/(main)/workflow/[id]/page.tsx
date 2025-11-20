@@ -27,6 +27,7 @@ import {
     Text,
     Title,
     Button,
+    ThemeIcon,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
@@ -195,54 +196,94 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
                 opened={opened}
                 onClose={close}
                 position="right"
-                title={<Title component={"div"}>What happens next?</Title>}
+                title={<Title order={3}>What happens next?</Title>}
+                padding="md"
+                size="md"
             >
-                <Text>Triggers</Text>
-                <Stack>
-                    {triggerNodes.map((node) => (
-                        <Card
-                            withBorder
-                            key={node.name}
-                            style={{ cursor: "pointer" }}
-                            onClick={() => addNode(node)}
-                        >
-                            <Group>
-                                <Image
-                                    src={node.iconUrl ?? ""}
-                                    alt={node.name}
-                                    width={40}
-                                    height={40}
-                                />
-                                <Text>{node.displayName}</Text>
-                            </Group>
-                            <Text>{node.description}</Text>
-                        </Card>
-                    ))}
-                </Stack>
+                {/* Trigger Section */}
+                <Stack gap="sm">
+                    <Text fw={600} size="md">
+                        Triggers
+                    </Text>
 
-                <Text>Actions</Text>
-                <Stack>
-                    {actionNodes.map((node) => (
-                        <Card withBorder key={node.name}>
-                            <Card.Section
-                                onClick={() => addNode(node)}
+                    <Stack gap="sm">
+                        {triggerNodes.map((node) => (
+                            <Card
+                                key={node.name}
+                                withBorder
+                                radius="md"
+                                shadow="sm"
+                                p="md"
                                 style={{ cursor: "pointer" }}
+                                onClick={() => addNode(node)}
                             >
-                                <Group>
-                                    <Image
-                                        src={node.iconUrl ?? ""}
-                                        alt={node.name}
-                                        width={40}
-                                        height={40}
-                                    />
-                                    <Text>{node.displayName}</Text>
+                                <Group align="center" gap="md">
+                                    <ThemeIcon
+                                        variant="white"
+                                        size="xl"
+                                    >
+
+                                        <Image
+                                            src={node.iconUrl ?? ""}
+                                            alt={node.name}
+                                            width={30}
+                                            height={30}
+                                            style={{ borderRadius: 6 }}
+                                        />
+                                    </ThemeIcon>
+                                    <div>
+                                        <Text fw={600}>{node.displayName}</Text>
+                                        <Text size="sm" c="dimmed">
+                                            {node.description}
+                                        </Text>
+                                    </div>
                                 </Group>
-                            </Card.Section>
-                            <Text>{node.description}</Text>
-                        </Card>
-                    ))}
+                            </Card>
+                        ))}
+                    </Stack>
+
+                    {/* Actions Section */}
+                    <Text fw={600} size="md" mt="lg">
+                        Actions
+                    </Text>
+
+                    <Stack gap="sm">
+                        {actionNodes.map((node) => (
+                            <Card
+                                key={node.name}
+                                withBorder
+                                radius="md"
+                                shadow="sm"
+                                p="md"
+                                style={{ cursor: "pointer" }}
+                                onClick={() => addNode(node)}
+                            >
+                                <Group align="center" gap="md">
+                                    <ThemeIcon
+                                        variant="white"
+                                        size="xl"
+                                    >
+                                        <Image
+                                            src={node.iconUrl ?? ""}
+                                            alt={node.name}
+                                            width={30}
+                                            height={30}
+                                            style={{ borderRadius: 6 }}
+                                        />
+                                    </ThemeIcon>
+                                    <div>
+                                        <Text fw={600}>{node.displayName}</Text>
+                                        <Text size="sm" c="dimmed">
+                                            {node.description}
+                                        </Text>
+                                    </div>
+                                </Group>
+                            </Card>
+                        ))}
+                    </Stack>
                 </Stack>
             </Drawer>
+
         </Fragment>
     );
 }

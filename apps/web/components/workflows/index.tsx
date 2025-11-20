@@ -19,7 +19,7 @@ export const Workflows = () => {
     return (
         <Stack>
             <Group justify="flex-end">
-                <Button variant="default" onClick={createWorkflow}>
+                <Button onClick={createWorkflow}>
                     Create Workflow
                 </Button>
             </Group>
