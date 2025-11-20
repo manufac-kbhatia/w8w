@@ -48,10 +48,10 @@ type NodeData {
 
 type Connection {
   id         String
-  fromNodeId String
-  toNodeId   String
-  fromOutput String
-  toInput    String
+  source String
+  target   String
+  sourceHandle String 
+  targetHandle    String
 }
 
 type Position {
