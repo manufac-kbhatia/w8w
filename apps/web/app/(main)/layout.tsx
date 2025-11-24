@@ -1,4 +1,5 @@
 "use client";
+import ThemeToggle from "@/components/themeToggler";
 import { createWorkflow, TABS } from "@/utils";
 import {
   ActionIcon,
@@ -7,17 +8,14 @@ import {
   Stack,
   ThemeIcon,
   Tooltip,
-  useMantineColorScheme,
 } from "@mantine/core";
 import {
   IconAutomaticGearboxFilled,
   IconHome,
   IconKey,
-  IconMoon,
   IconPlus,
   IconProgressCheck,
   IconRoute,
-  IconSun,
 } from "@tabler/icons-react";
 import { useRouter, usePathname } from "next/navigation";
 
@@ -28,8 +26,6 @@ export default function Layout({
 }>) {
   const path = usePathname();
   const router = useRouter();
-
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
   return (
     <AppShell
@@ -42,9 +38,7 @@ export default function Layout({
           <ThemeIcon variant="light" size="xl">
             <IconAutomaticGearboxFilled />
           </ThemeIcon>
-          <ActionIcon onClick={toggleColorScheme} variant="light">
-            {colorScheme === "dark" ? <IconSun /> : <IconMoon />}
-          </ActionIcon>
+          <ThemeToggle />
         </Group>
       </AppShell.Header>
       <AppShell.Navbar p="md">

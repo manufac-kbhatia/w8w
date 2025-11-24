@@ -1,9 +1,1 @@
 @import "tailwindcss";
-
-[data-mantine-color-scheme="light"] .imgDark {
-    display: none;
-}
-
-[data-mantine-color-scheme="dark"] .imgLight {
-    display: none;
-}

@@ -13,7 +13,6 @@ export function MantineCustomProvider({
 }) {
   return (
     <MantineProvider
-      defaultColorScheme="dark"
       theme={shadcnTheme}
       cssVariablesResolver={shadcnCssVariableResolver}
     >
