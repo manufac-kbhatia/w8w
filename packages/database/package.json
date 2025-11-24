@@ -2,6 +2,7 @@
   "name": "@w8w/db",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "db:generate": "prisma generate"
   },
@@ -10,14 +11,15 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@types/node": "^24.5.2",
-    "prisma": "^6.16.2",
+    "@repo/typescript-config": "*",
+    "@types/node": "^24.10.1",
+    "prisma": "6.19",
     "tsx": "^4.20.5",
-    "typescript": "^5.9.2",
-    "@repo/typescript-config": "*"
+    "typescript": "^5.9.2"
   },
   "dependencies": {
-    "@prisma/client": "^6.16.2"
+    "@prisma/client": "6.19",
+    "dotenv": "^16.0.3"
   },
   "exports": {
     ".": "./src/index.ts"
