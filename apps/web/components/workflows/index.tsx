@@ -2,7 +2,7 @@
 import { Button, Card, Group, Stack, Title } from "@mantine/core";
 import { createWorkflow } from "@/utils";
 import { useEffect, useState } from "react";
-import { Workflow } from "@w8w/db";
+import { Workflow } from "@w8w/db/types";
 import { redirect } from "next/navigation";
 import axios from "axios";
 

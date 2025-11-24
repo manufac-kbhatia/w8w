@@ -1,7 +1,6 @@
-import { ActionIcon, Group, Stack, Text, Title, Box } from "@mantine/core";
+import { ActionIcon, Group, Stack, Text } from "@mantine/core";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
-import { NodeToolbar } from "@xyflow/react";
-import { Fragment, ReactNode } from "react";
+import { ReactNode } from "react";
 
 export interface BaseNodeProps {
   children: ReactNode;

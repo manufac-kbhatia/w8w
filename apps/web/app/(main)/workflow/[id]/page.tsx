@@ -34,7 +34,7 @@ import { IconPlus } from "@tabler/icons-react";
 import Image from "next/image";
 import { CustomNodeType, InitialNodeType, nodeTypes } from "@/utils";
 import { use } from "react";
-import { NodeType, Workflow } from "@w8w/db";
+import { NodeType, Workflow } from "@w8w/db/types";
 import { NodeSchema } from "@w8w/types";
 import { v4 as uuidv4 } from "uuid";
 
@@ -94,18 +94,8 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
         return transformedNode;
       });
 
-      const transformedEdges: Edge[] = data.workflow.connections.map(
-        (connection) => ({
-          id: connection.id,
-          source: connection.fromNodeId,
-          target: connection.toNodeId,
-          sourceHandle: connection.fromOutput,
-          targetHandle: connection.toInput,
-        })
-      );
-
       setNodes(transformedNodes);
-      setEdges(transformedEdges);
+      setEdges(data.workflow.connections);
     };
 
     getWorkflow();
