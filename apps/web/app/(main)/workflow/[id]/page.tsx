@@ -196,7 +196,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
                 opened={opened}
                 onClose={close}
                 position="right"
-                title={<Title order={3}>What happens next?</Title>}
+                title={<Title order={3} component={"div"}>What happens next?</Title>}
                 padding="md"
                 size="md"
             >
@@ -210,7 +210,8 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
                         {triggerNodes.map((node) => (
                             <Card
                                 key={node.name}
-                                withBorder
+                                // className="transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
+                                withBorder={true}
                                 radius="md"
                                 shadow="sm"
                                 p="md"
@@ -219,7 +220,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
                             >
                                 <Group align="center" gap="md">
                                     <ThemeIcon
-                                        variant="white"
+                                        variant="light"
                                         size="xl"
                                     >
 
@@ -251,7 +252,11 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
                         {actionNodes.map((node) => (
                             <Card
                                 key={node.name}
-                                withBorder
+                                withBorder={true}
+                                classNames={{
+                                    root: "border-2 border-red-900"
+                                }}
+                                className="transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
                                 radius="md"
                                 shadow="sm"
                                 p="md"
@@ -260,7 +265,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
                             >
                                 <Group align="center" gap="md">
                                     <ThemeIcon
-                                        variant="white"
+                                        variant="light"
                                         size="xl"
                                     >
                                         <Image

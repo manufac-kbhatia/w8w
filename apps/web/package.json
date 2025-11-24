@@ -15,6 +15,7 @@
     "@mantine/form": "^8.3.1",
     "@mantine/hooks": "^8.3.1",
     "@repo/ui": "*",
+    "@tailwindcss/postcss": "^4.1.17",
     "@w8w/db": "*",
     "@w8w/types": "*",
     "@xyflow/react": "^12.8.4",
@@ -24,6 +25,7 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "reflect-metadata": "^0.2.2",
+    "tailwindcss": "^4.1.17",
     "uuid": "^13.0.0",
     "zod": "^4.1.8"
   },
