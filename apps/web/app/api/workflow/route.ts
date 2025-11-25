@@ -1,4 +1,4 @@
-import { NodeType, Workflow } from "@w8w/db/types";
+import { NodeType, Workflow } from "@w8w/db/prisma-client";
 import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import { prisma } from "@w8w/db/client";

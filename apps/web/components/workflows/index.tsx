@@ -2,7 +2,7 @@
 import { Button, Card, Group, Stack, Title } from "@mantine/core";
 import { createWorkflow } from "@/utils";
 import { useEffect, useState } from "react";
-import { Workflow } from "@w8w/db/types";
+import { Workflow } from "@w8w/db/prisma-browser";
 import { redirect } from "next/navigation";
 import axios from "axios";
 
@@ -31,7 +31,7 @@ export const Workflows = () => {
             onClick={() => redirect(`/workflow/${workflow.id}`)}
             key={workflow.id}
           >
-            <Title order={4}>{workflow.id}</Title>
+            <Title order={1}>{workflow.id}</Title>
           </Card>
         ))}
       </Stack>

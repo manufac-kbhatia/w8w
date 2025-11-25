@@ -16,19 +16,17 @@ import {
   Divider,
   ActionIcon,
   Menu,
-  useMantineTheme,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconDotsVertical, IconTrash } from "@tabler/icons-react";
-import { Credential } from "@w8w/db/types";
+import { Credential } from "@w8w/db/prisma-browser";
 import { CredentialSchema, PropertyTypes } from "@w8w/types";
 import axios from "axios";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export const Credentials = () => {
-  const theme = useMantineTheme();
   const [credentialSchemas, setCredentialSchemas] = useState<
     CredentialSchema[]
   >([]);
@@ -270,11 +268,8 @@ export const Credentials = () => {
           <Card
             key={credential.id}
             shadow="sm"
-            style={{
-              cursor: "pointer ",
-              borderLeft: "5px solid",
-              borderColor: theme.colors.blue[6],
-            }}
+            withBorder
+            className="transition-all duration-200 hover:scale-101 hover:shadow-lg cursor-pointer"
           >
             <Group justify="space-between" align="center">
               <Group>
@@ -285,7 +280,7 @@ export const Credentials = () => {
                   height={40}
                 />
                 <Stack gap={0}>
-                  <Title order={4}>{credential.name}</Title>
+                  <Title order={1}>{credential.name}</Title>
                   <Group>
                     <Text>
                       Last updated at {formatUpdatedAt(credential.updatedAt)}

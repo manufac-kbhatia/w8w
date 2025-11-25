@@ -22,7 +22,8 @@
     "dotenv": "^16.0.3"
   },
   "exports": {
-    "./types": "./src/index.ts",
+    "./prisma-client": "./src/prisma-client.ts",
+    "./prisma-browser": "./src/prisma-browser.ts",
     "./client": "./src/client.ts"
   }
 }
