@@ -9,6 +9,7 @@ import {
   PasswordInput,
   Select,
   Stack,
+  Text,
   TextInput,
   Title,
 } from "@mantine/core";
@@ -82,9 +83,12 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
         opened={opened}
         onClose={close}
         title={
-          <Title component={"div"} order={5}>
-            {data.nodeSchema.displayName}
-          </Title>
+          <Stack gap={1}>
+            <Title component={"div"} order={1}>
+              {data.nodeSchema.displayName}
+            </Title>
+            <Text c="dimmed">{data.nodeSchema.description}</Text>
+          </Stack>
         }
       >
         <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
