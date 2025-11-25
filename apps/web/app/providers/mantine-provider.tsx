@@ -2,22 +2,19 @@
 
 import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
-import { shadcnTheme } from "../theme/shadcnTheme";
-import { shadcnCssVariableResolver } from "../theme/cssVariableResolver";
-import "./style.css";
+import { MantineTheme } from "../theme";
 
 export function MantineCustomProvider({
-  children,
+    children,
 }: {
-  children: React.ReactNode;
+    children: React.ReactNode;
 }) {
-  return (
-    <MantineProvider
-      theme={shadcnTheme}
-      cssVariablesResolver={shadcnCssVariableResolver}
-    >
-      <Notifications />
-      {children}
-    </MantineProvider>
-  );
+    return (
+        <MantineProvider
+            theme={MantineTheme}
+        >
+            <Notifications />
+            {children}
+        </MantineProvider>
+    );
 }
