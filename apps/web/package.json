@@ -26,6 +26,7 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "reflect-metadata": "^0.2.2",
+    "tailwind-preset-mantine": "^3.0.2",
     "tailwindcss": "^4.1.17",
     "uuid": "^13.0.0",
     "zod": "^4.1.8"

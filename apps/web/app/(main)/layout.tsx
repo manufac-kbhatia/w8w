@@ -8,6 +8,7 @@ import {
     Stack,
     ThemeIcon,
     Tooltip,
+    useMantineTheme,
 } from "@mantine/core";
 import {
     IconAutomaticGearboxFilled,
@@ -26,6 +27,7 @@ export default function Layout({
 }>) {
     const path = usePathname();
     const router = useRouter();
+    const theme = useMantineTheme();
 
     return (
         <AppShell
@@ -49,6 +51,7 @@ export default function Layout({
                     <Tooltip
                         label="Home"
                         transitionProps={{ transition: "pop-bottom-left", duration: 300 }}
+                        color={theme.primaryColor}
                     >
                         <ActionIcon variant="light">
                             <IconHome size={20} />
@@ -58,6 +61,7 @@ export default function Layout({
                     <Tooltip
                         label="Create Workflow"
                         transitionProps={{ transition: "pop-bottom-left", duration: 300 }}
+                        color={theme.primaryColor}
                     >
                         <ActionIcon
                             variant="light"
@@ -71,6 +75,7 @@ export default function Layout({
                     <Tooltip
                         label="Workflows"
                         transitionProps={{ transition: "pop-bottom-left", duration: 300 }}
+                        color={theme.primaryColor}
                     >
                         <ActionIcon
                             variant="light"
@@ -83,6 +88,7 @@ export default function Layout({
                     <Tooltip
                         label="Credentials"
                         transitionProps={{ transition: "pop-bottom-left", duration: 300 }}
+                        color={theme.primaryColor}
                     >
                         <ActionIcon
                             variant="light"
@@ -95,6 +101,7 @@ export default function Layout({
                     <Tooltip
                         label="Executions"
                         transitionProps={{ transition: "pop-bottom-left", duration: 300 }}
+                        color={theme.primaryColor}
                     >
                         <ActionIcon
                             variant="light"
