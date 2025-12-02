@@ -1,6 +1,6 @@
 "use client";
 import "@xyflow/react/dist/style.css";
-import { useState, useCallback, useEffect, Fragment } from "react";
+import { useState, useCallback, useEffect, Fragment, useMemo } from "react";
 import {
     ReactFlow,
     applyNodeChanges,
@@ -45,6 +45,11 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
     const [opened, { open, close }] = useDisclosure(false);
     const [triggerNodes, setTriggerNodes] = useState<NodeSchema[]>([]);
     const [actionNodes, setActionNodes] = useState<NodeSchema[]>([]);
+
+    const showExecute = useMemo(() => {
+        const isMannualTriggerExist = nodes.find((node) => node.type === "CUSTOM" && (node as CustomNodeType).data.nodeSchema.type === "w8w-nodes-base.manualTrigger");
+        return isMannualTriggerExist ? true : false
+    }, [nodes])
 
     useEffect(() => {
         const getNodesJson = async () => {
@@ -187,6 +192,9 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
                             </ActionIcon>
                         </Group>
                     </Panel>
+                    {showExecute && <Panel position="top-center">
+                        <Button>Execute</Button>
+                    </Panel>}
                     <Controls position="top-left" style={{ color: "black" }} />
                     <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
                 </ReactFlow>

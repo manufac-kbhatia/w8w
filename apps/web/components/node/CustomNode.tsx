@@ -23,7 +23,7 @@ import { useEffect, useState } from "react";
 import BaseNode from "./BaseNode";
 
 export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
-    const { updateNodeData } = useReactFlow();
+    const { updateNodeData, deleteElements, getNode } = useReactFlow();
     const [opened, { close, open }] = useDisclosure();
     const [selectedCredential, setSelectedCredendtial] = useState<string | null>(
         null
@@ -60,12 +60,16 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
         getSupportedCredentials();
     }, [data.nodeSchema.type]);
 
+    const currentNode = getNode(id);
+    if (!currentNode) return;
+
     return (
         <>
             <BaseNode
                 showToolbar={true}
                 name={data.nodeSchema.displayName}
                 descritpion={data.nodeSchema.description}
+                onNodeDelete={() => deleteElements({ nodes: [currentNode] })}
             >
                 <ActionIcon
                     onClick={open}
