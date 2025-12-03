@@ -1,9 +1,10 @@
 "use client";
 import ThemeToggle from "@/components/themeToggler";
-import { createWorkflow, TABS } from "@/utils";
+import { createWorkflow, CustomNodeType, TABS } from "@/utils";
 import {
     ActionIcon,
     AppShell,
+    Button,
     Group,
     Stack,
     ThemeIcon,
@@ -18,7 +19,10 @@ import {
     IconProgressCheck,
     IconRoute,
 } from "@tabler/icons-react";
-import { useRouter, usePathname } from "next/navigation";
+import { NodeType } from "@w8w/db/prisma-client";
+import { useReactFlow } from "@xyflow/react";
+import axios from "axios";
+import { useRouter, usePathname, useParams } from "next/navigation";
 
 export default function Layout({
     children,
@@ -28,6 +32,43 @@ export default function Layout({
     const path = usePathname();
     const router = useRouter();
     const theme = useMantineTheme();
+    const { id } = useParams<{ id: string }>()
+    const { getNodes, getEdges } = useReactFlow();
+
+    const handleSave = async () => {
+        const nodesToTransform = getNodes() as CustomNodeType[];
+        const transformedNodes = nodesToTransform.map((node) => {
+            if (node.type === NodeType.CUSTOM) {
+                return {
+                    id: node.id,
+                    name: node.data.nodeSchema.name,
+                    type: node.type,
+                    data: node.data,
+                    position: node.position as { x: number; y: number },
+                };
+            }
+        });
+
+        const transformedEdges = getEdges().map((edge) => ({
+            id: edge.id,
+            source: edge.source,
+            target: edge.target,
+            sourceHandle: edge.sourceHandle ?? "main",
+            targetHandle: edge.targetHandle ?? "main",
+        }));
+
+        const saveWorkflow = {
+            id,
+            nodes: transformedNodes,
+            connections: transformedEdges,
+        };
+
+        await axios.put("/api/workflow", saveWorkflow, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+    };
 
     return (
         <AppShell
@@ -40,7 +81,10 @@ export default function Layout({
                     <ThemeIcon variant="light" size="xl">
                         <IconAutomaticGearboxFilled />
                     </ThemeIcon>
-                    <ThemeToggle />
+                    <Group>
+                        {id && <Button onClick={handleSave}>Save</Button>}
+                        <ThemeToggle />
+                    </Group>
                 </Group>
             </AppShell.Header>
             <AppShell.Navbar p="md">

@@ -37,9 +37,10 @@ import { use } from "react";
 import { NodeType, Workflow } from "@w8w/db/prisma-browser";
 import { NodeSchema } from "@w8w/types";
 import { v4 as uuidv4 } from "uuid";
+import { useParams } from "next/navigation";
 
-export default function Page({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = use(params);
+export default function Page() {
+    const { id } = useParams<{ id: string }>()
     const [nodes, setNodes] = useState<Node[]>([]);
     const [edges, setEdges] = useState<Edge[]>([]);
     const [opened, { open, close }] = useDisclosure(false);
@@ -137,41 +138,6 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
         close();
     };
 
-    const handleSave = async () => {
-        const nodesToTransform = nodes as CustomNodeType[];
-        const transformedNodes = nodesToTransform.map((node) => {
-            if (node.type === NodeType.CUSTOM) {
-                return {
-                    id: node.id,
-                    name: node.data.nodeSchema.name,
-                    type: node.type,
-                    data: node.data,
-                    position: node.position as { x: number; y: number },
-                };
-            }
-        });
-
-        const transformedEdges = edges.map((edge) => ({
-            id: edge.id,
-            source: edge.source,
-            target: edge.target,
-            sourceHandle: edge.sourceHandle ?? "main",
-            targetHandle: edge.targetHandle ?? "main",
-        }));
-
-        const saveWorkflow = {
-            id,
-            nodes: transformedNodes,
-            connections: transformedEdges,
-        };
-
-        await axios.put("/api/workflow", saveWorkflow, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-    };
-
     return (
         <Fragment>
             <div style={{ width: "100%", height: "100vh" }}>
@@ -185,12 +151,9 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
                     fitView
                 >
                     <Panel position="top-right">
-                        <Group>
-                            <Button onClick={handleSave}>Save</Button>
-                            <ActionIcon variant="light" onClick={open}>
-                                <IconPlus size={40} />
-                            </ActionIcon>
-                        </Group>
+                        <ActionIcon variant="light" onClick={open}>
+                            <IconPlus size={40} />
+                        </ActionIcon>
                     </Panel>
                     {showExecute && <Panel position="top-center">
                         <Button>Execute</Button>

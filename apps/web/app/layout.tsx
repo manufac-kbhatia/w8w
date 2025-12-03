@@ -4,6 +4,7 @@ import "./globals.css";
 import { mantineHtmlProps, ColorSchemeScript } from "@mantine/core";
 import "@mantine/notifications/styles.css";
 import { MantineCustomProvider } from "./providers/mantine-provider";
+import { ReactFlowProvider } from "@xyflow/react";
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",
@@ -33,7 +34,11 @@ export default function RootLayout({
                 className={`${geistSans.variable} ${geistMono.variable}`}
                 style={{ height: "100vh", overflow: "hidden" }}
             >
-                <MantineCustomProvider>{children}</MantineCustomProvider>
+                <MantineCustomProvider>
+                    <ReactFlowProvider>
+                        {children}
+                    </ReactFlowProvider>
+                </MantineCustomProvider>
             </body>
         </html>
     );
