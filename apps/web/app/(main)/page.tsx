@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Stack, Tabs, Text, Title, useMantineTheme } from "@mantine/core";
+import { Stack, Tabs, Text, Title } from "@mantine/core";
 import { Credentials } from "@/components/credentials";
 import { Tab, TABS } from "@/utils";
 import { Workflows } from "@/components/workflows";
