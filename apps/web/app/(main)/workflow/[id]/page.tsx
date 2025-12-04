@@ -173,7 +173,7 @@ export default function Page() {
             </ActionIcon>
           </Panel>
           {showExecute && (
-            <Panel position="top-center">
+            <Panel position="bottom-center">
               <Button>Execute</Button>
             </Panel>
           )}

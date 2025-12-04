@@ -16,9 +16,6 @@ export default function Page() {
     }
   }, [defaultTab]);
 
-  const theme = useMantineTheme();
-  console.log("theme.primaryColor", theme.primaryColor);
-
   return (
     <Stack>
       <Stack>

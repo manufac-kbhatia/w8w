@@ -69,7 +69,7 @@ export default function Layout({
     notifications.show({
       title: (
         <Group>
-          <Text>"Saving Workflow..."</Text>
+          <Text>Saving Workflow...</Text>
           <Loader size="xs" />
         </Group>
       ),
@@ -93,7 +93,7 @@ export default function Layout({
     <AppShell
       header={{ height: 80 }}
       navbar={{ width: 70, breakpoint: "xs" }}
-      padding={0}
+      padding={10}
     >
       <AppShell.Header p="md">
         <Group justify="space-between">
