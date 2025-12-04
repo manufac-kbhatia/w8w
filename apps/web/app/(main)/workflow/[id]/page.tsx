@@ -16,6 +16,7 @@ import {
     EdgeChange,
     Node,
     XYPosition,
+    useReactFlow,
 } from "@xyflow/react";
 import axios from "axios";
 import {
@@ -29,9 +30,10 @@ import {
     Button,
     ThemeIcon,
     Loader,
+    useMantineTheme,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconPlus } from "@tabler/icons-react";
+import { IconLock, IconLockOpen, IconMinus, IconPlus, IconScan, IconWindow } from "@tabler/icons-react";
 import Image from "next/image";
 import { CustomNodeType, InitialNodeType, nodeTypes } from "@/utils";
 import { use } from "react";
@@ -48,6 +50,8 @@ export default function Page() {
     const [triggerNodes, setTriggerNodes] = useState<NodeSchema[]>([]);
     const [actionNodes, setActionNodes] = useState<NodeSchema[]>([]);
     const [loadingWokflow, setLoadingWorkflow] = useState(false);
+    const [toggleInteractive, setToggleInteractive] = useState(true);
+    const { fitView, zoomIn, zoomOut } = useReactFlow();
 
     const showExecute = useMemo(() => {
         const isMannualTriggerExist = nodes.find((node) => node.type === "CUSTOM" && (node as CustomNodeType).data.nodeSchema.type === "w8w-nodes-base.manualTrigger");
@@ -151,6 +155,7 @@ export default function Page() {
                     edges={edges}
                     onNodesChange={onNodesChange}
                     onEdgesChange={onEdgesChange}
+                    nodesDraggable={toggleInteractive}
                     onConnect={onConnect}
                     fitView
                 >
@@ -163,7 +168,14 @@ export default function Page() {
                         <Button>Execute</Button>
                     </Panel>}
                     {loadingWokflow && <Loader size="md" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-1000" />}
-                    <Controls position="top-left" className="text-black" />
+                    <Controls position="top-left" showFitView={false} showZoom={false} showInteractive={false} className="p-1 flex flex-row gap-1">
+                        <ActionIcon variant="subtle" radius="sm" onClick={() => zoomIn()}><IconPlus /></ActionIcon>
+                        <ActionIcon variant="subtle" radius="sm" onClick={() => zoomOut()}><IconMinus /></ActionIcon>
+                        <ActionIcon variant="subtle" radius="sm" onClick={() => fitView()}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-scan"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 7v-1a2 2 0 0 1 2 -2h2" /><path d="M4 17v1a2 2 0 0 0 2 2h2" /><path d="M16 4h2a2 2 0 0 1 2 2v1" /><path d="M16 20h2a2 2 0 0 0 2 -2v-1" /></svg>
+                        </ActionIcon>
+                        <ActionIcon variant="subtle" radius="sm" onClick={() => setToggleInteractive((prev) => !prev)}>{toggleInteractive ? <IconLockOpen /> : <IconLock />}</ActionIcon>
+                    </Controls>
                     <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
                 </ReactFlow>
             </div>
@@ -255,6 +267,6 @@ export default function Page() {
                     </Stack>
                 </Stack>
             </Drawer>
-        </Fragment>
+        </Fragment >
     );
 }
