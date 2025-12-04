@@ -61,7 +61,7 @@ export default function Page() {
       (node) =>
         node.type === "CUSTOM" &&
         (node as CustomNodeType).data.nodeSchema.type ===
-          "w8w-nodes-base.manualTrigger"
+          "w8w-nodes-base.manualTrigger",
     );
     return isMannualTriggerExist ? true : false;
   }, [nodes]);
@@ -75,7 +75,7 @@ export default function Page() {
           else if (node.executionType === "action") acc.actions.push(node);
           return acc;
         },
-        { triggers: [] as NodeSchema[], actions: [] as NodeSchema[] }
+        { triggers: [] as NodeSchema[], actions: [] as NodeSchema[] },
       );
 
       setTriggerNodes(triggers);
@@ -89,7 +89,7 @@ export default function Page() {
     setLoadingWorkflow(true);
     const getWorkflow = async () => {
       const { data } = await axios.get<{ workflow: Workflow }>(
-        `/api/workflow/${id}`
+        `/api/workflow/${id}`,
       );
       const transformedNodes = data.workflow.nodes.map((node) => {
         let transformedNode: InitialNodeType | CustomNodeType;
@@ -126,18 +126,18 @@ export default function Page() {
   const onNodesChange: OnNodesChange<Node> = useCallback(
     (changes) =>
       setNodes((nodesSnapshot) => applyNodeChanges(changes, nodesSnapshot)),
-    []
+    [],
   );
   const onEdgesChange = useCallback(
     (changes: EdgeChange<Edge>[]) =>
       setEdges((edgesSnapshot) => applyEdgeChanges(changes, edgesSnapshot)),
-    []
+    [],
   );
 
   const onConnect = useCallback(
     (params: Connection) =>
       setEdges((edgesSnapshot) => addEdge(params, edgesSnapshot)),
-    []
+    [],
   );
 
   const addNode = (nodeSchema: NodeSchema) => {

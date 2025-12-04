@@ -11,7 +11,7 @@ export const Workflows = () => {
   useEffect(() => {
     const getWorkflow = async () => {
       const { data } = await axios.get<{ workflows: Workflow[] }>(
-        `/api/workflow`
+        `/api/workflow`,
       );
       setWorkflows(data.workflows);
     };

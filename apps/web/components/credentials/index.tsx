@@ -65,11 +65,11 @@ export const Credentials = () => {
   };
 
   const handleSelectCredentialSchema = (
-    credentialSchemaName: string | null
+    credentialSchemaName: string | null,
   ) => {
     if (credentialSchemaName) {
       const selectedCredentialSchema = credentialSchemas.find(
-        (credentialSchema) => credentialSchema.name === credentialSchemaName
+        (credentialSchema) => credentialSchema.name === credentialSchemaName,
       );
       if (selectedCredentialSchema && selectedCredentialSchema.properties) {
         setSelectedCredentialSchema(selectedCredentialSchema);
@@ -79,7 +79,7 @@ export const Credentials = () => {
             property.type === PropertyTypes.multiSelect
               ? [property.default ?? ""]
               : (property.default ?? ""),
-          ])
+          ]),
         );
 
         form.initialize(values);
@@ -188,7 +188,7 @@ export const Credentials = () => {
           />
           <form
             onSubmit={form.onSubmit((values) =>
-              handleCredentialSubmit(JSON.stringify(values))
+              handleCredentialSubmit(JSON.stringify(values)),
             )}
           >
             <Stack>
