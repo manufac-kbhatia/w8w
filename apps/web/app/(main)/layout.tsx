@@ -6,11 +6,14 @@ import {
     AppShell,
     Button,
     Group,
+    Loader,
     Stack,
+    Text,
     ThemeIcon,
     Tooltip,
     useMantineTheme,
 } from "@mantine/core";
+import { notifications } from '@mantine/notifications';
 import {
     IconAutomaticGearboxFilled,
     IconHome,
@@ -63,18 +66,33 @@ export default function Layout({
             connections: transformedEdges,
         };
 
+        notifications.show({
+            title: <Group>
+                <Text>"Saving Workflow..."</Text>
+                <Loader size="xs" />
+            </Group>,
+            message: `Saving your workflow with id: ${id}`
+        });
+
         await axios.put("/api/workflow", saveWorkflow, {
             headers: {
                 "Content-Type": "application/json",
             },
         });
+
+        notifications.clean();
+        notifications.show({
+            title: "Workflow Saved Successfully",
+            message: `Your workflow (ID: ${id}) has been saved and is now up to date.`,
+        });
+
     };
 
     return (
         <AppShell
             header={{ height: 80 }}
             navbar={{ width: 70, breakpoint: "xs" }}
-            padding="lg"
+            padding={0}
         >
             <AppShell.Header p="md">
                 <Group justify="space-between">
@@ -159,7 +177,7 @@ export default function Layout({
 
             <AppShell.Main
                 style={{
-                    height: "100%",
+                    height: "100vh",
                 }}
             >
                 {children}

@@ -28,6 +28,7 @@ import {
     Title,
     Button,
     ThemeIcon,
+    Loader,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
@@ -46,6 +47,7 @@ export default function Page() {
     const [opened, { open, close }] = useDisclosure(false);
     const [triggerNodes, setTriggerNodes] = useState<NodeSchema[]>([]);
     const [actionNodes, setActionNodes] = useState<NodeSchema[]>([]);
+    const [loadingWokflow, setLoadingWorkflow] = useState(false);
 
     const showExecute = useMemo(() => {
         const isMannualTriggerExist = nodes.find((node) => node.type === "CUSTOM" && (node as CustomNodeType).data.nodeSchema.type === "w8w-nodes-base.manualTrigger");
@@ -72,6 +74,7 @@ export default function Page() {
     }, []);
 
     useEffect(() => {
+        setLoadingWorkflow(true);
         const getWorkflow = async () => {
             const { data } = await axios.get<{ workflow: Workflow }>(
                 `/api/workflow/${id}`
@@ -100,6 +103,7 @@ export default function Page() {
                 return transformedNode;
             });
 
+            setLoadingWorkflow(false);
             setNodes(transformedNodes);
             setEdges(data.workflow.connections);
         };
@@ -140,7 +144,7 @@ export default function Page() {
 
     return (
         <Fragment>
-            <div style={{ width: "100%", height: "100vh" }}>
+            <div className="w-full h-full relative">
                 <ReactFlow
                     nodeTypes={nodeTypes}
                     nodes={nodes}
@@ -158,7 +162,8 @@ export default function Page() {
                     {showExecute && <Panel position="top-center">
                         <Button>Execute</Button>
                     </Panel>}
-                    <Controls position="top-left" style={{ color: "black" }} />
+                    {loadingWokflow && <Loader size="md" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-1000" />}
+                    <Controls position="top-left" className="text-black" />
                     <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
                 </ReactFlow>
             </div>
