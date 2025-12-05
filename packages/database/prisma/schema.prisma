@@ -41,12 +41,11 @@ enum NodeType {
 }
 
 type Node {
-    id           String
-    name         String
-    type         NodeType
-    position     Position
-    data         NodeData
-    credentialId String?
+    id       String
+    name     String
+    type     NodeType
+    position Position
+    data     NodeData
 }
 
 type NodeData {
