@@ -46,7 +46,7 @@ export default function Layout({
             if (node.type === NodeType.CUSTOM) {
                 return {
                     id: node.id,
-                    name: node.data.nodeSchema.name,
+                    name: node.data.nodeSchema?.name,
                     type: node.type,
                     data: node.data,
                     position: node.position as { x: number; y: number },
