@@ -44,7 +44,6 @@ import { NodeType, Workflow } from "@w8w/db/prisma-browser";
 import { NodeSchema } from "@w8w/types";
 import { v4 as uuidv4 } from "uuid";
 import { useParams } from "next/navigation";
-import { NodeData } from "@w8w/db/prisma-client";
 
 export default function Page() {
     const { id } = useParams<{ id: string }>();
@@ -61,7 +60,7 @@ export default function Page() {
         const isMannualTriggerExist = nodes.find(
             (node) =>
                 node.type === "CUSTOM" &&
-                (node as CustomNodeType).data.nodeSchema.type ===
+                (node as CustomNodeType).data.nodeSchema?.type ===
                 "w8w-nodes-base.manualTrigger",
         );
         return isMannualTriggerExist ? true : false;

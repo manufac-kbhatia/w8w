@@ -14,7 +14,7 @@ export const TABS = {
 export type Tab = (typeof TABS)[keyof typeof TABS];
 
 export type CustomNodeData = {
-    nodeSchema: NodeSchema;
+    nodeSchema?: NodeSchema;
     parameters?: Record<string, unknown>,
     credentialId?: string | null;
 };

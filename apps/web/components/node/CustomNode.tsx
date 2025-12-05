@@ -50,7 +50,7 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
     useEffect(() => {
         const getSupportedCredentials = async () => {
             const response = await axios.get(
-                `/api/credential/supported?type=${data.nodeSchema.type}`,
+                `/api/credential/supported?type=${data.nodeSchema?.type}`,
             );
             const supportedCredentials = response.data
                 .supportedCredentials as SupportedCredential[];
@@ -59,17 +59,19 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
         };
 
         getSupportedCredentials();
-    }, [data.nodeSchema.type]);
+    }, [data.nodeSchema?.type]);
 
     const currentNode = getNode(id);
     if (!currentNode) return;
+
+    console.log(data.parameters)
 
     return (
         <>
             <BaseNode
                 showToolbar={true}
-                name={data.parameters?.name as string ?? data.nodeSchema.displayName}
-                descritpion={data.parameters?.description as string ?? data.nodeSchema.description}
+                name={data.parameters?.name as string ?? data.nodeSchema?.displayName}
+                descritpion={data.parameters?.description as string ?? data.nodeSchema?.description}
                 onNodeDelete={() => deleteElements({ nodes: [currentNode] })}
             >
                 <ActionIcon
@@ -79,14 +81,14 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
                     size={40}
                 >
                     <Image
-                        src={data.nodeSchema.iconUrl ?? ""}
-                        alt={data.nodeSchema.name}
+                        src={data.nodeSchema?.iconUrl ?? ""}
+                        alt={data.nodeSchema?.name ?? ""}
                         width={20}
                         height={20}
                     />
                 </ActionIcon>
 
-                {data.nodeSchema.executionType === "action" && (
+                {data.nodeSchema?.executionType === "action" && (
                     <Handle id="main-target" type="target" position={Position.Left} />
                 )}
                 <Handle id="main-source" type="source" position={Position.Right} />
@@ -99,15 +101,15 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
                 title={
                     <Stack gap={1}>
                         <Title component={"div"} order={1}>
-                            {data.nodeSchema.displayName}
+                            {data.nodeSchema?.displayName}
                         </Title>
-                        <Text c="dimmed">{data.nodeSchema.description}</Text>
+                        <Text c="dimmed">{data.nodeSchema?.description}</Text>
                     </Stack>
                 }
             >
                 <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
                     <Stack>
-                        {data.nodeSchema.requiredCredential ? (
+                        {data.nodeSchema?.requiredCredential ? (
                             <Select
                                 label="Credential"
                                 data={supportedCredentials.map((cred) => ({
@@ -119,7 +121,7 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
                                 required
                             />
                         ) : null}
-                        {data.nodeSchema.properties.map((property) => {
+                        {data.nodeSchema?.properties.map((property) => {
                             switch (property.type) {
                                 case PropertyTypes.string:
                                     return !property.typeOptions?.password ? (
