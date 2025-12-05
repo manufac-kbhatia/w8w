@@ -45,11 +45,11 @@ type Node {
     name     String
     type     NodeType
     position Position
-    data     NodeData
+    data     NodeData?
 }
 
 type NodeData {
-    nodeSchema   Json
+    nodeSchema   Json?
     parameters   Json?
     credentialId String?
 }

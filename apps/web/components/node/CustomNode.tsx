@@ -28,8 +28,10 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
     const [selectedCredential, setSelectedCredendtial] = useState<string | null>(
         null,
     );
+
     const form = useForm({
         mode: "uncontrolled",
+        initialValues: data.parameters
     });
 
     const [supportedCredentials, setSupportedCredentials] = useState<
@@ -84,7 +86,6 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
                     />
                 </ActionIcon>
 
-                {/* FIX: Place handles here */}
                 {data.nodeSchema.executionType === "action" && (
                     <Handle id="main-target" type="target" position={Position.Left} />
                 )}

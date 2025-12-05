@@ -18,7 +18,6 @@ export async function POST() {
                     type: NodeType.INITIAL,
                     position: { x: 0, y: 0 },
                     name: "Inital Node",
-                    data: { nodeSchema: {} },
                 },
             ],
         },

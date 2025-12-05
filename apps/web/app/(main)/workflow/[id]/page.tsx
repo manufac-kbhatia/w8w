@@ -39,11 +39,12 @@ import {
     IconPlus,
 } from "@tabler/icons-react";
 import Image from "next/image";
-import { CustomNodeType, InitialNodeType, nodeTypes } from "@/utils";
+import { CustomNodeData, CustomNodeType, InitialNodeType, nodeTypes } from "@/utils";
 import { NodeType, Workflow } from "@w8w/db/prisma-browser";
 import { NodeSchema } from "@w8w/types";
 import { v4 as uuidv4 } from "uuid";
 import { useParams } from "next/navigation";
+import { NodeData } from "@w8w/db/prisma-client";
 
 export default function Page() {
     const { id } = useParams<{ id: string }>();
@@ -108,7 +109,7 @@ export default function Page() {
                         id: node.id,
                         position: node.position as XYPosition,
                         type: node.type,
-                        data: { nodeSchema: node.data.nodeSchema as unknown as NodeSchema },
+                        data: node.data as unknown as CustomNodeData
                     };
                 }
 
