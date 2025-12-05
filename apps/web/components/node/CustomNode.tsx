@@ -44,7 +44,7 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
             parameters: values,
             credentialId: selectedCredential,
         });
-
+        close();
     };
 
     useEffect(() => {
@@ -68,8 +68,8 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
         <>
             <BaseNode
                 showToolbar={true}
-                name={data.nodeSchema.displayName}
-                descritpion={data.nodeSchema.description}
+                name={data.parameters?.name as string ?? data.nodeSchema.displayName}
+                descritpion={data.parameters?.description as string ?? data.nodeSchema.description}
                 onNodeDelete={() => deleteElements({ nodes: [currentNode] })}
             >
                 <ActionIcon
