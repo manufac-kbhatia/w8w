@@ -1,51 +1,74 @@
 [
-  {
-    "type": "w8w-nodes-base.manualTrigger",
-    "name": "When clicking ‘Execute workflow’",
-    "displayName": "Manual Trigger",
-    "description": "Runs the flow on clicking a button in w8w",
-    "executionType": "trigger",
-    "properties": [],
-    "requiredCredential": false,
-    "iconUrl": "/mannual.svg"
-  },
-  {
-    "type": "w8w-nodes-base.webhook",
-    "name": "Webhoook",
-    "displayName": "Webhoook",
-    "description": "Starts the workflow when a webhook is called",
-    "executionType": "action",
-    "properties": [
-      {
-        "id": "1",
-        "displayName": "HTTP Method",
-        "name": "httpMethod",
-        "type": "options",
-        "options": [
-          {
-            "displayName": "GET",
-            "name": "GET"
-          },
-          {
-            "displayName": "POST",
-            "name": "POST"
-          },
-          {
-            "displayName": "DELETE",
-            "name": "DELETE"
-          }
+    {
+        "type": "w8w-nodes-base.manualTrigger",
+        "name": "When clicking ‘Execute workflow’",
+        "displayName": "Manual Trigger",
+        "description": "Runs the flow on clicking a button in w8w",
+        "executionType": "trigger",
+        "properties": [
+            {
+                "displayName": "Name",
+                "name": "name",
+                "type": "string",
+                "default": ""
+            },
+            {
+                "displayName": "Description",
+                "name": "description",
+                "type": "string",
+                "default": ""
+            }
         ],
-        "default": "GET"
-      },
-      {
-        "id": "2",
-        "displayName": "Path",
-        "name": "baseUrl",
-        "type": "string",
-        "default": ""
-      }
-    ],
-    "requiredCredential": true,
-    "iconUrl": "/webhook.svg"
-  }
+        "requiredCredential": false,
+        "iconUrl": "/mannual.svg"
+    },
+    {
+        "type": "w8w-nodes-base.webhook",
+        "name": "Webhoook",
+        "displayName": "Webhoook",
+        "description": "Starts the workflow when a webhook is called",
+        "executionType": "action",
+        "properties": [
+            {
+                "displayName": "Name",
+                "name": "name",
+                "type": "string",
+                "default": ""
+            },
+            {
+                "displayName": "Description",
+                "name": "description",
+                "type": "string",
+                "default": ""
+            },
+            {
+                "displayName": "HTTP Method",
+                "name": "httpMethod",
+                "type": "options",
+                "options": [
+                    {
+                        "displayName": "GET",
+                        "name": "GET"
+                    },
+                    {
+                        "displayName": "POST",
+                        "name": "POST"
+                    },
+                    {
+                        "displayName": "DELETE",
+                        "name": "DELETE"
+                    }
+                ],
+                "default": "GET"
+            },
+            {
+                "displayName": "Path",
+                "name": "baseUrl",
+                "type": "string",
+                "default": ""
+            }
+        ],
+        "requiredCredential": true,
+        "iconUrl": "/webhook.svg"
+    }
 ]

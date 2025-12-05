@@ -5,63 +5,65 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider            = "prisma-client"
-  output              = "../generated/prisma"
-  importFileExtension = "ts" // https://github.com/prisma/prisma/issues/27079#issuecomment-3275607034
+    provider            = "prisma-client"
+    output              = "../generated/prisma"
+    importFileExtension = "ts" // https://github.com/prisma/prisma/issues/27079#issuecomment-3275607034
 }
 
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
+    provider = "mongodb"
+    url      = env("DATABASE_URL")
 }
 
 model Workflow {
-  id          String       @id @default(auto()) @map("_id") @db.ObjectId
-  name        String?      @default("untitled-workflow")
-  active      Boolean      @default(true)
-  nodes       Node[]
-  connections Connection[]
-  updatedAt   DateTime?    @updatedAt
-  createdAt   DateTime     @default(now())
+    id          String       @id @default(auto()) @map("_id") @db.ObjectId
+    name        String?      @default("untitled-workflow")
+    active      Boolean      @default(true)
+    nodes       Node[]
+    connections Connection[]
+    updatedAt   DateTime?    @updatedAt
+    createdAt   DateTime     @default(now())
 }
 
 model Credential {
-  id             String    @id @default(auto()) @map("_id") @db.ObjectId
-  name           String    @unique
-  data           String
-  type           String
-  supportedNodes String[]
-  updatedAt      DateTime? @updatedAt
-  createdAt      DateTime  @default(now())
+    id             String    @id @default(auto()) @map("_id") @db.ObjectId
+    name           String    @unique
+    data           String
+    type           String
+    supportedNodes String[]
+    updatedAt      DateTime? @updatedAt
+    createdAt      DateTime  @default(now())
 }
 
 enum NodeType {
-  INITIAL
-  CUSTOM
+    INITIAL
+    CUSTOM
 }
 
 type Node {
-  id           String
-  name         String
-  type         NodeType
-  position     Position
-  data         NodeData
-  credentialId String?
+    id           String
+    name         String
+    type         NodeType
+    position     Position
+    data         NodeData
+    credentialId String?
 }
 
 type NodeData {
-  nodeSchema Json
+    nodeSchema   Json
+    parameters   Json?
+    credentialId String?
 }
 
 type Connection {
-  id           String
-  source       String
-  target       String
-  sourceHandle String
-  targetHandle String
+    id           String
+    source       String
+    target       String
+    sourceHandle String
+    targetHandle String
 }
 
 type Position {
-  x Int
-  y Int
+    x Int
+    y Int
 }
