@@ -2,7 +2,6 @@ import { NodeType, Workflow } from "@w8w/db/prisma-client";
 import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import { prisma } from "@w8w/db/client";
-import { success } from "zod";
 
 export async function GET(): Promise<NextResponse<{ workflows: Workflow[] }>> {
     const workflows = await prisma.workflow.findMany();
@@ -31,7 +30,7 @@ export async function POST() {
 export async function PUT(req: NextRequest) {
     try {
         const workflowToUpdate = await req.json();
-        const workflow = await prisma.workflow.update({
+        await prisma.workflow.update({
             where: {
                 id: workflowToUpdate.id,
             },
