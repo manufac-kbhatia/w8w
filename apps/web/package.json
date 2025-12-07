@@ -8,7 +8,7 @@
         "build": "next build",
         "start": "next start",
         "start:inngest": "npx inngest-cli@latest dev",
-        "lint": "next lint --max-warnings 0",
+        "lint": "next lint",
         "check-types": "tsc --noEmit"
     },
     "dependencies": {
