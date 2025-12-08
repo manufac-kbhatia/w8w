@@ -50,7 +50,7 @@ export default function Layout({
   const params = useSearchParams();
 
   const [workflowName, setWorkflowName] = useState<string>(
-    params.get("name") ?? "untitled-workflow"
+    params.get("name") ?? "untitled-workflow",
   );
 
   const [nameInputVariant, toggleNameInputVariant] = useToggle([
