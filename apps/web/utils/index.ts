@@ -1,5 +1,6 @@
 import CustomNode from "@/components/node/CustomNode";
 import InitialNode from "@/components/node/InitialNode";
+import { Connection } from "@w8w/db/prisma-client";
 import { NodeSchema } from "@w8w/types";
 import { Node, NodeTypes } from "@xyflow/react";
 import axios from "axios";
@@ -52,4 +53,13 @@ export interface SupportedCredential {
   id: string;
   name: string;
   type: string;
+}
+
+export function getAdjList(edges: Connection[]) {
+  const adj: Record<string, string[]> = {};
+  for (const { source: from, target: to } of edges) {
+    if (!adj[from]) adj[from] = [];
+    adj[from].push(to);
+  }
+  return adj;
 }
