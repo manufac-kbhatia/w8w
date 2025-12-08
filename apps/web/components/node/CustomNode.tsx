@@ -26,7 +26,7 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
   const { updateNodeData, deleteElements, getNode } = useReactFlow();
   const [opened, { close, open }] = useDisclosure();
   const [selectedCredential, setSelectedCredendtial] = useState<string | null>(
-    null,
+    null
   );
 
   const form = useForm({
@@ -50,7 +50,7 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
   useEffect(() => {
     const getSupportedCredentials = async () => {
       const response = await axios.get(
-        `/api/credential/supported?type=${data.nodeSchema?.type}`,
+        `/api/credential/supported?type=${data.nodeSchema?.type}`
       );
       const supportedCredentials = response.data
         .supportedCredentials as SupportedCredential[];
@@ -63,8 +63,6 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
 
   const currentNode = getNode(id);
   if (!currentNode) return;
-
-  console.log(data.parameters);
 
   return (
     <>

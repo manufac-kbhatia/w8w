@@ -28,22 +28,20 @@ export async function POST() {
 
 export async function PUT(req: NextRequest) {
   try {
-    const workflowToUpdate = await req.json();
+    const { id, ...workflowToUpdate } = (await req.json()) as Partial<Workflow>;
+
     await prisma.workflow.update({
       where: {
-        id: workflowToUpdate.id,
+        id: id,
       },
-      data: {
-        nodes: workflowToUpdate.nodes,
-        connections: workflowToUpdate.connections,
-      },
+      data: workflowToUpdate,
     });
 
     return NextResponse.json({
       success: true,
       data: {
-        id: workflowToUpdate.id,
-        message: `workflow with id: ${workflowToUpdate.id} updated successfully`,
+        id,
+        message: `workflow with id: ${id} updated successfully`,
       },
     });
   } catch (error) {

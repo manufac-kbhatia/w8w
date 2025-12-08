@@ -3,16 +3,20 @@ import ThemeToggle from "@/components/themeToggler";
 import { createWorkflow, CustomNodeType, TABS } from "@/utils";
 import {
   ActionIcon,
+  Anchor,
   AppShell,
+  Breadcrumbs,
   Button,
   Group,
   Loader,
   Stack,
   Text,
+  TextInput,
   ThemeIcon,
   Tooltip,
   useMantineTheme,
 } from "@mantine/core";
+import { useToggle } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import {
   IconAutomaticGearboxFilled,
@@ -25,7 +29,13 @@ import {
 import { NodeType } from "@w8w/db/prisma-browser";
 import { useReactFlow } from "@xyflow/react";
 import axios from "axios";
-import { useRouter, usePathname, useParams } from "next/navigation";
+import {
+  useRouter,
+  usePathname,
+  useParams,
+  useSearchParams,
+} from "next/navigation";
+import { useState } from "react";
 
 export default function Layout({
   children,
@@ -37,11 +47,20 @@ export default function Layout({
   const theme = useMantineTheme();
   const { id } = useParams<{ id: string }>();
   const { getNodes, getEdges } = useReactFlow();
+  const params = useSearchParams();
+
+  const [workflowName, setWorkflowName] = useState<string>(
+    params.get("name") ?? "untitled-workflow"
+  );
+
+  const [nameInputVariant, toggleNameInputVariant] = useToggle([
+    "unstyled",
+    "default",
+  ]);
 
   const handleSave = async () => {
     const nodesToTransform = getNodes() as CustomNodeType[];
 
-    console.log(nodesToTransform);
     const transformedNodes = nodesToTransform.map((node) => {
       if (node.type === NodeType.CUSTOM) {
         return {
@@ -64,6 +83,7 @@ export default function Layout({
 
     const saveWorkflow = {
       id,
+      name: workflowName,
       nodes: transformedNodes,
       connections: transformedEdges,
     };
@@ -99,9 +119,28 @@ export default function Layout({
     >
       <AppShell.Header p="md">
         <Group justify="space-between">
-          <ThemeIcon variant="light" size="xl">
-            <IconAutomaticGearboxFilled />
-          </ThemeIcon>
+          <Group>
+            <ThemeIcon variant="light" size="xl">
+              <IconAutomaticGearboxFilled />
+            </ThemeIcon>
+            {path.startsWith("/workflow") && (
+              <Breadcrumbs separator="/" separatorMargin={4} mt="xs">
+                <Anchor href={`/?tab=${TABS.workflow}`} size="lg">
+                  workflow
+                </Anchor>
+                <TextInput
+                  size="md"
+                  variant={nameInputVariant}
+                  onClick={() => toggleNameInputVariant("default")}
+                  onBlur={() => toggleNameInputVariant("unstyled")}
+                  value={workflowName}
+                  onChange={(event) =>
+                    setWorkflowName(event.currentTarget.value)
+                  }
+                />
+              </Breadcrumbs>
+            )}
+          </Group>
           <Group>
             {id && <Button onClick={handleSave}>Save</Button>}
             <ThemeToggle />
