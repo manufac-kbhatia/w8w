@@ -30,14 +30,23 @@ export const Workflows = () => {
   const [loadingWorkflows, setLoadingWorkflows] = useState(false);
   const theme = useMantineTheme();
 
+  const deleteWorkflow = async (id: string) => {
+    const response = await axios.delete(`/api/workflow/${id}`);
+
+    if (response.data.success) {
+      setWorkflows((prev) => prev.filter((w) => w.id !== id));
+    }
+  };
+
   useEffect(() => {
     const getWorkflow = async () => {
       setLoadingWorkflows(true);
-      const { data } = await axios.get<{ workflows: Workflow[] }>(
-        `/api/workflow`,
-      );
+      const response = await axios.get<{
+        success: boolean;
+        data: { workflows: Workflow[] };
+      }>(`/api/workflow`);
       setLoadingWorkflows(false);
-      setWorkflows(data.workflows);
+      setWorkflows(response.data.data.workflows);
     };
 
     getWorkflow();
@@ -53,20 +62,21 @@ export const Workflows = () => {
       ) : (
         <Stack gap={4}>
           {workflows.map((workflow) => (
-            <Link
+            <Card
               key={workflow.id}
-              href={{
-                pathname: `/workflow/${workflow.id}`,
-                query: { name: workflow.name },
-              }}
+              withBorder
+              shadow="xs"
+              className="border-2 transition-all duration-200 hover:scale-101 hover:shadow-lg cursor-pointer"
+              style={{ cursor: "pointer" }}
             >
-              <Card
-                withBorder
-                shadow="xs"
-                className="border-2 transition-all duration-200 hover:scale-101 hover:shadow-lg cursor-pointer"
-                style={{ cursor: "pointer" }}
-              >
-                <Group justify="space-between" align="center">
+              <Group justify="space-between" align="center">
+                <Link
+                  key={workflow.id}
+                  href={{
+                    pathname: `/workflow/${workflow.id}`,
+                    query: { name: workflow.name },
+                  }}
+                >
                   <Stack gap={0}>
                     <Title order={1}>{workflow.name}</Title>
                     <Group>
@@ -79,41 +89,48 @@ export const Workflows = () => {
                       </Text>
                     </Group>
                   </Stack>
-                  <Group>
-                    <Tooltip
-                      color={theme.primaryColor}
-                      label={
-                        checkMannualTriggerExist(transformNodes(workflow.nodes))
-                          ? "Click to start the execution"
-                          : "No Mannual trigger to found"
+                </Link>
+                <Group>
+                  <Tooltip
+                    color={theme.primaryColor}
+                    label={
+                      checkMannualTriggerExist(transformNodes(workflow.nodes))
+                        ? "Click to start the execution"
+                        : "No Mannual trigger to found"
+                    }
+                  >
+                    <Button
+                      disabled={
+                        !checkMannualTriggerExist(
+                          transformNodes(workflow.nodes),
+                        )
                       }
+                      size="compact-md"
                     >
-                      <Button
-                        disabled={
-                          !checkMannualTriggerExist(
-                            transformNodes(workflow.nodes),
-                          )
-                        }
-                        size="compact-md"
-                      >
-                        Execute
-                      </Button>
-                    </Tooltip>
-                    <ActionIcon
-                      size="md"
-                      radius="md"
-                      variant="light"
-                      onClick={() => redirect(`/workflow/${workflow.id}`)}
-                    >
-                      <IconEdit size={20} />
-                    </ActionIcon>
-                    <ActionIcon size="md" radius="md" variant="light">
-                      <IconTrash size={20} />
-                    </ActionIcon>
-                  </Group>
+                      Execute
+                    </Button>
+                  </Tooltip>
+                  <ActionIcon
+                    size="md"
+                    radius="md"
+                    variant="light"
+                    onClick={() =>
+                      redirect(`/workflow/${workflow.id}?name=${workflow.name}`)
+                    }
+                  >
+                    <IconEdit size={20} />
+                  </ActionIcon>
+                  <ActionIcon
+                    size="md"
+                    radius="md"
+                    variant="light"
+                    onClick={() => deleteWorkflow(workflow.id)}
+                  >
+                    <IconTrash size={20} />
+                  </ActionIcon>
                 </Group>
-              </Card>
-            </Link>
+              </Group>
+            </Card>
           ))}
         </Stack>
       )}

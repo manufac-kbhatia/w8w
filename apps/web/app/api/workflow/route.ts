@@ -1,11 +1,11 @@
-import { NodeType, Workflow } from "@w8w/db/prisma-client";
-import { NextRequest, NextResponse } from "next/server";
+import { NodeType } from "@w8w/db/prisma-client";
+import { NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import { prisma } from "@w8w/db/client";
 
-export async function GET(): Promise<NextResponse<{ workflows: Workflow[] }>> {
+export async function GET() {
   const workflows = await prisma.workflow.findMany();
-  return NextResponse.json({ workflows });
+  return NextResponse.json({ success: true, data: { workflows } });
 }
 
 export async function POST() {
@@ -23,33 +23,8 @@ export async function POST() {
     },
   });
 
-  return NextResponse.json({ id: workflow.id }, { status: 200 });
-}
-
-export async function PUT(req: NextRequest) {
-  try {
-    const { id, ...workflowToUpdate } = (await req.json()) as Partial<Workflow>;
-
-    await prisma.workflow.update({
-      where: {
-        id: id,
-      },
-      data: workflowToUpdate,
-    });
-
-    return NextResponse.json({
-      success: true,
-      data: {
-        id,
-        message: `workflow with id: ${id} updated successfully`,
-      },
-    });
-  } catch (error) {
-    console.log(error);
-    if (error instanceof Error)
-      return NextResponse.json({
-        success: false,
-        data: { message: error.message },
-      });
-  }
+  return NextResponse.json(
+    { success: true, data: { id: workflow.id } },
+    { status: 200 },
+  );
 }

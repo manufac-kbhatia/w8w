@@ -35,7 +35,7 @@ export const nodeTypes: NodeTypes = {
 
 export const createWorkflow = async () => {
   const response = await axios.post("/api/workflow");
-  const id = response.data.id;
+  const id = response.data.data.id;
   redirect(`/workflow/${id}`);
 };
 export const checkMannualTriggerExist = (nodes: Node[]) => {

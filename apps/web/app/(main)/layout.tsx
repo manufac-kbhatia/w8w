@@ -35,7 +35,7 @@ import {
   useParams,
   useSearchParams,
 } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Layout({
   children,
@@ -49,10 +49,9 @@ export default function Layout({
   const { getNodes, getEdges } = useReactFlow();
   const params = useSearchParams();
 
-  const [workflowName, setWorkflowName] = useState<string>(
-    params.get("name") ?? "untitled-workflow",
-  );
+  const [workflowName, setWorkflowName] = useState<string>("untitled-workflow");
 
+  console.log(params.get("name"));
   const [nameInputVariant, toggleNameInputVariant] = useToggle([
     "unstyled",
     "default",
@@ -82,7 +81,6 @@ export default function Layout({
     }));
 
     const saveWorkflow = {
-      id,
       name: workflowName,
       nodes: transformedNodes,
       connections: transformedEdges,
@@ -98,7 +96,7 @@ export default function Layout({
       message: `Saving your workflow with id: ${id}`,
     });
 
-    await axios.put("/api/workflow", saveWorkflow, {
+    await axios.put(`/api/workflow/${id}`, saveWorkflow, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -110,6 +108,13 @@ export default function Layout({
       message: `Your workflow (ID: ${id}) has been saved and is now up to date.`,
     });
   };
+
+  useEffect(() => {
+    const name = params.get("name");
+    if (name) {
+      setWorkflowName(name);
+    }
+  }, [params]);
 
   return (
     <AppShell

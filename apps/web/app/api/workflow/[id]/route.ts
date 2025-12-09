@@ -5,18 +5,125 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
-): Promise<NextResponse<{ workflow: Workflow } | { message: string }>> {
-  const { id } = await params;
-  const workflow = await prisma.workflow.findUnique({
-    where: {
-      id,
-    },
-  });
-  if (!workflow) {
-    return NextResponse.json(
-      { message: "No workflow found with given id" },
-      { status: 404 },
-    );
+) {
+  try {
+    const { id } = await params;
+    const workflow = await prisma.workflow.findUnique({
+      where: {
+        id,
+      },
+    });
+    if (!workflow) {
+      return NextResponse.json(
+        {
+          success: false,
+          data: { message: "No workflow found with given id" },
+        },
+        { status: 404 },
+      );
+    }
+    return NextResponse.json({ success: true, data: { workflow } });
+  } catch (error) {
+    if (error instanceof Error) {
+      return NextResponse.json(
+        {
+          success: false,
+          data: { message: error.message },
+        },
+        { status: 500 },
+      );
+    } else {
+      return NextResponse.json(
+        {
+          success: false,
+          data: { message: "Something went wrong!" },
+        },
+        { status: 500 },
+      );
+    }
   }
-  return NextResponse.json({ workflow });
+}
+
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  try {
+    const { id } = await params;
+    const workflowToUpdate = (await req.json()) as Omit<Workflow, "id">;
+
+    await prisma.workflow.update({
+      where: {
+        id,
+      },
+      data: workflowToUpdate,
+    });
+
+    return NextResponse.json({
+      success: true,
+      data: {
+        id,
+        message: `workflow with id: ${id} updated successfully`,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    if (error instanceof Error)
+      return NextResponse.json({
+        success: false,
+        data: { message: error.message },
+      });
+  }
+}
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  try {
+    const { id } = await params;
+
+    const workflowExist = await prisma.workflow.findUnique({ where: { id } });
+
+    if (!workflowExist) {
+      return NextResponse.json(
+        {
+          success: false,
+          data: {
+            id,
+            message: `workflow with id: ${id} not found`,
+          },
+        },
+        { status: 404 },
+      );
+    }
+
+    await prisma.workflow.delete({ where: { id } });
+
+    return NextResponse.json({
+      success: true,
+      data: {
+        id,
+        message: `workflow with id: ${id} deleted successfully`,
+      },
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      return NextResponse.json(
+        {
+          success: false,
+          data: { message: error.message },
+        },
+        { status: 500 },
+      );
+    } else {
+      return NextResponse.json(
+        {
+          success: false,
+          data: { message: "Something went wrong!" },
+        },
+        { status: 500 },
+      );
+    }
+  }
 }
