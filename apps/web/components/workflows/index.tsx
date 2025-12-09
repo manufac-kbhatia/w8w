@@ -1,10 +1,10 @@
 "use client";
-import { Button, Card, Group, Stack, Title } from "@mantine/core";
+import { Button, Card, Group, Stack } from "@mantine/core";
 import { createWorkflow } from "@/utils";
 import { useEffect, useState } from "react";
 import { Workflow } from "@w8w/db/prisma-browser";
-import { redirect } from "next/navigation";
 import axios from "axios";
+import Link from "next/link";
 
 export const Workflows = () => {
   const [workflows, setWorkflows] = useState<Workflow[]>([]);
@@ -18,6 +18,7 @@ export const Workflows = () => {
 
     getWorkflow();
   }, []);
+
   return (
     <Stack>
       <Group justify="flex-end">
@@ -30,10 +31,17 @@ export const Workflows = () => {
             shadow="xs"
             className="border-2 transition-all duration-200 hover:scale-101 hover:shadow-lg cursor-pointer"
             style={{ cursor: "pointer" }}
-            onClick={() => redirect(`/workflow/${workflow.id}`)}
             key={workflow.id}
           >
-            <Title order={1}>{workflow.id}</Title>
+            <Link
+              href={{
+                pathname: `/workflow/${workflow.id}`,
+                query: { name: workflow.name },
+              }}
+              className="text-xl font-bold"
+            >
+              {workflow.id}
+            </Link>
           </Card>
         ))}
       </Stack>
