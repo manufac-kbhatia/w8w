@@ -42,7 +42,7 @@ export const checkMannualTriggerExist = (nodes: Node[]) => {
     (node) =>
       node.type === "CUSTOM" &&
       (node as CustomNodeType).data.nodeSchema?.type ===
-        "w8w-nodes-base.manualTrigger"
+        "w8w-nodes-base.manualTrigger",
   );
   return isMannualTriggerExist ? true : false;
 };
