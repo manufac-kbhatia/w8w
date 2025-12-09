@@ -1,10 +1,9 @@
 import CustomNode from "@/components/node/CustomNode";
 import InitialNode from "@/components/node/InitialNode";
-import { Workflow } from "@w8w/db/prisma-browser";
-import { Connection, NodeType } from "@w8w/db/prisma-client";
+import { Connection } from "@w8w/db/prisma-client";
 import { NodeSchema } from "@w8w/types";
 import { Node, NodeTypes, XYPosition } from "@xyflow/react";
-import { Node as NodeInDB } from "@w8w/db/prisma-browser";
+import { Node as NodeInDB, NodeType } from "@w8w/db/prisma-browser";
 import axios from "axios";
 import { redirect } from "next/navigation";
 
@@ -43,7 +42,7 @@ export const checkMannualTriggerExist = (nodes: Node[]) => {
     (node) =>
       node.type === "CUSTOM" &&
       (node as CustomNodeType).data.nodeSchema?.type ===
-        "w8w-nodes-base.manualTrigger",
+        "w8w-nodes-base.manualTrigger"
   );
   return isMannualTriggerExist ? true : false;
 };
