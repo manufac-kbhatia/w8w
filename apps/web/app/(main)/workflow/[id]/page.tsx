@@ -58,7 +58,7 @@ export default function Page() {
   const [actionNodes, setActionNodes] = useState<NodeSchema[]>([]);
   const [loadingWokflow, setLoadingWorkflow] = useState(false);
   const [toggleInteractive, setToggleInteractive] = useState(true);
-  const { fitView, zoomIn, zoomOut } = useReactFlow();
+  const { fitView, zoomIn, zoomOut, screenToFlowPosition } = useReactFlow();
 
   const showExecute = useMemo(() => {
     return checkMannualTriggerExist(nodes);
@@ -73,7 +73,7 @@ export default function Page() {
           else if (node.executionType === "action") acc.actions.push(node);
           return acc;
         },
-        { triggers: [] as NodeSchema[], actions: [] as NodeSchema[] },
+        { triggers: [] as NodeSchema[], actions: [] as NodeSchema[] }
       );
 
       setTriggerNodes(triggers);
@@ -103,24 +103,32 @@ export default function Page() {
   const onNodesChange: OnNodesChange<Node> = useCallback(
     (changes) =>
       setNodes((nodesSnapshot) => applyNodeChanges(changes, nodesSnapshot)),
-    [],
+    []
   );
   const onEdgesChange = useCallback(
     (changes: EdgeChange<Edge>[]) =>
       setEdges((edgesSnapshot) => applyEdgeChanges(changes, edgesSnapshot)),
-    [],
+    []
   );
 
   const onConnect = useCallback(
     (params: Connection) =>
       setEdges((edgesSnapshot) => addEdge(params, edgesSnapshot)),
-    [],
+    []
   );
 
   const addNode = (nodeSchema: NodeSchema) => {
+    const x = window.innerWidth / 2;
+    const y = window.innerHeight / 2;
+
+    const position = screenToFlowPosition({
+      x: x + (Math.random() + 0.5) * 200,
+      y: y + (Math.random() + 0.5) * 200,
+    });
+
     const newNode: CustomNodeType = {
       id: uuidv4(),
-      position: { x: 100 * (nodes.length + 1), y: 0 },
+      position: position,
       data: { nodeSchema },
       type: NodeType.CUSTOM,
     };
