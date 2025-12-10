@@ -26,7 +26,13 @@ import {
   IconProgressCheck,
   IconRoute,
 } from "@tabler/icons-react";
-import { NodeType } from "@w8w/db/prisma-browser";
+import {
+  Connection,
+  Node,
+  NodeData,
+  NodeType,
+  Workflow,
+} from "@w8w/db/prisma-browser";
 import { useReactFlow } from "@xyflow/react";
 import axios from "axios";
 import {
@@ -51,7 +57,6 @@ export default function Layout({
 
   const [workflowName, setWorkflowName] = useState<string>("untitled-workflow");
 
-  console.log(params.get("name"));
   const [nameInputVariant, toggleNameInputVariant] = useToggle([
     "unstyled",
     "default",
@@ -60,19 +65,18 @@ export default function Layout({
   const handleSave = async () => {
     const nodesToTransform = getNodes() as CustomNodeType[];
 
-    const transformedNodes = nodesToTransform.map((node) => {
-      if (node.type === NodeType.CUSTOM) {
+    const transformedNodes: Node[] = nodesToTransform
+      .filter((n) => n.type === NodeType.CUSTOM)
+      .map((node) => {
         return {
           id: node.id,
-          name: node.data.nodeSchema?.name,
-          type: node.type,
-          data: node.data,
+          nodeType: node.type,
+          data: node.data as unknown as NodeData,
           position: node.position as { x: number; y: number },
         };
-      }
-    });
+      });
 
-    const transformedEdges = getEdges().map((edge) => ({
+    const transformedEdges: Connection[] = getEdges().map((edge) => ({
       id: edge.id,
       source: edge.source,
       target: edge.target,
@@ -80,7 +84,7 @@ export default function Layout({
       targetHandle: edge.targetHandle ?? "main",
     }));
 
-    const saveWorkflow = {
+    const saveWorkflow: Partial<Workflow> = {
       name: workflowName,
       nodes: transformedNodes,
       connections: transformedEdges,

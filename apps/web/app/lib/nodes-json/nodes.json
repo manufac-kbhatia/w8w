@@ -1,8 +1,6 @@
 [
   {
-    "type": "w8w-nodes-base.manualTrigger",
-    "name": "When clicking ‘Execute workflow’",
-    "displayName": "Manual Trigger",
+    "name": "Manual Trigger",
     "description": "Runs the flow on clicking a button in w8w",
     "executionType": "trigger",
     "properties": [
@@ -23,9 +21,7 @@
     "iconUrl": "/mannual.svg"
   },
   {
-    "type": "w8w-nodes-base.webhook",
     "name": "Webhoook",
-    "displayName": "Webhoook",
     "description": "Starts the workflow when a webhook is called",
     "executionType": "action",
     "properties": [

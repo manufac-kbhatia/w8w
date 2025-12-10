@@ -26,13 +26,16 @@ model Workflow {
 }
 
 model Credential {
-    id             String    @id @default(auto()) @map("_id") @db.ObjectId
-    name           String    @unique
-    data           String
-    type           String
+    id             String          @id @default(auto()) @map("_id") @db.ObjectId
+    data           CredentialData?
     supportedNodes String[]
-    updatedAt      DateTime? @updatedAt
-    createdAt      DateTime  @default(now())
+    updatedAt      DateTime?       @updatedAt
+    createdAt      DateTime        @default(now())
+}
+
+type CredentialData {
+    credentialSchema Json?
+    parameters       Json?
 }
 
 enum NodeType {
@@ -42,8 +45,7 @@ enum NodeType {
 
 type Node {
     id       String
-    name     String
-    type     NodeType
+    nodeType NodeType
     position Position
     data     NodeData?
 }

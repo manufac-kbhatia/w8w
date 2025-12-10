@@ -41,30 +41,32 @@ export const checkMannualTriggerExist = (nodes: Node[]) => {
   const isMannualTriggerExist = nodes.find(
     (node) =>
       node.type === "CUSTOM" &&
-      (node as CustomNodeType).data.nodeSchema?.type ===
-        "w8w-nodes-base.manualTrigger",
+      (node as CustomNodeType).data.nodeSchema?.name === "Mannual Trigger",
   );
   return isMannualTriggerExist ? true : false;
 };
 
-export const transformNodes = (nodes: NodeInDB[]) => {
+export const transformNodes = (
+  nodes: NodeInDB[],
+  onInitialNode?: () => void,
+) => {
   return nodes.map((node) => {
     let transformedNode: InitialNodeType | CustomNodeType;
-    if (node.type === NodeType.INITIAL) {
+    if (node.nodeType === NodeType.INITIAL) {
       transformedNode = {
         id: node.id,
         position: node.position as XYPosition,
-        type: node.type,
+        type: node.nodeType,
         data:
-          node.type === NodeType.INITIAL
-            ? { onClick: open }
+          node.nodeType === NodeType.INITIAL
+            ? { onClick: onInitialNode }
             : (node.data as Record<string, unknown>),
       } as InitialNodeType;
     } else {
       transformedNode = {
         id: node.id,
         position: node.position as XYPosition,
-        type: node.type,
+        type: node.nodeType,
         data: node.data as unknown as CustomNodeData,
       };
     }
@@ -73,7 +75,7 @@ export const transformNodes = (nodes: NodeInDB[]) => {
   });
 };
 
-export function formatUpdatedAt(date: Date | null): string {
+export function formatUpdatedAt(date?: Date | null): string {
   if (!date) return "";
   const d = typeof date === "string" ? new Date(date) : date;
   return d.toLocaleString("en-US", {

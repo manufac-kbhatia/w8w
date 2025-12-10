@@ -19,8 +19,12 @@ import {
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
-import { Credential } from "@w8w/db/prisma-browser";
-import { CredentialSchema, PropertyTypes } from "@w8w/types";
+import {
+  Credential,
+  CredentialData,
+  CredentialSchema,
+  PropertyTypes,
+} from "@w8w/types";
 import axios from "axios";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -42,7 +46,6 @@ export const Credentials = () => {
   const [selectedCredentialSchema, setSelectedCredentialSchema] =
     useState<CredentialSchema | null>(null);
 
-  const [credentialName, setCredentialName] = useState<string>("");
   const [credentials, setCredentials] = useState<Credential[]>([]);
   const [loadingCredentials, setLoadingCredentials] = useState(false);
 
@@ -51,13 +54,15 @@ export const Credentials = () => {
   });
 
   useEffect(() => {
-    const getCredentialsJson = async () => {
+    const getCredentialsSchema = async () => {
       const { data } = await axios.get<{
         credentialSchemas: CredentialSchema[];
       }>("/api/credentials-json");
+
+      console.log(data);
       setCredentialSchemas(data.credentialSchemas);
     };
-    getCredentialsJson();
+    getCredentialsSchema();
   }, []);
 
   const handleConfirm = () => {
@@ -91,21 +96,23 @@ export const Credentials = () => {
   const handleCancel = () => {
     setSelectedCredentialSchema(null);
     closeAddCredentialModal();
-    setCredentialName("");
     form.reset();
   };
 
-  const handleCredentialSubmit = async (data: string) => {
+  const handleCredentialSubmit = async (values: Record<string, unknown>) => {
     try {
-      const type = selectedCredentialSchema?.name;
-      const supportedNodes = selectedCredentialSchema?.supportedNodes;
-      const response = await axios.post("/api/credential", {
-        data,
-        type,
-        name: credentialName,
-        supportedNodes,
-      });
-      setCredentials((prev) => [...prev, response.data.credential]);
+      if (selectedCredentialSchema) {
+        const data: CredentialData = {
+          parameters: values,
+          credentialSchema: selectedCredentialSchema,
+        };
+        const supportedNodes = selectedCredentialSchema?.supportedNodes;
+        const response = await axios.post("/api/credential", {
+          data,
+          supportedNodes,
+        });
+        setCredentials((prev) => [...prev, response.data.credential]);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -123,6 +130,8 @@ export const Credentials = () => {
     const getCredentials = async () => {
       setLoadingCredentials(true);
       const response = await axios.get("/api/credential");
+
+      console.log(response);
       setLoadingCredentials(false);
       setCredentials(response.data.credentials);
     };
@@ -143,10 +152,8 @@ export const Credentials = () => {
             label="Select an app or service to connect to"
             placeholder="Search for an app"
             data={credentialSchemas.map((credentialSchema) => {
-              return {
-                value: credentialSchema.name ?? "",
-                label: credentialSchema.displayName ?? "",
-              };
+              console.log(credentialSchema.name);
+              return credentialSchema.name ?? "";
             })}
             onChange={(value) => handleSelectCredentialSchema(value)}
           />
@@ -171,28 +178,19 @@ export const Credentials = () => {
           <Group>
             {selectedCredentialSchema?.iconUrl && (
               <Image
-                alt={selectedCredentialSchema.displayName ?? ""}
+                alt={selectedCredentialSchema.name ?? ""}
                 src={selectedCredentialSchema.iconUrl}
                 height={30}
                 width={35}
               />
             )}
-            <Title order={4}>{selectedCredentialSchema?.displayName}</Title>
+            <Title order={4}>{selectedCredentialSchema?.name}</Title>
           </Group>
         }
       >
         <Stack>
-          <TextInput
-            label="Name for the credential"
-            placeholder="Please enter a name for the credential"
-            required
-            value={credentialName}
-            onChange={(e) => setCredentialName(e.currentTarget.value)}
-          />
           <form
-            onSubmit={form.onSubmit((values) =>
-              handleCredentialSubmit(JSON.stringify(values)),
-            )}
+            onSubmit={form.onSubmit((values) => handleCredentialSubmit(values))}
           >
             <Stack>
               {selectedCredentialSchema?.properties?.map((property) => {
@@ -270,50 +268,60 @@ export const Credentials = () => {
         <LoadingSkeleton lenght={5} height={70} />
       ) : (
         <Stack>
-          {credentials.map((credential) => (
-            <Card
-              key={credential.id}
-              shadow="sm"
-              withBorder
-              className="transition-all duration-200 hover:scale-101 hover:shadow-lg cursor-pointer"
-            >
-              <Group justify="space-between" align="center">
-                <Group>
-                  <Image
-                    src={`./${credential.type}.svg`}
-                    alt={credential.name}
-                    width={40}
-                    height={40}
-                  />
-                  <Stack gap={0}>
-                    <Title order={1}>{credential.name}</Title>
-                    <Group>
-                      <Text>
-                        Last updated at {formatUpdatedAt(credential.updatedAt)}
-                      </Text>
-                      <Divider orientation="vertical" size="sm" />
-                      <Text>
-                        Created at {formatUpdatedAt(credential.createdAt)}
-                      </Text>
-                    </Group>
-                  </Stack>
+          {credentials.map((credential) => {
+            const name: string =
+              (credential.data?.parameters?.name as string | undefined) ??
+              credential.data?.credentialSchema?.name ??
+              "";
+            return (
+              <Card
+                key={credential.id}
+                shadow="sm"
+                withBorder
+                className="transition-all duration-200 hover:scale-101 hover:shadow-lg cursor-pointer"
+              >
+                <Group justify="space-between" align="center">
+                  <Group>
+                    <Image
+                      src={credential.data?.credentialSchema?.iconUrl ?? ""}
+                      alt={
+                        credential.data?.credentialSchema?.name ??
+                        "Credntial Image"
+                      }
+                      width={40}
+                      height={40}
+                    />
+                    <Stack gap={0}>
+                      <Title order={1}>{name}</Title>
+                      <Group>
+                        <Text>
+                          Last updated at{" "}
+                          {formatUpdatedAt(credential.updatedAt)}
+                        </Text>
+                        <Divider orientation="vertical" size="sm" />
+                        <Text>
+                          Created at {formatUpdatedAt(credential.createdAt)}
+                        </Text>
+                      </Group>
+                    </Stack>
+                  </Group>
+                  <Group>
+                    <ActionIcon size="md" radius="md" variant="light">
+                      <IconEdit size={20} />
+                    </ActionIcon>
+                    <ActionIcon
+                      size="md"
+                      radius="md"
+                      variant="light"
+                      onClick={() => handleDelete(credential.id)}
+                    >
+                      <IconTrash size={20} />
+                    </ActionIcon>
+                  </Group>
                 </Group>
-                <Group>
-                  <ActionIcon size="md" radius="md" variant="light">
-                    <IconEdit size={20} />
-                  </ActionIcon>
-                  <ActionIcon
-                    size="md"
-                    radius="md"
-                    variant="light"
-                    onClick={() => handleDelete(credential.id)}
-                  >
-                    <IconTrash size={20} />
-                  </ActionIcon>
-                </Group>
-              </Group>
-            </Card>
-          ))}
+              </Card>
+            );
+          })}
         </Stack>
       )}
     </Stack>

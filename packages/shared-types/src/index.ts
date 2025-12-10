@@ -16,9 +16,7 @@
 // }
 
 export interface NodeSchema {
-  type: string; //  "type": "n8n-nodes-base.manualTrigger",
-  name: string; // "name": "When clicking ‘Execute workflow’",
-  displayName: string; // "displayName": "Manual Trigger",
+  name: string; // "displayName": "Manual Trigger",
   description?: string; // "description": "Runs the flow on clicking a button in w8w",
   executionType: "trigger" | "action"; //  "executionType": "trigger",
   properties: Properties[];
@@ -79,13 +77,25 @@ export interface NodeSchema {
 
 export interface CredentialSchema {
   name?: string;
-  displayName?: string;
+  description?: string;
   documentationUrl?: string;
   properties?: Properties[];
   iconUrl?: string;
   supportedNodes?: string[];
 }
 
+export interface Credential {
+  id: string;
+  data?: CredentialData;
+  supportedNodes?: string[];
+  updatedAt?: Date;
+  createdAt?: Date;
+}
+
+export interface CredentialData {
+  credentialSchema?: CredentialSchema;
+  parameters?: Record<string, unknown>;
+}
 export interface Properties {
   id: string;
   displayName: string;

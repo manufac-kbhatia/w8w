@@ -50,7 +50,7 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
   useEffect(() => {
     const getSupportedCredentials = async () => {
       const response = await axios.get(
-        `/api/credential/supported?type=${data.nodeSchema?.type}`,
+        `/api/credential/supported?name=${data.nodeSchema?.name}`,
       );
       const supportedCredentials = response.data
         .supportedCredentials as SupportedCredential[];
@@ -59,7 +59,7 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
     };
 
     getSupportedCredentials();
-  }, [data.nodeSchema?.type]);
+  }, [data.nodeSchema?.name]);
 
   const currentNode = getNode(id);
   if (!currentNode) return;
@@ -68,7 +68,7 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
     <>
       <BaseNode
         showToolbar={true}
-        name={(data.parameters?.name as string) ?? data.nodeSchema?.displayName}
+        name={(data.parameters?.name as string) ?? data.nodeSchema?.name}
         descritpion={
           (data.parameters?.description as string) ??
           data.nodeSchema?.description
@@ -102,7 +102,7 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
         title={
           <Stack gap={1}>
             <Title component={"div"} order={1}>
-              {data.nodeSchema?.displayName}
+              {data.nodeSchema?.name}
             </Title>
             <Text c="dimmed">{data.nodeSchema?.description}</Text>
           </Stack>

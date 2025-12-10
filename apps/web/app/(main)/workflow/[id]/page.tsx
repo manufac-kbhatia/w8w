@@ -90,7 +90,7 @@ export default function Page() {
         success: boolean;
         data: { workflow: Workflow };
       }>(`/api/workflow/${id}`);
-      const transformedNodes = transformNodes(data.data.workflow.nodes);
+      const transformedNodes = transformNodes(data.data.workflow.nodes, open);
 
       setLoadingWorkflow(false);
       setNodes(transformedNodes);
@@ -257,7 +257,7 @@ export default function Page() {
                     />
                   </ThemeIcon>
                   <div>
-                    <Text fw={600}>{node.displayName}</Text>
+                    <Text fw={600}>{node.name}</Text>
                     <Text size="sm" c="dimmed">
                       {node.description}
                     </Text>
@@ -294,7 +294,7 @@ export default function Page() {
                     />
                   </ThemeIcon>
                   <div>
-                    <Text fw={600}>{node.displayName}</Text>
+                    <Text fw={600}>{node.name}</Text>
                     <Text size="sm" c="dimmed">
                       {node.description}
                     </Text>

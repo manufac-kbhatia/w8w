@@ -15,9 +15,9 @@ export async function POST() {
       nodes: [
         {
           id: uuidv4(),
-          type: NodeType.INITIAL,
+          nodeType: NodeType.INITIAL,
           position: { x: 0, y: 0 },
-          name: "Inital Node",
+          data: { parameters: { name: "Initial node" } },
         },
       ],
     },
