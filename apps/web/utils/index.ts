@@ -87,12 +87,6 @@ export function formatUpdatedAt(date?: Date | null): string {
   });
 }
 
-export interface SupportedCredential {
-  id: string;
-  name: string;
-  type: string;
-}
-
 export function getAdjList(edges: Connection[]) {
   const adj: Record<string, string[]> = {};
   for (const { source: from, target: to } of edges) {

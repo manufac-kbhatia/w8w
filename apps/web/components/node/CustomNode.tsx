@@ -1,4 +1,4 @@
-import { CustomNodeType, SupportedCredential } from "@/utils";
+import { CustomNodeType } from "@/utils";
 import {
   ActionIcon,
   Button,
@@ -15,7 +15,7 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
-import { PropertyTypes } from "@w8w/types";
+import { PropertyTypes, SupportedCredential } from "@w8w/types";
 import { Handle, Position, useReactFlow, type NodeProps } from "@xyflow/react";
 import axios from "axios";
 import Image from "next/image";
@@ -25,8 +25,8 @@ import BaseNode from "./BaseNode";
 export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
   const { updateNodeData, deleteElements, getNode } = useReactFlow();
   const [opened, { close, open }] = useDisclosure();
-  const [selectedCredential, setSelectedCredendtial] = useState<string | null>(
-    null,
+  const [selectedCredential, setSelectedCredendtial] = useState(
+    data.credentialId,
   );
 
   const form = useForm({
@@ -64,11 +64,15 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
   const currentNode = getNode(id);
   if (!currentNode) return;
 
+  console.log({ supportedCredentials });
+
   return (
     <>
       <BaseNode
         showToolbar={true}
-        name={(data.parameters?.name as string) ?? data.nodeSchema?.name}
+        name={
+          (data.parameters?.name as string | undefined) ?? data.nodeSchema?.name
+        }
         descritpion={
           (data.parameters?.description as string) ??
           data.nodeSchema?.description

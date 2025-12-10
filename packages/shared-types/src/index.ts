@@ -126,3 +126,8 @@ export const PropertyTypes = {
 } as const;
 
 export type PropertyType = (typeof PropertyTypes)[keyof typeof PropertyTypes];
+
+export interface SupportedCredential {
+  id: string;
+  name: string;
+}
