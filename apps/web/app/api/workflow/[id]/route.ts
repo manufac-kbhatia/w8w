@@ -3,127 +3,127 @@ import { IWorkflow } from "@w8w/db/prisma-client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
-    req: NextRequest,
-    { params }: { params: Promise<{ id: string }> },
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
 ) {
-    try {
-        const { id } = await params;
-        const workflow = await prisma.iWorkflow.findUnique({
-            where: {
-                id,
-            },
-        });
-        if (!workflow) {
-            return NextResponse.json(
-                {
-                    success: false,
-                    data: { message: "No workflow found with given id" },
-                },
-                { status: 404 },
-            );
-        }
-        return NextResponse.json({ success: true, data: { workflow } });
-    } catch (error) {
-        if (error instanceof Error) {
-            return NextResponse.json(
-                {
-                    success: false,
-                    data: { message: error.message },
-                },
-                { status: 500 },
-            );
-        } else {
-            return NextResponse.json(
-                {
-                    success: false,
-                    data: { message: "Something went wrong!" },
-                },
-                { status: 500 },
-            );
-        }
+  try {
+    const { id } = await params;
+    const workflow = await prisma.iWorkflow.findUnique({
+      where: {
+        id,
+      },
+    });
+    if (!workflow) {
+      return NextResponse.json(
+        {
+          success: false,
+          data: { message: "No workflow found with given id" },
+        },
+        { status: 404 },
+      );
     }
+    return NextResponse.json({ success: true, data: { workflow } });
+  } catch (error) {
+    if (error instanceof Error) {
+      return NextResponse.json(
+        {
+          success: false,
+          data: { message: error.message },
+        },
+        { status: 500 },
+      );
+    } else {
+      return NextResponse.json(
+        {
+          success: false,
+          data: { message: "Something went wrong!" },
+        },
+        { status: 500 },
+      );
+    }
+  }
 }
 
 export async function PUT(
-    req: NextRequest,
-    { params }: { params: Promise<{ id: string }> },
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
 ) {
-    try {
-        const { id } = await params;
-        const workflowToUpdate = (await req.json()) as Omit<IWorkflow, "id">;
+  try {
+    const { id } = await params;
+    const workflowToUpdate = (await req.json()) as Omit<IWorkflow, "id">;
 
-        await prisma.iWorkflow.update({
-            where: {
-                id,
-            },
-            data: workflowToUpdate,
-        });
+    await prisma.iWorkflow.update({
+      where: {
+        id,
+      },
+      data: workflowToUpdate,
+    });
 
-        return NextResponse.json({
-            success: true,
-            data: {
-                id,
-                message: `workflow with id: ${id} updated successfully`,
-            },
-        });
-    } catch (error) {
-        console.log(error);
-        if (error instanceof Error)
-            return NextResponse.json({
-                success: false,
-                data: { message: error.message },
-            });
-    }
+    return NextResponse.json({
+      success: true,
+      data: {
+        id,
+        message: `workflow with id: ${id} updated successfully`,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    if (error instanceof Error)
+      return NextResponse.json({
+        success: false,
+        data: { message: error.message },
+      });
+  }
 }
 
 export async function DELETE(
-    req: NextRequest,
-    { params }: { params: Promise<{ id: string }> },
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
 ) {
-    try {
-        const { id } = await params;
+  try {
+    const { id } = await params;
 
-        const workflowExist = await prisma.iWorkflow.findUnique({ where: { id } });
+    const workflowExist = await prisma.iWorkflow.findUnique({ where: { id } });
 
-        if (!workflowExist) {
-            return NextResponse.json(
-                {
-                    success: false,
-                    data: {
-                        id,
-                        message: `workflow with id: ${id} not found`,
-                    },
-                },
-                { status: 404 },
-            );
-        }
-
-        await prisma.iWorkflow.delete({ where: { id } });
-
-        return NextResponse.json({
-            success: true,
-            data: {
-                id,
-                message: `workflow with id: ${id} deleted successfully`,
-            },
-        });
-    } catch (error) {
-        if (error instanceof Error) {
-            return NextResponse.json(
-                {
-                    success: false,
-                    data: { message: error.message },
-                },
-                { status: 500 },
-            );
-        } else {
-            return NextResponse.json(
-                {
-                    success: false,
-                    data: { message: "Something went wrong!" },
-                },
-                { status: 500 },
-            );
-        }
+    if (!workflowExist) {
+      return NextResponse.json(
+        {
+          success: false,
+          data: {
+            id,
+            message: `workflow with id: ${id} not found`,
+          },
+        },
+        { status: 404 },
+      );
     }
+
+    await prisma.iWorkflow.delete({ where: { id } });
+
+    return NextResponse.json({
+      success: true,
+      data: {
+        id,
+        message: `workflow with id: ${id} deleted successfully`,
+      },
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      return NextResponse.json(
+        {
+          success: false,
+          data: { message: error.message },
+        },
+        { status: 500 },
+      );
+    } else {
+      return NextResponse.json(
+        {
+          success: false,
+          data: { message: "Something went wrong!" },
+        },
+        { status: 500 },
+      );
+    }
+  }
 }
