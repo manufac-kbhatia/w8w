@@ -64,8 +64,6 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
   const currentNode = getNode(id);
   if (!currentNode) return;
 
-  console.log({ supportedCredentials });
-
   return (
     <>
       <BaseNode

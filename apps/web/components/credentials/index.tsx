@@ -59,7 +59,6 @@ export const Credentials = () => {
         credentialSchemas: CredentialSchema[];
       }>("/api/credentials-json");
 
-      console.log(data);
       setCredentialSchemas(data.credentialSchemas);
     };
     getCredentialsSchema();
@@ -130,8 +129,6 @@ export const Credentials = () => {
     const getCredentials = async () => {
       setLoadingCredentials(true);
       const response = await axios.get("/api/credential");
-
-      console.log(response);
       setLoadingCredentials(false);
       setCredentials(response.data.credentials);
     };
@@ -151,10 +148,9 @@ export const Credentials = () => {
           <Select
             label="Select an app or service to connect to"
             placeholder="Search for an app"
-            data={credentialSchemas.map((credentialSchema) => {
-              console.log(credentialSchema.name);
-              return credentialSchema.name ?? "";
-            })}
+            data={credentialSchemas.map(
+              (credentialSchema) => credentialSchema.name ?? "",
+            )}
             onChange={(value) => handleSelectCredentialSchema(value)}
           />
           <Group justify="flex-end">
