@@ -15,48 +15,48 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Workflow {
-    id          String       @id @default(auto()) @map("_id") @db.ObjectId
-    name        String?      @default("untitled-workflow")
-    active      Boolean      @default(true)
-    nodes       Node[]
-    connections Connection[]
-    updatedAt   DateTime?    @updatedAt
-    createdAt   DateTime     @default(now())
+model IWorkflow {
+    id          String        @id @default(auto()) @map("_id") @db.ObjectId
+    name        String?       @default("untitled-workflow")
+    active      Boolean       @default(true)
+    nodes       INode[]
+    connections IConnection[]
+    updatedAt   DateTime?     @updatedAt
+    createdAt   DateTime      @default(now())
 }
 
-model Credential {
-    id             String          @id @default(auto()) @map("_id") @db.ObjectId
-    data           CredentialData?
+model ICredential {
+    id             String           @id @default(auto()) @map("_id") @db.ObjectId
+    data           ICredentialData?
     supportedNodes String[]
-    updatedAt      DateTime?       @updatedAt
-    createdAt      DateTime        @default(now())
+    updatedAt      DateTime?        @updatedAt
+    createdAt      DateTime         @default(now())
 }
 
-type CredentialData {
+type ICredentialData {
     credentialSchema Json?
     parameters       Json?
 }
 
-enum NodeType {
+enum INodeType {
     INITIAL
     CUSTOM
 }
 
-type Node {
+type INode {
     id       String
-    nodeType NodeType
-    position Position
-    data     NodeData?
+    nodeType INodeType
+    position IPosition
+    data     INodeData?
 }
 
-type NodeData {
+type INodeData {
     nodeSchema   Json?
     parameters   Json?
     credentialId String?
 }
 
-type Connection {
+type IConnection {
     id           String
     source       String
     target       String
@@ -64,7 +64,7 @@ type Connection {
     targetHandle String
 }
 
-type Position {
+type IPosition {
     x Int
     y Int
 }
