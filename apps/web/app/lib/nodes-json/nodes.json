@@ -21,6 +21,33 @@
     "iconUrl": "/mannual.svg"
   },
   {
+    "name": "Timer",
+    "description": "Waits for the given time until to proceed further",
+    "executionType": "action",
+    "properties": [
+      {
+        "displayName": "Name",
+        "name": "name",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "displayName": "Description",
+        "name": "description",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "displayName": "Delay",
+        "name": "delay",
+        "type": "number",
+        "default": "0"
+      }
+    ],
+    "requiredCredential": false,
+    "iconUrl": "/mannual.svg"
+  },
+  {
     "name": "Webhoook",
     "description": "Starts the workflow when a webhook is called",
     "executionType": "action",

@@ -41,7 +41,7 @@ export const checkMannualTriggerExist = (nodes: Node[]) => {
   const isMannualTriggerExist = nodes.find(
     (node) =>
       node.type === "CUSTOM" &&
-      (node as CustomNodeType).data.nodeSchema?.name === "Manual Trigger",
+      (node as CustomNodeType).data.nodeSchema?.name === "Manual Trigger"
   );
   return isMannualTriggerExist ? true : false;
 };
@@ -89,6 +89,29 @@ export function getAdjList(edges: IConnection[]) {
   for (const { source: from, target: to } of edges) {
     if (!adj[from]) adj[from] = [];
     adj[from].push(to);
+
+    // Also initialize the "to" edge with empty array so that if there "to" edge doesnt appear as "from" edge later, atleast its entry is added with [] in adj list
+    if (!adj[to]) adj[to] = [];
   }
   return adj;
 }
+
+export function getInDegrees(edges: IConnection[]): Record<string, number> {
+  const inDegrees: Record<string, number> = {};
+  for (const { source: from, target: to } of edges) {
+    if (!inDegrees[to]) inDegrees[to] = 1;
+    else inDegrees[to]++;
+
+    if (!inDegrees[from]) inDegrees[from] = 0;
+  }
+
+  return inDegrees;
+}
+
+export const NodeNames = {
+  Timer: "Timer Node",
+  Manual: "Manual Trigger",
+  Webhook: "Webhook",
+} as const;
+
+export type NodeName = (typeof NodeNames)[keyof typeof NodeNames];
