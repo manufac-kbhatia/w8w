@@ -16,7 +16,7 @@ export const ManualTriggerExecutionFunction: ExecutionFunction = async ({
   });
   const result = await step.run(
     "Manual trigger execution",
-    () => workflowState
+    () => workflowState,
   );
 
   await publish({

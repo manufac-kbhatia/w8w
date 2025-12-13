@@ -24,7 +24,7 @@ export const TimerExecutionFunction: ExecutionFunction = async ({
     return new Promise((resolve) =>
       setTimeout(() => {
         resolve(delay);
-      }, delay)
+      }, delay),
     );
   });
   workflowState = { ...workflowState, result };

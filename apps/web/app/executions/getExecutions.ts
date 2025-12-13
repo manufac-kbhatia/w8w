@@ -15,7 +15,7 @@ export type ExecutionFunctionArgs = {
 };
 
 export type ExecutionFunction = (
-  args: ExecutionFunctionArgs
+  args: ExecutionFunctionArgs,
 ) => Promise<WorkflowState>;
 
 export const ExecutionFunctions: Record<NodeName, ExecutionFunction> = {
