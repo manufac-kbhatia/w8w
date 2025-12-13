@@ -7,11 +7,12 @@ import {
   getExecutionFucntion,
   WorkflowState,
 } from "@/app/executions/getExecutions";
+import { Realtime } from "@inngest/realtime/middleware";
 
 export const executeWorkflow = inngest.createFunction(
   { id: "execute-workflow" },
   { event: "execute/workflow" },
-  async ({ event, step }) => {
+  async ({ event, step, publish }) => {
     const workflowId = event.data.id as string | undefined;
     if (!workflowId) {
       throw new NonRetriableError("Workflow id not provided");
@@ -39,13 +40,13 @@ export const executeWorkflow = inngest.createFunction(
     });
 
     const adjacencyList = await step.run("Prepare adjacency list", () =>
-      getAdjList(workflow.connections),
+      getAdjList(workflow.connections)
     );
     const inDegrees = await step.run("Prepare InDegrees for each edges", () =>
-      getInDegrees(workflow.connections),
+      getInDegrees(workflow.connections)
     );
 
-    const workflowState: WorkflowState = {};
+    const workflowState: WorkflowState = { workflowId };
 
     const inDegreesEntry = Object.entries(inDegrees);
     for (const [nodeId, inDegree] of inDegreesEntry) {
@@ -56,13 +57,14 @@ export const executeWorkflow = inngest.createFunction(
           inDegrees,
           adjacencyList,
           step,
-          workflowState,
+          publish,
+          workflowState
         );
       }
     }
 
     return workflowState;
-  },
+  }
 );
 
 export async function executeNode(
@@ -71,7 +73,8 @@ export async function executeNode(
   inDegrees: Record<string, number>,
   adjacencyList: Record<string, string[]>,
   step: GetStepTools<Inngest.Any>,
-  workflowState: WorkflowState,
+  publish: Realtime.PublishFn,
+  workflowState: WorkflowState
 ) {
   // Get the node
   const node = idToNode[nodeId];
@@ -92,6 +95,7 @@ export async function executeNode(
     node,
     workflowState,
     step,
+    publish,
   });
 
   // Get children node and execute the same process again
@@ -112,8 +116,9 @@ export async function executeNode(
               inDegrees,
               adjacencyList,
               step,
-              updatedWorkflowState,
-            ),
+              publish,
+              updatedWorkflowState
+            )
           );
         }
       }

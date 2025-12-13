@@ -1,9 +1,10 @@
 "use client";
-import { CustomNodeType } from "@/utils";
+import { CustomNodeType, NodeStatus } from "@/utils";
 import {
   ActionIcon,
   Button,
   Group,
+  Loader,
   Modal,
   MultiSelect,
   NumberInput,
@@ -22,13 +23,26 @@ import axios from "axios";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import BaseNode from "./BaseNode";
+import { useInngestSubscription } from "@inngest/realtime/hooks";
+import { fetchRealtimeSubscriptionToken } from "@/app/actions/get-subscribe-token";
+import { useParams } from "next/navigation";
+import { IconCircleCheckFilled } from "@tabler/icons-react";
 
 export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
+  const { id: workflowId } = useParams<{ id: string }>();
   const { updateNodeData, deleteElements, getNode } = useReactFlow();
   const [opened, { close, open }] = useDisclosure();
   const [selectedCredential, setSelectedCredendtial] = useState(
-    data.credentialId,
+    data.credentialId
   );
+
+  console.log("workflowId", workflowId);
+
+  const { latestData } = useInngestSubscription({
+    refreshToken: () => fetchRealtimeSubscriptionToken(workflowId, id),
+  });
+
+  console.log(`${data.parameters?.name}`, latestData?.data.status);
 
   const form = useForm({
     mode: "uncontrolled",
@@ -51,7 +65,7 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
   useEffect(() => {
     const getSupportedCredentials = async () => {
       const response = await axios.get(
-        `/api/credential/supported?name=${data.nodeSchema?.name}`,
+        `/api/credential/supported?name=${data.nodeSchema?.name}`
       );
       const supportedCredentials = response.data
         .supportedCredentials as SupportedCredential[];
@@ -83,6 +97,7 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
           variant="white"
           bd={"1px solid black"}
           size={40}
+          style={{ position: "relative" }}
         >
           <Image
             src={data.nodeSchema?.iconUrl ?? ""}
@@ -90,6 +105,27 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
             width={20}
             height={20}
           />
+          {latestData?.data.status === NodeStatus.Loading && (
+            <Loader
+              size={10}
+              style={{
+                position: "absolute",
+                bottom: "5%",
+                right: "5%",
+              }}
+            />
+          )}
+
+          {latestData?.data.status === NodeStatus.Success && (
+            <IconCircleCheckFilled
+              size={10}
+              style={{
+                position: "absolute",
+                bottom: "5%",
+                right: "5%",
+              }}
+            />
+          )}
         </ActionIcon>
 
         {data.nodeSchema?.executionType === "action" && (

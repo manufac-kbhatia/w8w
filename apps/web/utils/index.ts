@@ -41,7 +41,7 @@ export const checkMannualTriggerExist = (nodes: Node[]) => {
   const isMannualTriggerExist = nodes.find(
     (node) =>
       node.type === "CUSTOM" &&
-      (node as CustomNodeType).data.nodeSchema?.name === "Manual Trigger",
+      (node as CustomNodeType).data.nodeSchema?.name === "Manual Trigger"
   );
   return isMannualTriggerExist ? true : false;
 };
@@ -115,3 +115,11 @@ export const NodeNames = {
 } as const;
 
 export type NodeName = (typeof NodeNames)[keyof typeof NodeNames];
+
+export const NodeStatus = {
+  Loading: "Loading",
+  Success: "Success",
+  Error: "Error",
+} as const;
+
+export type NodeStatus = (typeof NodeStatus)[keyof typeof NodeStatus];
