@@ -21,7 +21,7 @@
     "iconUrl": "/mannual.svg"
   },
   {
-    "name": "Timer",
+    "name": "Timer Node",
     "description": "Waits for the given time until to proceed further",
     "executionType": "action",
     "properties": [

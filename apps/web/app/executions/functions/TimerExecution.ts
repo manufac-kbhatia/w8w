@@ -11,30 +11,27 @@ export const TimerExecutionFunction: ExecutionFunction = async ({
     | Record<string, unknown>
     | undefined;
 
-  const delay = parameters?.delay as number | undefined;
-  await publish({
-    channel: `Workflow:${workflowState.workflowId}`,
-    topic: `Node:${node.id}`,
-    data: {
-      status: NodeStatus.Loading,
-    },
+  const delay = (parameters?.delay as number | undefined) ?? 0;
+
+  await step.run(`publish loading:${node.id}`, async () => {
+    await publish({
+      channel: `Workflow:${workflowState.workflowId}`,
+      topic: `Node:${node.id}`,
+      data: { status: NodeStatus.Loading },
+    });
   });
 
-  const result = await step.run(`${parameters?.name} : ${delay}`, async () => {
-    return new Promise((resolve) =>
-      setTimeout(() => {
-        resolve(delay);
-      }, delay),
-    );
-  });
-  workflowState = { ...workflowState, result };
+  await step.sleep(`${parameters?.name} : delay`, delay);
 
-  await publish({
-    channel: `Workflow:${workflowState.workflowId}`,
-    topic: `Node:${node.id}`,
-    data: {
-      status: NodeStatus.Success,
-    },
+  workflowState = { ...workflowState, result: delay };
+
+  await step.run(`publish success:${node.id}`, async () => {
+    await publish({
+      channel: `Workflow:${workflowState.workflowId}`,
+      topic: `Node:${node.id}`,
+      data: { status: NodeStatus.Success },
+    });
   });
+
   return workflowState;
 };

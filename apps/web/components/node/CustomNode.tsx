@@ -14,6 +14,7 @@ import {
   Text,
   TextInput,
   Title,
+  useMantineTheme,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
@@ -33,16 +34,13 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
   const { updateNodeData, deleteElements, getNode } = useReactFlow();
   const [opened, { close, open }] = useDisclosure();
   const [selectedCredential, setSelectedCredendtial] = useState(
-    data.credentialId,
+    data.credentialId
   );
-
-  console.log("workflowId", workflowId);
+  const theme = useMantineTheme();
 
   const { latestData } = useInngestSubscription({
     refreshToken: () => fetchRealtimeSubscriptionToken(workflowId, id),
   });
-
-  console.log(`${data.parameters?.name}`, latestData?.data.status);
 
   const form = useForm({
     mode: "uncontrolled",
@@ -65,7 +63,7 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
   useEffect(() => {
     const getSupportedCredentials = async () => {
       const response = await axios.get(
-        `/api/credential/supported?name=${data.nodeSchema?.name}`,
+        `/api/credential/supported?name=${data.nodeSchema?.name}`
       );
       const supportedCredentials = response.data
         .supportedCredentials as SupportedCredential[];
@@ -118,6 +116,7 @@ export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
 
           {latestData?.data.status === NodeStatus.Success && (
             <IconCircleCheckFilled
+              color={theme.colors.green[5]}
               size={10}
               style={{
                 position: "absolute",
