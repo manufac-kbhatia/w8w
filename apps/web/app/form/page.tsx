@@ -85,7 +85,7 @@ export const PreviewTextInput = () => {
 
   const update = <K extends keyof TextInputConfig>(
     key: K,
-    value: TextInputConfig[K]
+    value: TextInputConfig[K],
   ) => {
     setConfig((prev) => ({ ...prev, [key]: value }));
   };
