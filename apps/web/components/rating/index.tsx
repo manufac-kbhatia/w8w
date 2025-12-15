@@ -1,4 +1,4 @@
-import { Rating, RatingProps, Stack, Text, Title } from "@mantine/core";
+import { Rating, RatingProps, Stack, Text } from "@mantine/core";
 
 export interface RatingInputProps extends RatingProps {
   label?: string;

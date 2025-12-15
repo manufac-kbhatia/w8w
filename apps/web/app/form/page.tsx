@@ -2,6 +2,8 @@
 import { MultiSelectCreatable } from "@/components/createableMultiSelect";
 import { SelectCreatable } from "@/components/createableSelect";
 import { RatingInput } from "@/components/rating";
+import { RadioInput } from "@/components/radio";
+
 import {
   Button,
   Checkbox,
@@ -11,7 +13,6 @@ import {
   Modal,
   MultiSelect,
   NumberInput,
-  Radio,
   Select,
   Stack,
   Switch,
@@ -30,7 +31,7 @@ export const MantineInputNames = {
   NumberInput: "NumberInput",
   Select: "Select",
   MultiSelect: "MultiSelect",
-  Radio: "Radio",
+  Radio: "RadioInput",
   Checkbox: "Checkbox",
   Rating: "RatingInput",
 } as const;
@@ -44,7 +45,7 @@ export const MantineInputs: Record<MantineInputName, MantineComponent<any>> = {
   NumberInput,
   Select,
   MultiSelect,
-  Radio,
+  RadioInput,
   Checkbox,
   RatingInput,
 };
@@ -241,16 +242,17 @@ export function PreviewInput({
           disabled={
             inputName === "Checkbox" ||
             inputName == "RatingInput" ||
-            inputName === "Radio"
+            inputName === "RadioInput"
           }
         />
 
-        {inputName === "Select" && config.data && (
-          <SelectCreatable
-            data={config.data}
-            onDataCreate={(value) => update("data", [...config.data!, value])}
-          />
-        )}
+        {(inputName === "Select" || inputName === "RadioInput") &&
+          config.data && (
+            <SelectCreatable
+              data={config.data}
+              onDataCreate={(value) => update("data", [...config.data!, value])}
+            />
+          )}
 
         {inputName === "MultiSelect" && config.data && (
           <MultiSelectCreatable
