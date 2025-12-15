@@ -40,10 +40,10 @@ export const executeWorkflow = inngest.createFunction(
     });
 
     const adjacencyList = await step.run("Prepare adjacency list", () =>
-      getAdjList(workflow.connections),
+      getAdjList(workflow.connections)
     );
     const inDegrees = await step.run("Prepare InDegrees for each edges", () =>
-      getInDegrees(workflow.connections),
+      getInDegrees(workflow.connections)
     );
 
     const workflowState: WorkflowState = { workflowId };
@@ -58,13 +58,13 @@ export const executeWorkflow = inngest.createFunction(
           adjacencyList,
           step,
           publish,
-          workflowState,
+          workflowState
         );
       }
     }
 
     return workflowState;
-  },
+  }
 );
 
 export async function executeNode(
@@ -74,7 +74,7 @@ export async function executeNode(
   adjacencyList: Record<string, string[]>,
   step: GetStepTools<Inngest.Any>,
   publish: Realtime.PublishFn,
-  workflowState: WorkflowState,
+  workflowState: WorkflowState
 ) {
   // Get the node
   const node = idToNode[nodeId];
@@ -116,8 +116,8 @@ export async function executeNode(
               adjacencyList,
               step,
               publish,
-              updatedWorkflowState,
-            ),
+              updatedWorkflowState
+            )
           );
         }
       }
