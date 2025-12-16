@@ -1,7 +1,7 @@
 import CustomNode from "@/components/node/CustomNode";
 import InitialNode from "@/components/node/InitialNode";
 import { IConnection } from "@w8w/db/prisma-client";
-import { NodeSchema } from "@w8w/types";
+import { NodeSchema } from "@/types";
 import { Node, NodeTypes, XYPosition } from "@xyflow/react";
 import { INode, INodeType } from "@w8w/db/prisma-browser";
 import axios from "axios";
@@ -41,7 +41,7 @@ export const checkMannualTriggerExist = (nodes: Node[]) => {
   const isMannualTriggerExist = nodes.find(
     (node) =>
       node.type === "CUSTOM" &&
-      (node as CustomNodeType).data.nodeSchema?.name === "Manual Trigger",
+      (node as CustomNodeType).data.nodeSchema?.name === "Manual Trigger"
   );
   return isMannualTriggerExist ? true : false;
 };

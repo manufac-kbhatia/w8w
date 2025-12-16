@@ -1,5 +1,6 @@
+import { SupportedCredential } from "@/types";
 import { prisma } from "@w8w/db/client";
-import { SupportedCredential } from "@w8w/types";
+
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -36,7 +37,7 @@ export async function GET(req: NextRequest) {
           id: cred.id,
           name,
         };
-      },
+      }
     );
     return NextResponse.json({ supportedCredentials }, { status: 200 });
   }

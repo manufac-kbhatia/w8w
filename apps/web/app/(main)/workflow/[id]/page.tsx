@@ -45,9 +45,9 @@ import {
   transformNodes,
 } from "@/utils";
 import { INodeType, IWorkflow } from "@w8w/db/prisma-browser";
-import { NodeSchema } from "@w8w/types";
 import { v4 as uuidv4 } from "uuid";
 import { useParams } from "next/navigation";
+import { NodeSchema } from "@/types";
 
 export default function Page() {
   const { id } = useParams<{ id: string }>();
@@ -73,7 +73,7 @@ export default function Page() {
           else if (node.executionType === "action") acc.actions.push(node);
           return acc;
         },
-        { triggers: [] as NodeSchema[], actions: [] as NodeSchema[] },
+        { triggers: [] as NodeSchema[], actions: [] as NodeSchema[] }
       );
 
       setTriggerNodes(triggers);
@@ -103,18 +103,18 @@ export default function Page() {
   const onNodesChange: OnNodesChange<Node> = useCallback(
     (changes) =>
       setNodes((nodesSnapshot) => applyNodeChanges(changes, nodesSnapshot)),
-    [],
+    []
   );
   const onEdgesChange = useCallback(
     (changes: EdgeChange<Edge>[]) =>
       setEdges((edgesSnapshot) => applyEdgeChanges(changes, edgesSnapshot)),
-    [],
+    []
   );
 
   const onConnect = useCallback(
     (params: Connection) =>
       setEdges((edgesSnapshot) => addEdge(params, edgesSnapshot)),
-    [],
+    []
   );
 
   const addNode = (nodeSchema: NodeSchema) => {
@@ -126,11 +126,11 @@ export default function Page() {
       y: y + (Math.random() + 0.5) * 200,
     });
 
-    const newNode: CustomNodeType = {
+    const newNode: Node = {
       id: uuidv4(),
       position: position,
       data: { nodeSchema },
-      type: INodeType.CUSTOM,
+      type: nodeSchema.nodeType,
     };
     setNodes((prev) => [
       ...prev.filter((node) => node.type !== INodeType.INITIAL),

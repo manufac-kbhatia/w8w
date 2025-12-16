@@ -24,7 +24,7 @@ import {
   CredentialData,
   CredentialSchema,
   PropertyTypes,
-} from "@w8w/types";
+} from "@/types";
 import axios from "axios";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -70,11 +70,11 @@ export const Credentials = () => {
   };
 
   const handleSelectCredentialSchema = (
-    credentialSchemaName: string | null,
+    credentialSchemaName: string | null
   ) => {
     if (credentialSchemaName) {
       const selectedCredentialSchema = credentialSchemas.find(
-        (credentialSchema) => credentialSchema.name === credentialSchemaName,
+        (credentialSchema) => credentialSchema.name === credentialSchemaName
       );
       if (selectedCredentialSchema && selectedCredentialSchema.properties) {
         setSelectedCredentialSchema(selectedCredentialSchema);
@@ -84,7 +84,7 @@ export const Credentials = () => {
             property.type === PropertyTypes.multiSelect
               ? [property.default ?? ""]
               : (property.default ?? ""),
-          ]),
+          ])
         );
 
         form.initialize(values);
@@ -149,7 +149,7 @@ export const Credentials = () => {
             label="Select an app or service to connect to"
             placeholder="Search for an app"
             data={credentialSchemas.map(
-              (credentialSchema) => credentialSchema.name ?? "",
+              (credentialSchema) => credentialSchema.name ?? ""
             )}
             onChange={(value) => handleSelectCredentialSchema(value)}
           />
