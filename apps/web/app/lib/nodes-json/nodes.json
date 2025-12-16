@@ -3,6 +3,7 @@
     "name": "Manual Trigger",
     "description": "Runs the flow on clicking a button in w8w",
     "executionType": "trigger",
+    "nodeType": "CUSTOM",
     "properties": [
       {
         "displayName": "Name",
@@ -24,6 +25,7 @@
     "name": "Timer Node",
     "description": "Waits for the given time until to proceed further",
     "executionType": "action",
+    "nodeType": "CUSTOM",
     "properties": [
       {
         "displayName": "Name",
@@ -45,12 +47,13 @@
       }
     ],
     "requiredCredential": false,
-    "iconUrl": "/mannual.svg"
+    "iconUrl": "/timer.svg"
   },
   {
     "name": "Webhoook",
     "description": "Starts the workflow when a webhook is called",
-    "executionType": "action",
+    "executionType": "trigger",
+    "nodeType": "CUSTOM",
     "properties": [
       {
         "displayName": "Name",
@@ -93,5 +96,27 @@
     ],
     "requiredCredential": true,
     "iconUrl": "/webhook.svg"
+  },
+  {
+    "name": "Form",
+    "description": "Initiates workflow execution upon form submission",
+    "executionType": "action",
+    "nodeType": "FORM",
+    "properties": [
+      {
+        "displayName": "Name",
+        "name": "name",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "displayName": "Description",
+        "name": "description",
+        "type": "string",
+        "default": ""
+      }
+    ],
+    "requiredCredential": false,
+    "iconUrl": "/timer.svg"
   }
 ]

@@ -194,13 +194,13 @@ export function PreviewInput({
           data={config.data}
           description={config.description}
           required={config.required}
-          onChange={(value: any) => {
+          onChange={(value: React.ChangeEvent<HTMLInputElement> | string) => {
             let updatedValue;
 
-            if (inputName === "TextInput" || inputName === "Textarea") {
-              updatedValue = value.currentTarget.value;
-            } else {
+            if (typeof value === "string") {
               updatedValue = value;
+            } else {
+              updatedValue = value.currentTarget.value;
             }
 
             update("defaultValue", updatedValue);
@@ -214,6 +214,7 @@ export function PreviewInput({
       <Fieldset legend={<Title>Edit the field</Title>}>
         <TextInput
           label="Name"
+          description="Name field will be used for accessing the form data in other nodes"
           value={config.name}
           onChange={(e) => update("name", e.target.value)}
           required

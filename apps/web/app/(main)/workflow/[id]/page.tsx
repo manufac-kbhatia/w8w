@@ -73,7 +73,7 @@ export default function Page() {
           else if (node.executionType === "action") acc.actions.push(node);
           return acc;
         },
-        { triggers: [] as NodeSchema[], actions: [] as NodeSchema[] }
+        { triggers: [] as NodeSchema[], actions: [] as NodeSchema[] },
       );
 
       setTriggerNodes(triggers);
@@ -103,18 +103,18 @@ export default function Page() {
   const onNodesChange: OnNodesChange<Node> = useCallback(
     (changes) =>
       setNodes((nodesSnapshot) => applyNodeChanges(changes, nodesSnapshot)),
-    []
+    [],
   );
   const onEdgesChange = useCallback(
     (changes: EdgeChange<Edge>[]) =>
       setEdges((edgesSnapshot) => applyEdgeChanges(changes, edgesSnapshot)),
-    []
+    [],
   );
 
   const onConnect = useCallback(
     (params: Connection) =>
       setEdges((edgesSnapshot) => addEdge(params, edgesSnapshot)),
-    []
+    [],
   );
 
   const addNode = (nodeSchema: NodeSchema) => {
