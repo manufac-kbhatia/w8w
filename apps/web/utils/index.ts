@@ -15,7 +15,7 @@ export const TABS = {
 
 export type Tab = (typeof TABS)[keyof typeof TABS];
 
-export type CustomNodeData = {
+export type BaseNodeData = {
   nodeSchema?: NodeSchema;
   parameters?: Record<string, unknown>;
   credentialId?: string | null;
@@ -24,7 +24,7 @@ export type CustomNodeData = {
 export type InitialNodeData = {
   onClick: () => void;
 };
-export type CustomNode = Node<CustomNodeData, "CUSTOM">;
+export type CustomNode = Node<BaseNodeData, "CUSTOM">;
 export type InitialNode = Node<InitialNodeData, "INITIAL">;
 
 export const nodeTypes: NodeTypes = {
