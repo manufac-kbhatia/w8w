@@ -6,6 +6,7 @@ import { Node, NodeTypes, XYPosition } from "@xyflow/react";
 import { INode, INodeType } from "@w8w/db/prisma-browser";
 import axios from "axios";
 import { redirect } from "next/navigation";
+import FormNode from "@/components/node/FormNode";
 
 export const TABS = {
   workflow: "workflow",
@@ -26,11 +27,12 @@ export type InitialNodeData = {
 };
 export type CustomNode = Node<BaseNodeData, "CUSTOM">;
 export type InitialNode = Node<InitialNodeData, "INITIAL">;
+export type FormNode = Node<BaseNodeData, "FORM">;
 
 export const nodeTypes: NodeTypes = {
   ["INITIAL"]: InitialNode,
   ["CUSTOM"]: CustomNode,
-  ["FORM"]: CustomNode, // Add form node instead
+  ["FORM"]: FormNode,
 };
 
 export const createWorkflow = async () => {
