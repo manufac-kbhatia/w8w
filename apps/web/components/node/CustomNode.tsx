@@ -1,5 +1,5 @@
 "use client";
-import { CustomNodeType, NodeStatus } from "@/utils";
+import { type CustomNode, NodeStatus } from "@/utils";
 import {
   ActionIcon,
   Button,
@@ -29,7 +29,7 @@ import { fetchRealtimeSubscriptionToken } from "@/app/actions/get-subscribe-toke
 import { useParams } from "next/navigation";
 import { IconCircleCheckFilled } from "@tabler/icons-react";
 
-export default function CustomNode({ data, id }: NodeProps<CustomNodeType>) {
+export default function CustomNode({ data, id }: NodeProps<CustomNode>) {
   const { id: workflowId } = useParams<{ id: string }>();
   const { updateNodeData, deleteElements, getNode } = useReactFlow();
   const [opened, { close, open }] = useDisclosure();

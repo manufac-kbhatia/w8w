@@ -1,10 +1,10 @@
-import { InitialNodeType } from "@/utils";
+import type { InitialNode } from "@/utils";
 import { ActionIcon } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { type NodeProps } from "@xyflow/react";
 import BaseNode from "./BaseNode";
 
-export default function InitialNode({ data }: NodeProps<InitialNodeType>) {
+export default function InitialNode({ data }: NodeProps<InitialNode>) {
   return (
     <BaseNode
       showToolbar={false}

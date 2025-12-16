@@ -38,12 +38,7 @@ import {
   IconPlus,
 } from "@tabler/icons-react";
 import Image from "next/image";
-import {
-  checkMannualTriggerExist,
-  CustomNodeType,
-  nodeTypes,
-  transformNodes,
-} from "@/utils";
+import { checkMannualTriggerExist, nodeTypes, transformNodes } from "@/utils";
 import { INodeType, IWorkflow } from "@w8w/db/prisma-browser";
 import { v4 as uuidv4 } from "uuid";
 import { useParams } from "next/navigation";
@@ -222,7 +217,7 @@ export default function Page() {
         onClose={close}
         position="right"
         title={
-          <Title order={3} component={"div"}>
+          <Title order={2} component={"div"}>
             What happens next?
           </Title>
         }
@@ -246,7 +241,7 @@ export default function Page() {
                 p="md"
                 onClick={() => addNode(node)}
               >
-                <Group align="center" gap="md">
+                <Group align="center" gap="xs" wrap="nowrap">
                   <ThemeIcon variant="white" size="xl">
                     <Image
                       src={node.iconUrl ?? ""}
@@ -256,12 +251,12 @@ export default function Page() {
                       style={{ borderRadius: 6 }}
                     />
                   </ThemeIcon>
-                  <div>
+                  <Stack gap={1}>
                     <Text fw={600}>{node.name}</Text>
                     <Text size="sm" c="dimmed">
                       {node.description}
                     </Text>
-                  </div>
+                  </Stack>
                 </Group>
               </Card>
             ))}
@@ -283,7 +278,7 @@ export default function Page() {
                 p="md"
                 onClick={() => addNode(node)}
               >
-                <Group align="center" gap="md">
+                <Group align="center" gap="xs" wrap="nowrap">
                   <ThemeIcon variant="white" size="xl">
                     <Image
                       src={node.iconUrl ?? ""}
@@ -293,12 +288,12 @@ export default function Page() {
                       style={{ borderRadius: 6 }}
                     />
                   </ThemeIcon>
-                  <div>
+                  <Stack gap={1}>
                     <Text fw={600}>{node.name}</Text>
                     <Text size="sm" c="dimmed">
                       {node.description}
                     </Text>
-                  </div>
+                  </Stack>
                 </Group>
               </Card>
             ))}

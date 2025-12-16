@@ -24,12 +24,13 @@ export type CustomNodeData = {
 export type InitialNodeData = {
   onClick: () => void;
 };
-export type CustomNodeType = Node<CustomNodeData, "CUSTOM">;
-export type InitialNodeType = Node<InitialNodeData, "INITIAL">;
+export type CustomNode = Node<CustomNodeData, "CUSTOM">;
+export type InitialNode = Node<InitialNodeData, "INITIAL">;
 
 export const nodeTypes: NodeTypes = {
   ["INITIAL"]: InitialNode,
   ["CUSTOM"]: CustomNode,
+  ["FORM"]: CustomNode, // Add form node instead
 };
 
 export const createWorkflow = async () => {
@@ -41,33 +42,22 @@ export const checkMannualTriggerExist = (nodes: Node[]) => {
   const isMannualTriggerExist = nodes.find(
     (node) =>
       node.type === "CUSTOM" &&
-      (node as CustomNodeType).data.nodeSchema?.name === "Manual Trigger",
+      (node as CustomNode).data.nodeSchema?.name === NodeNames.Manual,
   );
   return isMannualTriggerExist ? true : false;
 };
 
 export const transformNodes = (nodes: INode[], onInitialNode?: () => void) => {
   return nodes.map((node) => {
-    let transformedNode: InitialNodeType | CustomNodeType;
-    if (node.nodeType === INodeType.INITIAL) {
-      transformedNode = {
-        id: node.id,
-        position: node.position as XYPosition,
-        type: node.nodeType,
-        data:
-          node.nodeType === INodeType.INITIAL
-            ? { onClick: onInitialNode }
-            : (node.data as Record<string, unknown>),
-      } as InitialNodeType;
-    } else {
-      transformedNode = {
-        id: node.id,
-        position: node.position as XYPosition,
-        type: node.nodeType,
-        data: node.data as unknown as CustomNodeData,
-      };
-    }
-
+    const transformedNode: Node = {
+      id: node.id,
+      position: node.position as XYPosition,
+      type: node.nodeType,
+      data:
+        node.nodeType === INodeType.INITIAL
+          ? { onClick: onInitialNode }
+          : (node.data as Record<string, unknown>),
+    };
     return transformedNode;
   });
 };
@@ -112,6 +102,7 @@ export const NodeNames = {
   Timer: "Timer Node",
   Manual: "Manual Trigger",
   Webhook: "Webhook",
+  Form: "Form",
 } as const;
 
 export type NodeName = (typeof NodeNames)[keyof typeof NodeNames];

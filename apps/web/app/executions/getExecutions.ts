@@ -22,6 +22,7 @@ export const ExecutionFunctions: Record<NodeName, ExecutionFunction> = {
   [NodeNames.Timer]: TimerExecutionFunction,
   [NodeNames.Manual]: ManualTriggerExecutionFunction,
   [NodeNames.Webhook]: ManualTriggerExecutionFunction,
+  [NodeNames.Form]: ManualTriggerExecutionFunction, // Add form execution instead
 };
 
 export function getExecutionFucntion(name: NodeName): ExecutionFunction {

@@ -1,6 +1,6 @@
 "use client";
 import ThemeToggle from "@/components/themeToggler";
-import { createWorkflow, CustomNodeType, TABS } from "@/utils";
+import { createWorkflow, type CustomNode, TABS } from "@/utils";
 import {
   ActionIcon,
   Anchor,
@@ -64,7 +64,7 @@ export default function Layout({
   ]);
 
   const handleSave = async () => {
-    const nodesToTransform = getNodes() as CustomNodeType[];
+    const nodesToTransform = getNodes() as CustomNode[];
 
     const transformedNodes: INode[] = nodesToTransform
       .filter((n) => n.type === INodeType.CUSTOM)
