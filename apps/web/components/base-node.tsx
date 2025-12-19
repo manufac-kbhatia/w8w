@@ -22,7 +22,7 @@ export function BaseNode({ status, className, ...props }: BaseNodeProps) {
         // is selected, using Tailwind's `&` selector.
         "[.react-flow\\_\\_node.selected_&]:border-muted-foreground",
         "[.react-flow\\_\\_node.selected_&]:shadow-lg",
-        className
+        className,
       )}
       tabIndex={0}
       {...props}
@@ -64,7 +64,7 @@ export function BaseNodeHeader({
         "mx-0 my-0 -mb-1 flex flex-row items-center justify-between gap-2 px-3 py-2",
         // Remove or modify these classes if you modify the padding in the
         // `<BaseNode />` component.
-        className
+        className,
       )}
     />
   );
@@ -106,7 +106,7 @@ export function BaseNodeFooter({ className, ...props }: ComponentProps<"div">) {
       data-slot="base-node-footer"
       className={cn(
         "flex flex-col items-center gap-y-2 border-t px-3 pt-2 pb-3",
-        className
+        className,
       )}
       {...props}
     />

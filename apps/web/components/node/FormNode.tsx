@@ -23,7 +23,7 @@ export default function FormNode({ data, id, ...rest }: NodeProps<FormNode>) {
   const { updateNodeData, getNode } = useReactFlow();
   const [opened, { close, open }] = useDisclosure();
   const [selectedCredential, setSelectedCredendtial] = useState(
-    data.credentialId
+    data.credentialId,
   );
   const [fields, setFields] = useState<FormField[]>([]);
 
@@ -47,7 +47,7 @@ export default function FormNode({ data, id, ...rest }: NodeProps<FormNode>) {
   useEffect(() => {
     const getSupportedCredentials = async () => {
       const response = await axios.get(
-        `/api/credential/supported?name=${data.nodeSchema?.name}`
+        `/api/credential/supported?name=${data.nodeSchema?.name}`,
       );
       const supportedCredentials = response.data
         .supportedCredentials as SupportedCredential[];
