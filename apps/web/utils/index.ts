@@ -44,16 +44,13 @@ export const checkMannualTriggerExist = (nodes: Node[]) => {
   const isMannualTriggerExist = nodes.find(
     (node) =>
       node.type === "CUSTOM" &&
-      (node as CustomNode).data.nodeSchema?.name === NodeNames.Manual,
+      (node as CustomNode).data.nodeSchema?.name === NodeNames.Manual
   );
   return isMannualTriggerExist ? true : false;
 };
 
 export const transformNodes = (nodes: INode[], onInitialNode?: () => void) => {
   return nodes.map((node) => {
-    const label =
-      (node.data as unknown as BaseNodeData).parameters?.name ??
-      (node.data as unknown as BaseNodeData).nodeSchema?.name;
     const transformedNode: Node = {
       id: node.id,
       position: node.position as XYPosition,
@@ -61,10 +58,7 @@ export const transformNodes = (nodes: INode[], onInitialNode?: () => void) => {
       data:
         node.nodeType === INodeType.INITIAL
           ? { onClick: onInitialNode }
-          : {
-              ...(node.data as Record<string, unknown>),
-              label: label,
-            },
+          : (node.data as Record<string, unknown>),
     };
     return transformedNode;
   });

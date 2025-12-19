@@ -16,6 +16,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+import { BaseNodeData } from "@/utils";
 
 export interface NodeSearchProps extends Omit<PanelProps, "children"> {
   // The function to search for nodes, should return an array of nodes that match the search string
@@ -46,10 +47,10 @@ export function NodeSearchInternal({
       return nodes.filter((node) =>
         (node.data.label as string)
           .toLowerCase()
-          .includes(searchString.toLowerCase()),
+          .includes(searchString.toLowerCase())
       );
     },
-    [getNodes],
+    [getNodes]
   );
 
   const onChange = useCallback(
@@ -61,17 +62,17 @@ export function NodeSearchInternal({
         setSearchResults(results);
       }
     },
-    [onSearch, onOpenChange],
+    [onSearch, onOpenChange]
   );
 
   const defaultOnSelectNode = useCallback(
     (node: Node) => {
       setNodes((nodes) =>
-        nodes.map((n) => (n.id === node.id ? { ...n, selected: true } : n)),
+        nodes.map((n) => (n.id === node.id ? { ...n, selected: true } : n))
       );
       fitView({ nodes: [node], duration: 500 });
     },
-    [fitView, setNodes],
+    [fitView, setNodes]
   );
 
   const onSelect = useCallback(
@@ -80,7 +81,7 @@ export function NodeSearchInternal({
       setSearchString("");
       onOpenChange?.(false);
     },
-    [onSelectNode, defaultOnSelectNode, onOpenChange],
+    [onSelectNode, defaultOnSelectNode, onOpenChange]
   );
 
   return (
@@ -99,9 +100,15 @@ export function NodeSearchInternal({
           ) : (
             <CommandGroup heading="Nodes">
               {searchResults.map((node) => {
+                const data = node.data as BaseNodeData;
                 return (
                   <CommandItem key={node.id} onSelect={() => onSelect(node)}>
-                    <span>{node.data.label as string}</span>
+                    <span>
+                      {
+                        (data.parameters?.name ??
+                          data.nodeSchema?.name) as string
+                      }
+                    </span>
                   </CommandItem>
                 );
               })}
