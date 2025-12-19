@@ -1,4 +1,4 @@
-import { SupportedCredential } from "@/types";
+import { CredentialData, SupportedCredential } from "@/types";
 import { prisma } from "@w8w/db/client";
 
 import { NextRequest, NextResponse } from "next/server";
@@ -26,18 +26,18 @@ export async function GET(req: NextRequest) {
     const supportedCredentials: SupportedCredential[] = credentials.map(
       (cred) => {
         const name =
-          (cred.data?.parameters as Record<string, any> | undefined)?.[
-            "name"
-          ] ??
-          (cred.data?.credentialSchema as Record<string, any> | undefined)?.[
-            "name"
-          ] ??
+          ((cred.data as unknown as CredentialData).parameters?.name as
+            | string
+            | undefined) ??
+          ((cred.data as unknown as CredentialData).credentialSchema?.name as
+            | string
+            | undefined) ??
           "Unknown Credential";
         return {
           id: cred.id,
           name,
         };
-      },
+      }
     );
     return NextResponse.json({ supportedCredentials }, { status: 200 });
   }

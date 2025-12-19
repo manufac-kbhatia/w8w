@@ -1,10 +1,8 @@
 "use client";
-import { type CustomNode, NodeStatus } from "@/utils";
+import { type CustomNode } from "@/utils";
 import {
-  ActionIcon,
   Button,
   Group,
-  Loader,
   Modal,
   MultiSelect,
   NumberInput,
@@ -14,29 +12,31 @@ import {
   Text,
   TextInput,
   Title,
-  useMantineTheme,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { PropertyTypes, SupportedCredential } from "@/types";
-import { Handle, Position, useReactFlow, type NodeProps } from "@xyflow/react";
+import { useReactFlow, type NodeProps } from "@xyflow/react";
 import axios from "axios";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import BaseNode from "./BaseNode";
 import { useInngestSubscription } from "@inngest/realtime/hooks";
 import { fetchRealtimeSubscriptionToken } from "@/app/actions/get-subscribe-token";
 import { useParams } from "next/navigation";
-import { IconCircleCheckFilled } from "@tabler/icons-react";
+import W8WBaseNode from "./W8WBaseNode";
+import { NodeStatus } from "../node-status-indicator";
 
-export default function CustomNode({ data, id }: NodeProps<CustomNode>) {
+export default function CustomNode({
+  data,
+  id,
+  ...rest
+}: NodeProps<CustomNode>) {
   const { id: workflowId } = useParams<{ id: string }>();
-  const { updateNodeData, deleteElements, getNode } = useReactFlow();
+  const { updateNodeData } = useReactFlow();
   const [opened, { close, open }] = useDisclosure();
   const [selectedCredential, setSelectedCredendtial] = useState(
     data.credentialId,
   );
-  const theme = useMantineTheme();
 
   const { latestData } = useInngestSubscription({
     refreshToken: () => fetchRealtimeSubscriptionToken(workflowId, id),
@@ -74,64 +74,24 @@ export default function CustomNode({ data, id }: NodeProps<CustomNode>) {
     getSupportedCredentials();
   }, [data.nodeSchema?.name]);
 
-  const currentNode = getNode(id);
-  if (!currentNode) return;
-
   return (
     <>
-      <BaseNode
+      <W8WBaseNode
+        {...rest}
+        data={data}
+        id={id}
+        onDoubleClick={open}
+        onNodeEdit={open}
         showToolbar={true}
-        name={
-          (data.parameters?.name as string | undefined) ?? data.nodeSchema?.name
-        }
-        descritpion={
-          (data.parameters?.description as string) ??
-          data.nodeSchema?.description
-        }
-        onNodeDelete={() => deleteElements({ nodes: [currentNode] })}
+        status={latestData?.data.status as NodeStatus}
       >
-        <ActionIcon
-          onClick={open}
-          variant="white"
-          bd={"1px solid black"}
-          size={40}
-          style={{ position: "relative" }}
-        >
-          <Image
-            src={data.nodeSchema?.iconUrl ?? ""}
-            alt={data.nodeSchema?.name ?? ""}
-            width={20}
-            height={20}
-          />
-          {latestData?.data.status === NodeStatus.Loading && (
-            <Loader
-              size={10}
-              style={{
-                position: "absolute",
-                bottom: "5%",
-                right: "5%",
-              }}
-            />
-          )}
-
-          {latestData?.data.status === NodeStatus.Success && (
-            <IconCircleCheckFilled
-              color={theme.colors.green[5]}
-              size={10}
-              style={{
-                position: "absolute",
-                bottom: "5%",
-                right: "5%",
-              }}
-            />
-          )}
-        </ActionIcon>
-
-        {data.nodeSchema?.executionType === "action" && (
-          <Handle id="main-target" type="target" position={Position.Left} />
-        )}
-        <Handle id="main-source" type="source" position={Position.Right} />
-      </BaseNode>
+        <Image
+          src={data.nodeSchema?.iconUrl ?? ""}
+          alt={data.nodeSchema?.name ?? ""}
+          width={20}
+          height={20}
+        />
+      </W8WBaseNode>
 
       <Modal
         centered

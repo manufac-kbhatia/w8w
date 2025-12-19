@@ -1,47 +1,31 @@
 "use client";
-import { type FormNode, NodeStatus } from "@/utils";
-import {
-  ActionIcon,
-  Loader,
-  Modal,
-  Stack,
-  Tabs,
-  Text,
-  Title,
-  useMantineTheme,
-} from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { type FormNode } from "@/utils";
+import { Modal, Stack, Tabs, Text, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { SupportedCredential } from "@/types";
-import { Handle, Position, useReactFlow, type NodeProps } from "@xyflow/react";
+import { useReactFlow, type NodeProps } from "@xyflow/react";
 import axios from "axios";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import BaseNode from "./BaseNode";
 import { useInngestSubscription } from "@inngest/realtime/hooks";
 import { fetchRealtimeSubscriptionToken } from "@/app/actions/get-subscribe-token";
 import { useParams } from "next/navigation";
-import {
-  IconCircleCheckFilled,
-  IconEditCircle,
-  IconEye,
-  IconInfoCircle,
-} from "@tabler/icons-react";
+import { IconEditCircle, IconEye, IconInfoCircle } from "@tabler/icons-react";
 import { RenderNodeForm } from "./RenderNodeSchema";
 import { PreviewForm } from "../createForm/PreviewForm";
 import { FormField } from "../createForm/utils";
 import CreateForm from "../createForm";
+import W8WBaseNode from "./W8WBaseNode";
+import { NodeStatus } from "../node-status-indicator";
 
-export default function FormNode({ data, id }: NodeProps<FormNode>) {
+export default function FormNode({ data, id, ...rest }: NodeProps<FormNode>) {
   const { id: workflowId } = useParams<{ id: string }>();
-  const { updateNodeData, deleteElements, getNode } = useReactFlow();
+  const { updateNodeData, getNode } = useReactFlow();
   const [opened, { close, open }] = useDisclosure();
   const [selectedCredential, setSelectedCredendtial] = useState(
-    data.credentialId,
+    data.credentialId
   );
   const [fields, setFields] = useState<FormField[]>([]);
-
-  const theme = useMantineTheme();
 
   const { latestData } = useInngestSubscription({
     refreshToken: () => fetchRealtimeSubscriptionToken(workflowId, id),
@@ -63,7 +47,7 @@ export default function FormNode({ data, id }: NodeProps<FormNode>) {
   useEffect(() => {
     const getSupportedCredentials = async () => {
       const response = await axios.get(
-        `/api/credential/supported?name=${data.nodeSchema?.name}`,
+        `/api/credential/supported?name=${data.nodeSchema?.name}`
       );
       const supportedCredentials = response.data
         .supportedCredentials as SupportedCredential[];
@@ -79,59 +63,22 @@ export default function FormNode({ data, id }: NodeProps<FormNode>) {
 
   return (
     <>
-      <BaseNode
+      <W8WBaseNode
+        {...rest}
+        data={data}
+        id={id}
+        onDoubleClick={open}
+        onNodeEdit={open}
         showToolbar={true}
-        name={
-          (data.parameters?.name as string | undefined) ?? data.nodeSchema?.name
-        }
-        descritpion={
-          (data.parameters?.description as string) ??
-          data.nodeSchema?.description
-        }
-        onNodeDelete={() => deleteElements({ nodes: [currentNode] })}
+        status={latestData?.data.status as NodeStatus}
       >
-        <ActionIcon
-          onClick={open}
-          variant="white"
-          bd={"1px solid black"}
-          size={40}
-          style={{ position: "relative" }}
-        >
-          <Image
-            src={data.nodeSchema?.iconUrl ?? ""}
-            alt={data.nodeSchema?.name ?? ""}
-            width={20}
-            height={20}
-          />
-          {latestData?.data.status === NodeStatus.Loading && (
-            <Loader
-              size={10}
-              style={{
-                position: "absolute",
-                bottom: "5%",
-                right: "5%",
-              }}
-            />
-          )}
-
-          {latestData?.data.status === NodeStatus.Success && (
-            <IconCircleCheckFilled
-              color={theme.colors.green[5]}
-              size={10}
-              style={{
-                position: "absolute",
-                bottom: "5%",
-                right: "5%",
-              }}
-            />
-          )}
-        </ActionIcon>
-
-        {data.nodeSchema?.executionType === "action" && (
-          <Handle id="main-target" type="target" position={Position.Left} />
-        )}
-        <Handle id="main-source" type="source" position={Position.Right} />
-      </BaseNode>
+        <Image
+          src={data.nodeSchema?.iconUrl ?? ""}
+          alt={data.nodeSchema?.name ?? ""}
+          width={20}
+          height={20}
+        />
+      </W8WBaseNode>
 
       <Modal
         centered

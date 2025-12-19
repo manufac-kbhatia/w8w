@@ -100,7 +100,7 @@
   {
     "name": "Form",
     "description": "Initiates workflow execution upon form submission",
-    "executionType": "action",
+    "executionType": "trigger",
     "nodeType": "FORM",
     "properties": [
       {

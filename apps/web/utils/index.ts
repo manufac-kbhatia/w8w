@@ -51,6 +51,9 @@ export const checkMannualTriggerExist = (nodes: Node[]) => {
 
 export const transformNodes = (nodes: INode[], onInitialNode?: () => void) => {
   return nodes.map((node) => {
+    const label =
+      (node.data as unknown as BaseNodeData).parameters?.name ??
+      (node.data as unknown as BaseNodeData).nodeSchema?.name;
     const transformedNode: Node = {
       id: node.id,
       position: node.position as XYPosition,
@@ -58,7 +61,10 @@ export const transformNodes = (nodes: INode[], onInitialNode?: () => void) => {
       data:
         node.nodeType === INodeType.INITIAL
           ? { onClick: onInitialNode }
-          : (node.data as Record<string, unknown>),
+          : {
+              ...(node.data as Record<string, unknown>),
+              label: label,
+            },
     };
     return transformedNode;
   });
@@ -110,9 +116,8 @@ export const NodeNames = {
 export type NodeName = (typeof NodeNames)[keyof typeof NodeNames];
 
 export const NodeStatus = {
-  Loading: "Loading",
-  Success: "Success",
-  Error: "Error",
+  Loading: "loading",
+  Success: "success",
+  Error: "error",
+  Initial: "initial",
 } as const;
-
-export type NodeStatus = (typeof NodeStatus)[keyof typeof NodeStatus];

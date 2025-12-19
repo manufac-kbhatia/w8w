@@ -43,6 +43,9 @@ import { INodeType, IWorkflow } from "@w8w/db/prisma-browser";
 import { v4 as uuidv4 } from "uuid";
 import { useParams } from "next/navigation";
 import { NodeSchema } from "@/types";
+import { NodeSearch } from "@/components/node-search";
+import FuzzySearch from "fuzzy-search";
+import { ZoomSelect } from "@/components/zoom-select";
 
 export default function Page() {
   const { id } = useParams<{ id: string }>();
@@ -117,8 +120,8 @@ export default function Page() {
     const y = window.innerHeight / 2;
 
     const position = screenToFlowPosition({
-      x: x + (Math.random() + 0.5) * 200,
-      y: y + (Math.random() + 0.5) * 200,
+      x: x + (Math.random() - 0.5) * 200,
+      y: y + (Math.random() - 0.5) * 200,
     });
 
     const newNode: Node = {
@@ -139,6 +142,14 @@ export default function Page() {
     console.log(response);
   };
 
+  const searcher = new FuzzySearch(
+    nodes,
+    ["data.parameters.name", "data.nodeSchema.name"],
+    {
+      caseSensitive: false,
+    },
+  );
+
   return (
     <Fragment>
       <div className="w-full h-full relative">
@@ -152,6 +163,18 @@ export default function Page() {
           onConnect={onConnect}
           fitView
         >
+          <Panel
+            className="flex gap-1 rounded-md bg-primary-foreground p-1 text-foreground"
+            position="top-center"
+          >
+            <NodeSearch
+              onSearch={(value) => {
+                const node = searcher.search(value);
+                console.log(node);
+                return node;
+              }}
+            />
+          </Panel>
           <Panel position="top-right">
             <ActionIcon variant="light" onClick={open}>
               <IconPlus size={40} />
@@ -210,6 +233,7 @@ export default function Page() {
             </ActionIcon>
           </Controls>
           <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
+          <ZoomSelect position="bottom-left" />
         </ReactFlow>
       </div>
       <Drawer
