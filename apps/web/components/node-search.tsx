@@ -47,10 +47,10 @@ export function NodeSearchInternal({
       return nodes.filter((node) =>
         (node.data.label as string)
           .toLowerCase()
-          .includes(searchString.toLowerCase())
+          .includes(searchString.toLowerCase()),
       );
     },
-    [getNodes]
+    [getNodes],
   );
 
   const onChange = useCallback(
@@ -62,17 +62,17 @@ export function NodeSearchInternal({
         setSearchResults(results);
       }
     },
-    [onSearch, onOpenChange]
+    [onSearch, onOpenChange],
   );
 
   const defaultOnSelectNode = useCallback(
     (node: Node) => {
       setNodes((nodes) =>
-        nodes.map((n) => (n.id === node.id ? { ...n, selected: true } : n))
+        nodes.map((n) => (n.id === node.id ? { ...n, selected: true } : n)),
       );
       fitView({ nodes: [node], duration: 500 });
     },
-    [fitView, setNodes]
+    [fitView, setNodes],
   );
 
   const onSelect = useCallback(
@@ -81,7 +81,7 @@ export function NodeSearchInternal({
       setSearchString("");
       onOpenChange?.(false);
     },
-    [onSelectNode, defaultOnSelectNode, onOpenChange]
+    [onSelectNode, defaultOnSelectNode, onOpenChange],
   );
 
   return (
