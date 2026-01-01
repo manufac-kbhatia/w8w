@@ -36,6 +36,7 @@ import {
   IconLockOpen,
   IconMinus,
   IconPlus,
+  IconSearch,
 } from "@tabler/icons-react";
 import Image from "next/image";
 import { checkMannualTriggerExist, nodeTypes, transformNodes } from "@/utils";
@@ -57,6 +58,7 @@ export default function Page() {
   const [loadingWokflow, setLoadingWorkflow] = useState(false);
   const [toggleInteractive, setToggleInteractive] = useState(true);
   const { fitView, zoomIn, zoomOut, screenToFlowPosition } = useReactFlow();
+  const [showSearch, setShowSearch] = useState(false);
 
   const showExecute = useMemo(() => {
     return checkMannualTriggerExist(nodes);
@@ -71,7 +73,7 @@ export default function Page() {
           else if (node.executionType === "action") acc.actions.push(node);
           return acc;
         },
-        { triggers: [] as NodeSchema[], actions: [] as NodeSchema[] },
+        { triggers: [] as NodeSchema[], actions: [] as NodeSchema[] }
       );
 
       setTriggerNodes(triggers);
@@ -101,18 +103,18 @@ export default function Page() {
   const onNodesChange: OnNodesChange<Node> = useCallback(
     (changes) =>
       setNodes((nodesSnapshot) => applyNodeChanges(changes, nodesSnapshot)),
-    [],
+    []
   );
   const onEdgesChange = useCallback(
     (changes: EdgeChange<Edge>[]) =>
       setEdges((edgesSnapshot) => applyEdgeChanges(changes, edgesSnapshot)),
-    [],
+    []
   );
 
   const onConnect = useCallback(
     (params: Connection) =>
       setEdges((edgesSnapshot) => addEdge(params, edgesSnapshot)),
-    [],
+    []
   );
 
   const addNode = (nodeSchema: NodeSchema) => {
@@ -147,7 +149,7 @@ export default function Page() {
     ["data.parameters.name", "data.nodeSchema.name"],
     {
       caseSensitive: false,
-    },
+    }
   );
 
   return (
@@ -163,18 +165,20 @@ export default function Page() {
           onConnect={onConnect}
           fitView
         >
-          <Panel
-            className="flex gap-1 rounded-md bg-primary-foreground p-1 text-foreground"
-            position="top-center"
-          >
-            <NodeSearch
-              onSearch={(value) => {
-                const node = searcher.search(value);
-                console.log(node);
-                return node;
-              }}
-            />
-          </Panel>
+          {showSearch && (
+            <Panel
+              className="flex gap-1 rounded-md bg-primary-foreground p-1 text-foreground"
+              position="top-center"
+            >
+              <NodeSearch
+                onSearch={(value) => {
+                  const node = searcher.search(value);
+                  console.log(node);
+                  return node;
+                }}
+              />
+            </Panel>
+          )}
           <Panel position="top-right">
             <ActionIcon variant="light" onClick={open}>
               <IconPlus size={40} />
@@ -230,6 +234,13 @@ export default function Page() {
               onClick={() => setToggleInteractive((prev) => !prev)}
             >
               {toggleInteractive ? <IconLockOpen /> : <IconLock />}
+            </ActionIcon>
+            <ActionIcon
+              variant="subtle"
+              radius="sm"
+              onClick={() => setShowSearch((prev) => !prev)}
+            >
+              <IconSearch />
             </ActionIcon>
           </Controls>
           <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
