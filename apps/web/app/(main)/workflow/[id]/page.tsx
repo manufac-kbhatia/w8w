@@ -164,6 +164,9 @@ export default function Page() {
           nodesDraggable={toggleInteractive}
           onConnect={onConnect}
           fitView
+          proOptions={{
+            hideAttribution: true,
+          }}
         >
           {showSearch && (
             <Panel
