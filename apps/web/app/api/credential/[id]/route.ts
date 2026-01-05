@@ -3,10 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
 
-  await prisma.iCredential.delete({ where: { id } });
+  await prisma.credential.delete({ where: { id } });
   return NextResponse.json({ success: true, data: { id } });
 }

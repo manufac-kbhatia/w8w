@@ -18,7 +18,7 @@ import {
   transformNodes,
 } from "@/utils";
 import { useEffect, useState } from "react";
-import { IWorkflow } from "@w8w/db/prisma-browser";
+import { Prisma } from "@w8w/db/prisma-browser";
 import axios from "axios";
 import Link from "next/link";
 import LoadingSkeleton from "../loadingSkeleton";
@@ -26,7 +26,9 @@ import { IconEdit, IconTrash } from "@tabler/icons-react";
 import { redirect } from "next/navigation";
 
 export const Workflows = () => {
-  const [workflows, setWorkflows] = useState<IWorkflow[]>([]);
+  const [workflows, setWorkflows] = useState<
+    Prisma.WorkflowGetPayload<{ include: { nodes: true; connections: true } }>[]
+  >([]);
   const [loadingWorkflows, setLoadingWorkflows] = useState(false);
   const theme = useMantineTheme();
 
@@ -43,7 +45,11 @@ export const Workflows = () => {
       setLoadingWorkflows(true);
       const response = await axios.get<{
         success: boolean;
-        data: { workflows: IWorkflow[] };
+        data: {
+          workflows: Prisma.WorkflowGetPayload<{
+            include: { nodes: true; connections: true };
+          }>[];
+        };
       }>(`/api/workflow`);
       setLoadingWorkflows(false);
       setWorkflows(response.data.data.workflows);
@@ -102,7 +108,7 @@ export const Workflows = () => {
                     <Button
                       disabled={
                         !checkMannualTriggerExist(
-                          transformNodes(workflow.nodes),
+                          transformNodes(workflow.nodes)
                         )
                       }
                       size="compact-md"

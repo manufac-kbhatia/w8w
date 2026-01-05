@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest) {
   const name = req.nextUrl.searchParams.get("name");
   if (name) {
-    const credentials = await prisma.iCredential.findMany({
+    const credentials = await prisma.credential.findMany({
       where: {
         supportedNodes: {
           has: name,
@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
           id: cred.id,
           name,
         };
-      },
+      }
     );
     return NextResponse.json({ supportedCredentials }, { status: 200 });
   }

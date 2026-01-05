@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
   const body = await req.json();
 
-  const credential = await prisma.iCredential.create({
+  const credential = await prisma.credential.create({
     data: {
       data: body.data,
       supportedNodes: body.supportedNodes,
@@ -14,6 +14,6 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET() {
-  const credentials = await prisma.iCredential.findMany();
+  const credentials = await prisma.credential.findMany();
   return NextResponse.json({ credentials }, { status: 200 });
 }

@@ -1,5 +1,5 @@
 import { NodeName, NodeNames } from "@/utils";
-import { INode } from "@w8w/db/prisma-client";
+import { Node } from "@w8w/db/prisma-client";
 import { GetStepTools, Inngest } from "inngest";
 import { TimerExecutionFunction } from "./functions/TimerExecution";
 import { ManualTriggerExecutionFunction } from "./functions/manualTrigger";
@@ -8,14 +8,14 @@ import { Realtime } from "@inngest/realtime/middleware";
 export type WorkflowState = Record<string, unknown>;
 
 export type ExecutionFunctionArgs = {
-  node: INode;
+  node: Node;
   workflowState: WorkflowState;
   step: GetStepTools<Inngest.Any>;
   publish: Realtime.PublishFn;
 };
 
 export type ExecutionFunction = (
-  args: ExecutionFunctionArgs,
+  args: ExecutionFunctionArgs
 ) => Promise<WorkflowState>;
 
 export const ExecutionFunctions: Record<NodeName, ExecutionFunction> = {

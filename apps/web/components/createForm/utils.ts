@@ -64,6 +64,7 @@ export const MantineInputNames = {
 export type MantineInputName =
   (typeof MantineInputNames)[keyof typeof MantineInputNames];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const MantineInputs: Record<MantineInputName, MantineComponent<any>> = {
   TextInput,
   Textarea,

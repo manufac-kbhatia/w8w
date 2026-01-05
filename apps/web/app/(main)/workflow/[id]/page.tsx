@@ -40,7 +40,7 @@ import {
 } from "@tabler/icons-react";
 import Image from "next/image";
 import { checkMannualTriggerExist, nodeTypes, transformNodes } from "@/utils";
-import { INodeType, IWorkflow } from "@w8w/db/prisma-browser";
+import { NodeType, Prisma } from "@w8w/db/prisma-browser";
 import { v4 as uuidv4 } from "uuid";
 import { useParams } from "next/navigation";
 import { NodeSchema } from "@/types";
@@ -88,7 +88,11 @@ export default function Page() {
     const getWorkflow = async () => {
       const { data } = await axios.get<{
         success: boolean;
-        data: { workflow: IWorkflow };
+        data: {
+          workflow: Prisma.WorkflowGetPayload<{
+            include: { nodes: true; connections: true };
+          }>;
+        };
       }>(`/api/workflow/${id}`);
       const transformedNodes = transformNodes(data.data.workflow.nodes, open);
 
@@ -133,7 +137,7 @@ export default function Page() {
       type: nodeSchema.nodeType,
     };
     setNodes((prev) => [
-      ...prev.filter((node) => node.type !== INodeType.INITIAL),
+      ...prev.filter((node) => node.type !== NodeType.INITIAL),
       newNode,
     ]);
     close();

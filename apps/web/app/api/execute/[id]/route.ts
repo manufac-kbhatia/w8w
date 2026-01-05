@@ -7,11 +7,11 @@ export const dynamic = "force-dynamic";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
 
-  const workflow = await prisma.iWorkflow.findUnique({
+  const workflow = await prisma.workflow.findUnique({
     where: {
       id,
     },
@@ -30,7 +30,7 @@ export async function POST(
           message: "Workflow not found",
         },
       },
-      { status: 404 },
+      { status: 404 }
     );
   }
 

@@ -2,7 +2,7 @@ import { GetStepTools, Inngest, NonRetriableError } from "inngest";
 import { inngest } from "./client";
 import { prisma } from "@w8w/db/client";
 import { getAdjList, getInDegrees, NodeName } from "@/utils";
-import { INode } from "@w8w/db/prisma-client";
+import { Node } from "@w8w/db/prisma-client";
 import {
   getExecutionFucntion,
   WorkflowState,
@@ -19,8 +19,12 @@ export const executeWorkflow = inngest.createFunction(
     }
 
     const workflow = await step.run("Fetch workflow", async () => {
-      const workflow = await prisma.iWorkflow.findUnique({
+      const workflow = await prisma.workflow.findUnique({
         where: { id: workflowId },
+        include: {
+          nodes: true,
+          connections: true,
+        },
       });
       if (!workflow) {
         throw new NonRetriableError("Workflow not found");
@@ -32,7 +36,7 @@ export const executeWorkflow = inngest.createFunction(
     // TODO: Check if the workflow is cyclic or not
 
     const idToNode = await step.run("Prepare id-to-node map", () => {
-      const idToNode: Record<string, INode> = {};
+      const idToNode: Record<string, Node> = {};
       workflow.nodes.forEach((node) => {
         idToNode[node.id] = node;
       });
@@ -40,10 +44,10 @@ export const executeWorkflow = inngest.createFunction(
     });
 
     const adjacencyList = await step.run("Prepare adjacency list", () =>
-      getAdjList(workflow.connections),
+      getAdjList(workflow.connections)
     );
     const inDegrees = await step.run("Prepare InDegrees for each edges", () =>
-      getInDegrees(workflow.connections),
+      getInDegrees(workflow.connections)
     );
 
     const workflowState: WorkflowState = { workflowId };
@@ -58,23 +62,23 @@ export const executeWorkflow = inngest.createFunction(
           adjacencyList,
           step,
           publish,
-          workflowState,
+          workflowState
         );
       }
     }
 
     return workflowState;
-  },
+  }
 );
 
 export async function executeNode(
   nodeId: string,
-  idToNode: Record<string, INode>,
+  idToNode: Record<string, Node>,
   inDegrees: Record<string, number>,
   adjacencyList: Record<string, string[]>,
   step: GetStepTools<Inngest.Any>,
   publish: Realtime.PublishFn,
-  workflowState: WorkflowState,
+  workflowState: WorkflowState
 ) {
   // Get the node
   const node = idToNode[nodeId];
@@ -116,8 +120,8 @@ export async function executeNode(
               adjacencyList,
               step,
               publish,
-              updatedWorkflowState,
-            ),
+              updatedWorkflowState
+            )
           );
         }
       }

@@ -27,13 +27,13 @@ import {
   IconRoute,
 } from "@tabler/icons-react";
 import {
-  IConnection,
-  INode,
-  INodeData,
-  INodeType,
-  IPosition,
-  IWorkflow,
+  Connection,
+  Node,
+  NodeData,
+  NodeType,
+  Position,
 } from "@w8w/db/prisma-browser";
+import { Prisma } from "@w8w/db/prisma-client";
 import { useReactFlow } from "@xyflow/react";
 import axios from "axios";
 import {
@@ -66,26 +66,32 @@ export default function Layout({
   const handleSave = async () => {
     const nodesToTransform = getNodes() as CustomNode[];
 
-    const transformedNodes: INode[] = nodesToTransform
-      .filter((n) => n.type === INodeType.CUSTOM)
+    const transformedNodes: Prisma.NodeCreateManyInput[] = nodesToTransform
+      .filter((n) => n.type === NodeType.CUSTOM)
       .map((node) => {
         return {
           id: node.id,
           nodeType: node.type,
-          data: node.data as unknown as INodeData,
-          position: node.position as IPosition,
+          data: node.data as unknown as NodeData,
+          position: node.position as Position,
         };
       });
 
-    const transformedEdges: IConnection[] = getEdges().map((edge) => ({
-      id: edge.id,
-      source: edge.source,
-      target: edge.target,
-      sourceHandle: edge.sourceHandle ?? "main",
-      targetHandle: edge.targetHandle ?? "main",
-    }));
+    const transformedEdges: Prisma.ConnectionCreateManyInput[] = getEdges().map(
+      (edge) => ({
+        id: edge.id,
+        source: edge.source,
+        target: edge.target,
+        sourceHandle: edge.sourceHandle ?? "main",
+        targetHandle: edge.targetHandle ?? "main",
+      })
+    );
 
-    const saveWorkflow: Partial<IWorkflow> = {
+    const saveWorkflow: {
+      name: string;
+      nodes: Prisma.NodeCreateManyInput[];
+      connections: Prisma.ConnectionCreateManyInput[];
+    } = {
       name: workflowName,
       nodes: transformedNodes,
       connections: transformedEdges,

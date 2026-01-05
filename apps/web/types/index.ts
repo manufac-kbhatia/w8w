@@ -1,10 +1,10 @@
-import { INodeType } from "@w8w/db/prisma-browser";
+import { NodeType } from "@w8w/db/prisma-browser";
 
 export interface NodeSchema {
   name: string; // "displayName": "Manual Trigger",
   description?: string; // "description": "Runs the flow on clicking a button in w8w",
   executionType: "trigger" | "action"; //  "executionType": "trigger",
-  nodeType: INodeType;
+  nodeType: NodeType;
   properties: Properties[];
   requiredCredential?: boolean; // "requiredCredential": false,
   iconUrl?: string;
