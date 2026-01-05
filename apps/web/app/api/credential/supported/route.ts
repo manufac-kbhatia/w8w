@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
           id: cred.id,
           name,
         };
-      }
+      },
     );
     return NextResponse.json({ supportedCredentials }, { status: 200 });
   }

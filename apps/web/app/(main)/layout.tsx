@@ -84,7 +84,7 @@ export default function Layout({
         target: edge.target,
         sourceHandle: edge.sourceHandle ?? "main",
         targetHandle: edge.targetHandle ?? "main",
-      })
+      }),
     );
 
     const saveWorkflow: {

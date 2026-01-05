@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
 
@@ -30,7 +30,7 @@ export async function POST(
           message: "Workflow not found",
         },
       },
-      { status: 404 }
+      { status: 404 },
     );
   }
 

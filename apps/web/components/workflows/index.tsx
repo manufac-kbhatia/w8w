@@ -108,7 +108,7 @@ export const Workflows = () => {
                     <Button
                       disabled={
                         !checkMannualTriggerExist(
-                          transformNodes(workflow.nodes)
+                          transformNodes(workflow.nodes),
                         )
                       }
                       size="compact-md"
