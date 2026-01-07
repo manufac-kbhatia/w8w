@@ -1,6 +1,15 @@
 "use client";
 import { type FormNode } from "@/utils";
-import { Modal, Stack, Tabs, Text, Title } from "@mantine/core";
+import {
+  Button,
+  CopyButton,
+  Modal,
+  Stack,
+  Tabs,
+  Text,
+  TextInput,
+  Title,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { SupportedCredential } from "@/types";
 import { useReactFlow, type NodeProps } from "@xyflow/react";
@@ -23,9 +32,11 @@ export default function FormNode({ data, id, ...rest }: NodeProps<FormNode>) {
   const { updateNodeData, getNode } = useReactFlow();
   const [opened, { close, open }] = useDisclosure();
   const [selectedCredential, setSelectedCredendtial] = useState(
-    data.credentialId,
+    data.credentialId
   );
-  const [fields, setFields] = useState<FormField[]>([]);
+  const [fields, setFields] = useState<FormField[]>(
+    (data.meta?.fields as FormField[] | undefined) ?? []
+  );
 
   const { latestData } = useInngestSubscription({
     refreshToken: () => fetchRealtimeSubscriptionToken(workflowId, id),
@@ -39,6 +50,7 @@ export default function FormNode({ data, id, ...rest }: NodeProps<FormNode>) {
     updateNodeData(id, {
       ...data,
       parameters: values,
+      meta: { fields },
       credentialId: selectedCredential,
     });
     close();
@@ -47,7 +59,7 @@ export default function FormNode({ data, id, ...rest }: NodeProps<FormNode>) {
   useEffect(() => {
     const getSupportedCredentials = async () => {
       const response = await axios.get(
-        `/api/credential/supported?name=${data.nodeSchema?.name}`,
+        `/api/credential/supported?name=${data.nodeSchema?.name}`
       );
       const supportedCredentials = response.data
         .supportedCredentials as SupportedCredential[];
@@ -107,20 +119,33 @@ export default function FormNode({ data, id, ...rest }: NodeProps<FormNode>) {
           </Tabs.List>
 
           <Tabs.Panel value="Basics" p="md">
-            <RenderNodeForm
-              data={data}
-              onSubmit={handleSubmit}
-              setSelectedCredendtial={setSelectedCredendtial}
-              selectedCredential={selectedCredential}
-              supportedCredentials={supportedCredentials}
-              onCancel={close}
-            />
+            <Stack>
+              <CopyButton value={`http://localhost:3000/form/${id}`}>
+                {({ copied, copy }) => (
+                  <Button onClick={copy} w={"fit-content"}>
+                    {copied ? "Copied!" : "Copy form url"}
+                  </Button>
+                )}
+              </CopyButton>
+              <RenderNodeForm
+                data={data}
+                onSubmit={handleSubmit}
+                setSelectedCredendtial={setSelectedCredendtial}
+                selectedCredential={selectedCredential}
+                supportedCredentials={supportedCredentials}
+                onCancel={close}
+              />
+            </Stack>
           </Tabs.Panel>
 
           <Tabs.Panel value="Design" p="md">
             <CreateForm
-              fields={fields}
-              onFieldSave={(field) => setFields((prev) => [...prev, field])}
+              onFieldSave={(field) =>
+                setFields((prev) => {
+                  console.log([...prev, field]);
+                  return [...prev, field];
+                })
+              }
             />
           </Tabs.Panel>
 

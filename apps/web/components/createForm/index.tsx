@@ -13,11 +13,10 @@ import {
 import { AddInput } from "./AddInput";
 
 export interface CreateFormProps {
-  fields: FormField[];
   onFieldSave: (field: FormField) => void;
 }
 
-export default function CreateForm({ fields, onFieldSave }: CreateFormProps) {
+export default function CreateForm({ onFieldSave }: CreateFormProps) {
   const [value, setValue] = useState<MantineInputName | null>();
   const [opened, { open, close }] = useDisclosure();
   const [config, setConfig] = useState<MantineInputConfig | null>(null);
@@ -50,7 +49,6 @@ export default function CreateForm({ fields, onFieldSave }: CreateFormProps) {
     if (!inputName) return;
     const defaultConfig: MantineInputConfig = getDefaultConfig(inputName);
     const fieldId = crypto.randomUUID();
-    console.log(inputName, defaultConfig, fieldId);
 
     setValue(inputName);
     setConfig(defaultConfig);

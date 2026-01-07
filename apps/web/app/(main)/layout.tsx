@@ -34,7 +34,7 @@ import {
   Position,
 } from "@w8w/db/prisma-browser";
 import { Prisma } from "@w8w/db/prisma-client";
-import { useReactFlow } from "@xyflow/react";
+import { useReactFlow, Node as INode } from "@xyflow/react";
 import axios from "axios";
 import {
   useRouter,
@@ -64,14 +64,14 @@ export default function Layout({
   ]);
 
   const handleSave = async () => {
-    const nodesToTransform = getNodes() as CustomNode[];
-
+    const nodesToTransform = getNodes() as INode[];
+    console.log("nodesToTransform", nodesToTransform);
     const transformedNodes: Prisma.NodeCreateManyInput[] = nodesToTransform
-      .filter((n) => n.type === NodeType.CUSTOM)
+      .filter((n) => n.type != NodeType.INITIAL)
       .map((node) => {
         return {
           id: node.id,
-          nodeType: node.type,
+          nodeType: node.type as NodeType,
           data: node.data as unknown as NodeData,
           position: node.position as Position,
         };
@@ -84,9 +84,10 @@ export default function Layout({
         target: edge.target,
         sourceHandle: edge.sourceHandle ?? "main",
         targetHandle: edge.targetHandle ?? "main",
-      }),
+      })
     );
 
+    console.log("Transform nodes", transformedNodes);
     const saveWorkflow: {
       name: string;
       nodes: Prisma.NodeCreateManyInput[];

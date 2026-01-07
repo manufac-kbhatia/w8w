@@ -20,6 +20,7 @@ export type BaseNodeData = {
   nodeSchema?: NodeSchema;
   parameters?: Record<string, unknown>;
   credentialId?: string | null;
+  meta?: Record<string, unknown>;
 };
 
 export type InitialNodeData = {
@@ -44,7 +45,7 @@ export const checkMannualTriggerExist = (nodes: Node[]) => {
   const isMannualTriggerExist = nodes.find(
     (node) =>
       node.type === "CUSTOM" &&
-      (node as CustomNode).data.nodeSchema?.name === NodeNames.Manual,
+      (node as CustomNode).data.nodeSchema?.name === NodeNames.Manual
   );
   return isMannualTriggerExist ? true : false;
 };
