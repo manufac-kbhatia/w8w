@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
@@ -20,7 +20,7 @@ export async function GET(
             message: "Node not found",
           },
         },
-        { status: 404 }
+        { status: 404 },
       );
     }
     return NextResponse.json({
@@ -38,7 +38,7 @@ export async function GET(
             error instanceof Error ? error.message : "Something went wrong",
         },
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

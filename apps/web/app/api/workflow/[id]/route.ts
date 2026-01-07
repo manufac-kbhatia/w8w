@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
@@ -23,7 +23,7 @@ export async function GET(
           success: false,
           data: { message: "No workflow found with given id" },
         },
-        { status: 404 }
+        { status: 404 },
       );
     }
     return NextResponse.json({ success: true, data: { workflow } });
@@ -34,7 +34,7 @@ export async function GET(
           success: false,
           data: { message: error.message },
         },
-        { status: 500 }
+        { status: 500 },
       );
     } else {
       return NextResponse.json(
@@ -42,7 +42,7 @@ export async function GET(
           success: false,
           data: { message: "Something went wrong!" },
         },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }
@@ -50,7 +50,7 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
@@ -120,14 +120,14 @@ export async function PUT(
         success: false,
         error: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
@@ -143,7 +143,7 @@ export async function DELETE(
             message: `workflow with id: ${id} not found`,
           },
         },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -163,7 +163,7 @@ export async function DELETE(
           success: false,
           data: { message: error.message },
         },
-        { status: 500 }
+        { status: 500 },
       );
     } else {
       return NextResponse.json(
@@ -171,7 +171,7 @@ export async function DELETE(
           success: false,
           data: { message: "Something went wrong!" },
         },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }
