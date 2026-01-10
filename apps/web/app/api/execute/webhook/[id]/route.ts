@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
   const body = (await req.json()) as Record<string, unknown> | undefined;
@@ -26,7 +26,7 @@ export async function POST(
           message: "Webhook not found",
         },
       },
-      { status: 404 }
+      { status: 404 },
     );
   }
 
@@ -47,7 +47,7 @@ export async function POST(
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
 
@@ -68,7 +68,7 @@ export async function GET(
           message: "Webhook not found",
         },
       },
-      { status: 404 }
+      { status: 404 },
     );
   }
 

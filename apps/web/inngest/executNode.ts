@@ -14,7 +14,7 @@ export async function executeNode(
   adjacencyList: Record<string, string[]>,
   step: GetStepTools<Inngest.Any>,
   publish: Realtime.PublishFn,
-  workflowState: WorkflowState
+  workflowState: WorkflowState,
 ) {
   // Get the node
   const node = idToNode[nodeId];
@@ -56,8 +56,8 @@ export async function executeNode(
               adjacencyList,
               step,
               publish,
-              updatedWorkflowState
-            )
+              updatedWorkflowState,
+            ),
           );
         }
       }

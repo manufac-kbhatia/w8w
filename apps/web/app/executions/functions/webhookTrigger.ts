@@ -16,7 +16,7 @@ export const WebhookExecutionFunction: ExecutionFunction = async ({
   });
   const result = await step.run(
     "Webhook trigger execution",
-    () => workflowState
+    () => workflowState,
   );
 
   await publish({

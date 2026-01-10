@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
   const body = (await req.json()) as {
@@ -28,7 +28,7 @@ export async function POST(
           message: "Form not found",
         },
       },
-      { status: 404 }
+      { status: 404 },
     );
   }
 
