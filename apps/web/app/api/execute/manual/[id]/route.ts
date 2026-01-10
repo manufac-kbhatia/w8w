@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { inngest } from "../../../../inngest/client";
+import { inngest } from "../../../../../inngest/client";
 import { prisma } from "@w8w/db/client";
 
 // Opt out of caching; every request should send a new event
@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
 
@@ -30,12 +30,12 @@ export async function POST(
           message: "Workflow not found",
         },
       },
-      { status: 404 },
+      { status: 404 }
     );
   }
 
   await inngest.send({
-    name: "execute/workflow",
+    name: "execute/workflow/manual",
     data: {
       id,
     },

@@ -1,8 +1,16 @@
 import { serve } from "inngest/next";
 import { inngest } from "../../../inngest/client";
-import { executeWorkflow } from "@/inngest/functions";
+import {
+  executeWorkflowForm,
+  executeWorkflowManual,
+  executeWorkflowWebhook,
+} from "@/inngest/functions";
 
 export const { GET, POST, PUT } = serve({
   client: inngest,
-  functions: [executeWorkflow],
+  functions: [
+    executeWorkflowManual,
+    executeWorkflowForm,
+    executeWorkflowWebhook,
+  ],
 });

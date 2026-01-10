@@ -1,6 +1,6 @@
 "use client";
 import { type CustomNode } from "@/utils";
-import { Modal, Stack, Text, Title } from "@mantine/core";
+import { Button, CopyButton, Modal, Stack, Text, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { SupportedCredential } from "@/types";
 import { useReactFlow, type NodeProps } from "@xyflow/react";
@@ -14,7 +14,7 @@ import W8WBaseNode from "./W8WBaseNode";
 import { NodeStatus } from "../node-status-indicator";
 import { RenderNodeForm } from "./RenderNodeSchema";
 
-export default function CustomNode({
+export default function WebhookNode({
   data,
   id,
   ...rest
@@ -57,6 +57,15 @@ export default function CustomNode({
     getSupportedCredentials();
   }, [data.nodeSchema?.name]);
 
+  useEffect(() => {
+    updateNodeData(id, {
+      ...data,
+      parameters: {
+        baseUrl: id,
+      },
+    });
+  }, []);
+
   return (
     <>
       <W8WBaseNode
@@ -89,6 +98,13 @@ export default function CustomNode({
           </Stack>
         }
       >
+        <CopyButton value={`http://localhost:3000/api/execute/webhook/${id}`}>
+          {({ copied, copy }) => (
+            <Button onClick={copy} w={"fit-content"}>
+              {copied ? "Copied!" : "Copy webhook url"}
+            </Button>
+          )}
+        </CopyButton>
         <RenderNodeForm
           data={data}
           onSubmit={handleSubmit}

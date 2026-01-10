@@ -7,6 +7,7 @@ import { Node as INode, NodeType as INodeType } from "@w8w/db/prisma-browser";
 import axios from "axios";
 import { redirect } from "next/navigation";
 import FormNode from "@/components/node/FormNode";
+import WebhookNode from "@/components/node/WebhookNode";
 
 export const TABS = {
   workflow: "workflow",
@@ -29,11 +30,13 @@ export type InitialNodeData = {
 export type CustomNode = Node<BaseNodeData, "CUSTOM">;
 export type InitialNode = Node<InitialNodeData, "INITIAL">;
 export type FormNode = Node<BaseNodeData, "FORM">;
+export type WebhookNode = Node<BaseNodeData, "WEBHOOK">;
 
 export const nodeTypes: NodeTypes = {
   ["INITIAL"]: InitialNode,
   ["CUSTOM"]: CustomNode,
   ["FORM"]: FormNode,
+  ["WEBHOOK"]: WebhookNode,
 };
 
 export const createWorkflow = async () => {
@@ -45,7 +48,7 @@ export const checkMannualTriggerExist = (nodes: Node[]) => {
   const isMannualTriggerExist = nodes.find(
     (node) =>
       node.type === "CUSTOM" &&
-      (node as CustomNode).data.nodeSchema?.name === NodeNames.Manual,
+      (node as CustomNode).data.nodeSchema?.name === NodeNames.Manual
   );
   return isMannualTriggerExist ? true : false;
 };

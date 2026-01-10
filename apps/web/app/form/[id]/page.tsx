@@ -23,6 +23,15 @@ export default function Form() {
     getFormData();
   }, [id]);
 
+  const handleFormSubmit = async (values: Record<string, unknown>) => {
+    try {
+      await axios.post(`/api/execute/form/${id}`, { formValues: values });
+      form.reset();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const meta = node?.data?.meta as Record<string, unknown> | undefined;
   const fields = meta?.fields as FormField[] | undefined;
   const values = node?.data?.parameters as Record<string, string> | undefined;
@@ -38,7 +47,7 @@ export default function Form() {
           </Stack>
 
           <form
-            onSubmit={form.onSubmit((values) => console.log(values))}
+            onSubmit={form.onSubmit((values) => handleFormSubmit(values))}
             className="min-w-xl space-x-3"
           >
             <Stack>

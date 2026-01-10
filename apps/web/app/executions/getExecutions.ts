@@ -4,6 +4,8 @@ import { GetStepTools, Inngest } from "inngest";
 import { TimerExecutionFunction } from "./functions/TimerExecution";
 import { ManualTriggerExecutionFunction } from "./functions/manualTrigger";
 import { Realtime } from "@inngest/realtime/middleware";
+import { FormTriggerExecutionFunction } from "./functions/formTrigger";
+import { WebhookExecutionFunction } from "./functions/webhookTrigger";
 
 export type WorkflowState = Record<string, unknown>;
 
@@ -15,14 +17,14 @@ export type ExecutionFunctionArgs = {
 };
 
 export type ExecutionFunction = (
-  args: ExecutionFunctionArgs,
+  args: ExecutionFunctionArgs
 ) => Promise<WorkflowState>;
 
 export const ExecutionFunctions: Record<NodeName, ExecutionFunction> = {
   [NodeNames.Timer]: TimerExecutionFunction,
   [NodeNames.Manual]: ManualTriggerExecutionFunction,
-  [NodeNames.Webhook]: ManualTriggerExecutionFunction,
-  [NodeNames.Form]: ManualTriggerExecutionFunction, // Add form execution instead
+  [NodeNames.Webhook]: WebhookExecutionFunction,
+  [NodeNames.Form]: FormTriggerExecutionFunction,
 };
 
 export function getExecutionFucntion(name: NodeName): ExecutionFunction {

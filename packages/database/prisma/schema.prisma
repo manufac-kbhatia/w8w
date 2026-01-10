@@ -42,6 +42,7 @@ enum NodeType {
     INITIAL
     CUSTOM
     FORM
+    WEBHOOK
 }
 
 model Node {

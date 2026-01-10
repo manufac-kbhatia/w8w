@@ -44,6 +44,7 @@ export interface Properties {
   placeholder?: string;
   required?: boolean;
   default?: string;
+  readOnly?: boolean;
 }
 
 export const PropertyTypes = {

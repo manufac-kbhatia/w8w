@@ -52,10 +52,10 @@
     "iconUrl": "/timer.svg"
   },
   {
-    "name": "Webhoook",
+    "name": "Webhook",
     "description": "Starts the workflow when a webhook is called",
     "executionType": "trigger",
-    "nodeType": "CUSTOM",
+    "nodeType": "WEBHOOK",
     "properties": [
       {
         "displayName": "Name",
@@ -83,10 +83,6 @@
           {
             "displayName": "POST",
             "name": "POST"
-          },
-          {
-            "displayName": "DELETE",
-            "name": "DELETE"
           }
         ],
         "default": "GET"
@@ -95,10 +91,11 @@
         "displayName": "Path",
         "name": "baseUrl",
         "type": "string",
-        "default": ""
+        "default": "",
+        "readOnly": true
       }
     ],
-    "requiredCredential": true,
+    "requiredCredential": false,
     "iconUrl": "/webhook.svg"
   },
   {

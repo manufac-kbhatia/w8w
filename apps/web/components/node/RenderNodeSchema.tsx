@@ -60,6 +60,7 @@ export function RenderNodeForm({
                   description={property.description}
                   key={form.key(property.name)}
                   name={property.name}
+                  readOnly={property.readOnly}
                   {...form.getInputProps(property.name)}
                 />
               ) : (
@@ -70,6 +71,7 @@ export function RenderNodeForm({
                   description={property.description}
                   key={form.key(property.name)}
                   name={property.name}
+                  readOnly={property.readOnly}
                   {...form.getInputProps(property.name)}
                 />
               );
@@ -83,6 +85,7 @@ export function RenderNodeForm({
                   required={property.required}
                   description={property.description}
                   name={property.name}
+                  readOnly={property.readOnly}
                   {...form.getInputProps(property.name)}
                 />
               );
@@ -99,6 +102,24 @@ export function RenderNodeForm({
                   required={property.required}
                   description={property.description}
                   name={property.name}
+                  readOnly={property.readOnly}
+                  {...form.getInputProps(property.name)}
+                />
+              );
+            case PropertyTypes.select:
+              return (
+                <Select
+                  key={form.key(property.name)}
+                  data={property.options?.map((option) => ({
+                    value: option.name ?? "",
+                    label: option.displayName ?? "",
+                  }))}
+                  label={property.displayName}
+                  placeholder={property.placeholder}
+                  required={property.required}
+                  description={property.description}
+                  name={property.name}
+                  readOnly={property.readOnly}
                   {...form.getInputProps(property.name)}
                 />
               );
