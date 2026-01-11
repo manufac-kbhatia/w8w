@@ -83,7 +83,7 @@ export default function Layout({
         target: edge.target,
         sourceHandle: edge.sourceHandle ?? "main",
         targetHandle: edge.targetHandle ?? "main",
-      }),
+      })
     );
 
     const saveWorkflow: {
@@ -141,7 +141,7 @@ export default function Layout({
             {path.startsWith("/workflow") && (
               <Breadcrumbs separator="/" separatorMargin={4} mt="xs">
                 <Anchor href={`/?tab=${TABS.workflow}`} size="lg">
-                  workflow
+                  workflows
                 </Anchor>
                 <TextInput
                   size="md"
