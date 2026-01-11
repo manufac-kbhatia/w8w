@@ -46,7 +46,7 @@ export const SendTelegramMessageActionExecution: ExecutionFunction = async ({
     const chatId = nodeData.parameters?.chatId as string | undefined;
     const text = (nodeData.parameters?.text as string | undefined) ?? "";
     if (!chatId) throw new NonRetriableError("Chat Id not provided");
-    const bot = new TelegramBot(apiToken, { polling: true });
+    const bot = new TelegramBot(apiToken);
     const info = await bot.sendMessage(chatId, text);
     return info;
   });
