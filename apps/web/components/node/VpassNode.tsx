@@ -1,6 +1,6 @@
 "use client";
-import { type CustomNode } from "@/utils";
-import { Modal, Stack, Text, Title } from "@mantine/core";
+import { type VpaasNode } from "@/utils";
+import { Code, Modal, Stack, Tabs, Text, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { SupportedCredential } from "@/types";
 import { useReactFlow, type NodeProps } from "@xyflow/react";
@@ -10,20 +10,25 @@ import { useEffect, useState } from "react";
 import { useInngestSubscription } from "@inngest/realtime/hooks";
 import { fetchRealtimeSubscriptionToken } from "@/app/actions/get-subscribe-token";
 import { useParams } from "next/navigation";
+import { IconEditCircle, IconEye, IconInfoCircle } from "@tabler/icons-react";
+import { RenderNodeForm } from "./RenderNodeSchema";
 import W8WBaseNode from "./W8WBaseNode";
 import { NodeStatus } from "../node-status-indicator";
-import { RenderNodeForm } from "./RenderNodeSchema";
+import {
+  getInstructionInXml,
+  InstructionField,
+} from "../createVpaasInstrunction/utils";
+import CreateInstrunctions from "../createVpaasInstrunction";
 
-export default function VpaasNode({
-  data,
-  id,
-  ...rest
-}: NodeProps<CustomNode>) {
+export default function VpaasNode({ data, id, ...rest }: NodeProps<VpaasNode>) {
   const { id: workflowId } = useParams<{ id: string }>();
-  const { updateNodeData } = useReactFlow();
+  const { updateNodeData, getNode } = useReactFlow();
   const [opened, { close, open }] = useDisclosure();
   const [selectedCredential, setSelectedCredendtial] = useState(
-    data.credentialId,
+    data.credentialId
+  );
+  const [instructions, setInstructions] = useState<InstructionField[]>(
+    (data.meta?.instructions as InstructionField[] | undefined) ?? []
   );
 
   const { latestData } = useInngestSubscription({
@@ -38,6 +43,7 @@ export default function VpaasNode({
     updateNodeData(id, {
       ...data,
       parameters: values,
+      meta: { instructions },
       credentialId: selectedCredential,
     });
     close();
@@ -46,7 +52,7 @@ export default function VpaasNode({
   useEffect(() => {
     const getSupportedCredentials = async () => {
       const response = await axios.get(
-        `/api/credential/supported?name=${data.nodeSchema?.name}`,
+        `/api/credential/supported?name=${data.nodeSchema?.name}`
       );
       const supportedCredentials = response.data
         .supportedCredentials as SupportedCredential[];
@@ -56,6 +62,11 @@ export default function VpaasNode({
 
     getSupportedCredentials();
   }, [data.nodeSchema?.name]);
+
+  const currentNode = getNode(id);
+  if (!currentNode) return;
+
+  console.log(instructions);
 
   return (
     <>
@@ -89,14 +100,46 @@ export default function VpaasNode({
           </Stack>
         }
       >
-        <RenderNodeForm
-          data={data}
-          onSubmit={handleSubmit}
-          setSelectedCredendtial={setSelectedCredendtial}
-          selectedCredential={selectedCredential}
-          supportedCredentials={supportedCredentials}
-          onCancel={close}
-        />
+        <Tabs defaultValue="Basics">
+          <Tabs.List>
+            <Tabs.Tab value="Basics" leftSection={<IconInfoCircle size={20} />}>
+              Basics
+            </Tabs.Tab>
+            <Tabs.Tab value="Design" leftSection={<IconEditCircle size={20} />}>
+              Design Instructions
+            </Tabs.Tab>
+            <Tabs.Tab value="Preview" leftSection={<IconEye size={20} />}>
+              Preview
+            </Tabs.Tab>
+          </Tabs.List>
+
+          <Tabs.Panel value="Basics" p="md">
+            <Stack>
+              <RenderNodeForm
+                data={data}
+                onSubmit={handleSubmit}
+                setSelectedCredendtial={setSelectedCredendtial}
+                selectedCredential={selectedCredential}
+                supportedCredentials={supportedCredentials}
+                onCancel={close}
+              />
+            </Stack>
+          </Tabs.Panel>
+
+          <Tabs.Panel value="Design" p="md">
+            <CreateInstrunctions
+              onInstructionSave={(instruction) =>
+                setInstructions((prev) => [...prev, instruction])
+              }
+            />
+          </Tabs.Panel>
+
+          <Tabs.Panel value="Preview" p="md">
+            <Code color="blue.9" c="white" block>
+              {getInstructionInXml(instructions)}
+            </Code>
+          </Tabs.Panel>
+        </Tabs>
       </Modal>
     </>
   );

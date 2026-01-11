@@ -32,7 +32,7 @@ export type CustomNode = Node<BaseNodeData, "CUSTOM">;
 export type InitialNode = Node<InitialNodeData, "INITIAL">;
 export type FormNode = Node<BaseNodeData, "FORM">;
 export type WebhookNode = Node<BaseNodeData, "WEBHOOK">;
-export type VpassNode = Node<BaseNodeData, "VPAAS">;
+export type VpaasNode = Node<BaseNodeData, "VPAAS">;
 
 export const nodeTypes: NodeTypes = {
   ["INITIAL"]: InitialNode,
@@ -51,7 +51,7 @@ export const checkMannualTriggerExist = (nodes: Node[]) => {
   const isMannualTriggerExist = nodes.find(
     (node) =>
       node.type === "CUSTOM" &&
-      (node as CustomNode).data.nodeSchema?.name === NodeNames.Manual,
+      (node as CustomNode).data.nodeSchema?.name === NodeNames.Manual
   );
   return isMannualTriggerExist ? true : false;
 };

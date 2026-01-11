@@ -170,7 +170,7 @@
       {
         "displayName": "Record Session",
         "name": "recordSession",
-        "type": "options",
+        "type": "option",
         "options": [
           {
             "displayName": "True",
@@ -185,7 +185,7 @@
       }
     ],
     "requiredCredential": true,
-    "iconUrl": "/gmail.svg"
+    "iconUrl": "/vpaas.svg"
   },
   {
     "name": "Send Mail",
