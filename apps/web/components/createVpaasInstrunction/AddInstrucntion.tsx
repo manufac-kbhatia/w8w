@@ -36,7 +36,6 @@ export function AddInstruction({
   onCancel,
 }: AddInstructionProps) {
   const [config, setConfig] = useState<InstructionConfig>(initalConfig);
-  console.log("config", config);
 
   const [supportedCredentials, setSupportedCredentials] = useState<
     SupportedCredential[]
