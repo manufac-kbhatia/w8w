@@ -25,10 +25,10 @@ export default function VpaasNode({ data, id, ...rest }: NodeProps<VpaasNode>) {
   const { updateNodeData, getNode } = useReactFlow();
   const [opened, { close, open }] = useDisclosure();
   const [selectedCredential, setSelectedCredendtial] = useState(
-    data.credentialId
+    data.credentialId,
   );
   const [instructions, setInstructions] = useState<InstructionField[]>(
-    (data.meta?.instructions as InstructionField[] | undefined) ?? []
+    (data.meta?.instructions as InstructionField[] | undefined) ?? [],
   );
 
   const { latestData } = useInngestSubscription({
@@ -52,7 +52,7 @@ export default function VpaasNode({ data, id, ...rest }: NodeProps<VpaasNode>) {
   useEffect(() => {
     const getSupportedCredentials = async () => {
       const response = await axios.get(
-        `/api/credential/supported?name=${data.nodeSchema?.name}`
+        `/api/credential/supported?name=${data.nodeSchema?.name}`,
       );
       const supportedCredentials = response.data
         .supportedCredentials as SupportedCredential[];
