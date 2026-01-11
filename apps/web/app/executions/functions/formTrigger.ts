@@ -7,21 +7,24 @@ export const FormTriggerExecutionFunction: ExecutionFunction = async ({
   step,
   publish,
 }) => {
-  await publish({
-    channel: `Workflow:${workflowState.workflowId}`,
-    topic: `Node:${node.id}`,
-    data: {
-      status: NodeStatus.Loading,
-    },
+  await step.run(`publish loading:${node.id}`, async () => {
+    await publish({
+      channel: `Workflow:${workflowState.workflowId}`,
+      topic: `Node:${node.id}`,
+      data: { status: NodeStatus.Loading },
+    });
   });
-  const result = await step.run("Form trigger execution", () => workflowState);
+  const result = await step.run(
+    "Form trigger execution" + node.id,
+    () => workflowState
+  );
 
-  await publish({
-    channel: `Workflow:${workflowState.workflowId}`,
-    topic: `Node:${node.id}`,
-    data: {
-      status: NodeStatus.Success,
-    },
+  await step.run(`publish success:${node.id}`, async () => {
+    await publish({
+      channel: `Workflow:${workflowState.workflowId}`,
+      topic: `Node:${node.id}`,
+      data: { status: NodeStatus.Success },
+    });
   });
   return result;
 };

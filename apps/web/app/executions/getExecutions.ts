@@ -7,6 +7,7 @@ import { Realtime } from "@inngest/realtime/middleware";
 import { FormTriggerExecutionFunction } from "./functions/formTrigger";
 import { WebhookExecutionFunction } from "./functions/webhookTrigger";
 import { SendGmailActionExecution } from "./functions/send-mail-action";
+import { SendTelegramMessageActionExecution } from "./functions/send-telegram-message";
 
 export type WorkflowState = Record<string, unknown>;
 
@@ -18,7 +19,7 @@ export type ExecutionFunctionArgs = {
 };
 
 export type ExecutionFunction = (
-  args: ExecutionFunctionArgs,
+  args: ExecutionFunctionArgs
 ) => Promise<WorkflowState>;
 
 export const ExecutionFunctions: Record<NodeName, ExecutionFunction> = {
@@ -27,6 +28,7 @@ export const ExecutionFunctions: Record<NodeName, ExecutionFunction> = {
   [NodeNames.Webhook]: WebhookExecutionFunction,
   [NodeNames.Form]: FormTriggerExecutionFunction,
   [NodeNames.Send_Mail]: SendGmailActionExecution,
+  [NodeNames.Send_Telegram_Message]: SendTelegramMessageActionExecution,
 };
 
 export function getExecutionFucntion(name: NodeName): ExecutionFunction {
