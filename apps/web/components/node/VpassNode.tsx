@@ -15,89 +15,89 @@ import { NodeStatus } from "../node-status-indicator";
 import { RenderNodeForm } from "./RenderNodeSchema";
 
 export default function VpaasNode({
-    data,
-    id,
-    ...rest
+  data,
+  id,
+  ...rest
 }: NodeProps<CustomNode>) {
-    const { id: workflowId } = useParams<{ id: string }>();
-    const { updateNodeData } = useReactFlow();
-    const [opened, { close, open }] = useDisclosure();
-    const [selectedCredential, setSelectedCredendtial] = useState(
-        data.credentialId,
-    );
+  const { id: workflowId } = useParams<{ id: string }>();
+  const { updateNodeData } = useReactFlow();
+  const [opened, { close, open }] = useDisclosure();
+  const [selectedCredential, setSelectedCredendtial] = useState(
+    data.credentialId,
+  );
 
-    const { latestData } = useInngestSubscription({
-        refreshToken: () => fetchRealtimeSubscriptionToken(workflowId, id),
+  const { latestData } = useInngestSubscription({
+    refreshToken: () => fetchRealtimeSubscriptionToken(workflowId, id),
+  });
+
+  const [supportedCredentials, setSupportedCredentials] = useState<
+    SupportedCredential[]
+  >([]);
+
+  const handleSubmit = (values: Record<string, unknown>) => {
+    updateNodeData(id, {
+      ...data,
+      parameters: values,
+      credentialId: selectedCredential,
     });
+    close();
+  };
 
-    const [supportedCredentials, setSupportedCredentials] = useState<
-        SupportedCredential[]
-    >([]);
+  useEffect(() => {
+    const getSupportedCredentials = async () => {
+      const response = await axios.get(
+        `/api/credential/supported?name=${data.nodeSchema?.name}`,
+      );
+      const supportedCredentials = response.data
+        .supportedCredentials as SupportedCredential[];
 
-    const handleSubmit = (values: Record<string, unknown>) => {
-        updateNodeData(id, {
-            ...data,
-            parameters: values,
-            credentialId: selectedCredential,
-        });
-        close();
+      setSupportedCredentials(supportedCredentials);
     };
 
-    useEffect(() => {
-        const getSupportedCredentials = async () => {
-            const response = await axios.get(
-                `/api/credential/supported?name=${data.nodeSchema?.name}`,
-            );
-            const supportedCredentials = response.data
-                .supportedCredentials as SupportedCredential[];
+    getSupportedCredentials();
+  }, [data.nodeSchema?.name]);
 
-            setSupportedCredentials(supportedCredentials);
-        };
+  return (
+    <>
+      <W8WBaseNode
+        {...rest}
+        data={data}
+        id={id}
+        onDoubleClick={open}
+        onNodeEdit={open}
+        showToolbar={true}
+        status={latestData?.data.status as NodeStatus}
+      >
+        <Image
+          src={data.nodeSchema?.iconUrl ?? ""}
+          alt={data.nodeSchema?.name ?? ""}
+          width={20}
+          height={20}
+        />
+      </W8WBaseNode>
 
-        getSupportedCredentials();
-    }, [data.nodeSchema?.name]);
-
-    return (
-        <>
-            <W8WBaseNode
-                {...rest}
-                data={data}
-                id={id}
-                onDoubleClick={open}
-                onNodeEdit={open}
-                showToolbar={true}
-                status={latestData?.data.status as NodeStatus}
-            >
-                <Image
-                    src={data.nodeSchema?.iconUrl ?? ""}
-                    alt={data.nodeSchema?.name ?? ""}
-                    width={20}
-                    height={20}
-                />
-            </W8WBaseNode>
-
-            <Modal
-                centered
-                opened={opened}
-                onClose={close}
-                title={
-                    <Stack gap={1}>
-                        <Title component={"div"} order={1}>
-                            {data.nodeSchema?.name}
-                        </Title>
-                        <Text c="dimmed">{data.nodeSchema?.description}</Text>
-                    </Stack>
-                }
-            >
-                <RenderNodeForm
-                    data={data}
-                    onSubmit={handleSubmit}
-                    setSelectedCredendtial={setSelectedCredendtial}
-                    selectedCredential={selectedCredential}
-                    supportedCredentials={supportedCredentials}
-                    onCancel={close}
-                />
-            </Modal>
-        </>
-    );
+      <Modal
+        centered
+        opened={opened}
+        onClose={close}
+        title={
+          <Stack gap={1}>
+            <Title component={"div"} order={1}>
+              {data.nodeSchema?.name}
+            </Title>
+            <Text c="dimmed">{data.nodeSchema?.description}</Text>
+          </Stack>
+        }
+      >
+        <RenderNodeForm
+          data={data}
+          onSubmit={handleSubmit}
+          setSelectedCredendtial={setSelectedCredendtial}
+          selectedCredential={selectedCredential}
+          supportedCredentials={supportedCredentials}
+          onCancel={close}
+        />
+      </Modal>
+    </>
+  );
 }
