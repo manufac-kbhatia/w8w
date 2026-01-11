@@ -1,245 +1,308 @@
 [
-  {
-    "name": "Manual Trigger",
-    "description": "Runs the flow on clicking a button in w8w",
-    "executionType": "trigger",
-    "nodeType": "CUSTOM",
-    "properties": [
-      {
-        "displayName": "Name",
-        "name": "name",
-        "type": "string",
-        "default": "",
-        "required": true
-      },
-      {
-        "displayName": "Description",
-        "name": "description",
-        "type": "string",
-        "default": ""
-      }
-    ],
-    "requiredCredential": false,
-    "iconUrl": "/mannual.svg"
-  },
-  {
-    "name": "Timer Node",
-    "description": "Waits for the given time until to proceed further",
-    "executionType": "action",
-    "nodeType": "CUSTOM",
-    "properties": [
-      {
-        "displayName": "Name",
-        "name": "name",
-        "type": "string",
-        "default": "",
-        "required": true
-      },
-      {
-        "displayName": "Description",
-        "name": "description",
-        "type": "string",
-        "default": ""
-      },
-      {
-        "displayName": "Delay",
-        "name": "delay",
-        "type": "number",
-        "default": "0"
-      }
-    ],
-    "requiredCredential": false,
-    "iconUrl": "/timer.svg"
-  },
-  {
-    "name": "Webhook",
-    "description": "Starts the workflow when a webhook is called",
-    "executionType": "trigger",
-    "nodeType": "WEBHOOK",
-    "properties": [
-      {
-        "displayName": "Name",
-        "name": "name",
-        "type": "string",
-        "default": "",
-        "required": true
-      },
-      {
-        "displayName": "Description",
-        "name": "description",
-        "type": "string",
-        "default": "",
-        "required": true
-      },
-      {
-        "displayName": "HTTP Method",
-        "name": "httpMethod",
-        "type": "options",
-        "options": [
-          {
-            "displayName": "GET",
-            "name": "GET"
-          },
-          {
-            "displayName": "POST",
-            "name": "POST"
-          }
+    {
+        "name": "Manual Trigger",
+        "description": "Runs the flow on clicking a button in w8w",
+        "executionType": "trigger",
+        "nodeType": "CUSTOM",
+        "properties": [
+            {
+                "displayName": "Name",
+                "name": "name",
+                "type": "string",
+                "default": "",
+                "required": true
+            },
+            {
+                "displayName": "Description",
+                "name": "description",
+                "type": "string",
+                "default": ""
+            }
         ],
-        "default": "GET"
-      },
-      {
-        "displayName": "Path",
-        "name": "baseUrl",
-        "type": "string",
-        "default": "",
-        "readOnly": true
-      }
-    ],
-    "requiredCredential": false,
-    "iconUrl": "/webhook.svg"
-  },
-  {
-    "name": "Form",
-    "description": "Initiates workflow execution upon form submission",
-    "executionType": "trigger",
-    "nodeType": "FORM",
-    "properties": [
-      {
-        "displayName": "Name",
-        "description": "Name of the form will be shown to the shared user",
-        "name": "name",
-        "type": "string",
-        "default": "",
-        "required": true
-      },
-      {
-        "displayName": "Description",
-        "description": "Description of the form will be shown to the shared user",
-        "name": "description",
-        "type": "string",
-        "default": "",
-        "required": true
-      }
-    ],
-    "requiredCredential": false,
-    "iconUrl": "/form.svg"
-  },
-  {
-    "name": "Send Mail",
-    "description": "Sends an email via gmail",
-    "executionType": "action",
-    "nodeType": "CUSTOM",
-    "properties": [
-      {
-        "displayName": "Name",
-        "name": "name",
-        "type": "string",
-        "default": "",
-        "required": true
-      },
-      {
-        "displayName": "Description",
-        "name": "description",
-        "type": "string",
-        "default": ""
-      },
-      {
-        "displayName": "To",
-        "name": "to",
-        "type": "string",
-        "default": "",
-        "required": true
-      },
-      {
-        "displayName": "Subject",
-        "name": "subject",
-        "type": "string",
-        "default": "",
-        "required": true
-      },
-      {
-        "displayName": "Message",
-        "name": "message",
-        "type": "text",
-        "default": "",
-        "required": true
-      }
-    ],
-    "requiredCredential": true,
-    "iconUrl": "/gmail.svg"
-  },
-  {
-    "name": "Send Telegram Message",
-    "description": "Sends a text message",
-    "executionType": "action",
-    "nodeType": "CUSTOM",
-    "properties": [
-      {
-        "displayName": "Name",
-        "name": "name",
-        "type": "string",
-        "default": "",
-        "required": true
-      },
-      {
-        "displayName": "Description",
-        "name": "description",
-        "type": "string",
-        "default": ""
-      },
-      {
-        "displayName": "ChatID",
-        "name": "chatId",
-        "type": "string",
-        "default": "",
-        "required": true
-      },
-      {
-        "displayName": "Text",
-        "name": "text",
-        "type": "string",
-        "default": "",
-        "required": true
-      }
-    ],
-    "requiredCredential": true,
-    "iconUrl": "/telegram.svg"
-  },
-  {
-    "name": "Send SMS",
-    "description": "Sends a SMS via Twilio SMS service",
-    "executionType": "action",
-    "nodeType": "CUSTOM",
-    "properties": [
-      {
-        "displayName": "Name",
-        "name": "name",
-        "type": "string",
-        "default": "",
-        "required": true
-      },
-      {
-        "displayName": "Description",
-        "name": "description",
-        "type": "string",
-        "default": ""
-      },
-      {
-        "displayName": "From",
-        "name": "From",
-        "type": "string",
-        "default": "",
-        "required": true
-      },
-      {
-        "displayName": "To",
-        "name": "to",
-        "type": "string",
-        "default": "",
-        "required": true
-      }
-    ],
-    "requiredCredential": true,
-    "iconUrl": "/twilio.svg"
-  }
+        "requiredCredential": false,
+        "iconUrl": "/mannual.svg"
+    },
+    {
+        "name": "Timer Node",
+        "description": "Waits for the given time until to proceed further",
+        "executionType": "action",
+        "nodeType": "CUSTOM",
+        "properties": [
+            {
+                "displayName": "Name",
+                "name": "name",
+                "type": "string",
+                "default": "",
+                "required": true
+            },
+            {
+                "displayName": "Description",
+                "name": "description",
+                "type": "string",
+                "default": ""
+            },
+            {
+                "displayName": "Delay",
+                "name": "delay",
+                "type": "number",
+                "default": "0"
+            }
+        ],
+        "requiredCredential": false,
+        "iconUrl": "/timer.svg"
+    },
+    {
+        "name": "Webhook",
+        "description": "Starts the workflow when a webhook is called",
+        "executionType": "trigger",
+        "nodeType": "WEBHOOK",
+        "properties": [
+            {
+                "displayName": "Name",
+                "name": "name",
+                "type": "string",
+                "default": "",
+                "required": true
+            },
+            {
+                "displayName": "Description",
+                "name": "description",
+                "type": "string",
+                "default": "",
+                "required": true
+            },
+            {
+                "displayName": "HTTP Method",
+                "name": "httpMethod",
+                "type": "options",
+                "options": [
+                    {
+                        "displayName": "GET",
+                        "name": "GET"
+                    },
+                    {
+                        "displayName": "POST",
+                        "name": "POST"
+                    }
+                ],
+                "default": "GET"
+            },
+            {
+                "displayName": "Path",
+                "name": "baseUrl",
+                "type": "string",
+                "default": "",
+                "readOnly": true
+            }
+        ],
+        "requiredCredential": false,
+        "iconUrl": "/webhook.svg"
+    },
+    {
+        "name": "Form",
+        "description": "Initiates workflow execution upon form submission",
+        "executionType": "trigger",
+        "nodeType": "FORM",
+        "properties": [
+            {
+                "displayName": "Name",
+                "description": "Name of the form will be shown to the shared user",
+                "name": "name",
+                "type": "string",
+                "default": "",
+                "required": true
+            },
+            {
+                "displayName": "Description",
+                "description": "Description of the form will be shown to the shared user",
+                "name": "description",
+                "type": "string",
+                "default": "",
+                "required": true
+            }
+        ],
+        "requiredCredential": false,
+        "iconUrl": "/form.svg"
+    },
+    {
+        "name": "VPAAS",
+        "description": "Automate your call workflow",
+        "executionType": "action",
+        "nodeType": "VPAAS",
+        "properties": [
+            {
+                "displayName": "Name",
+                "name": "name",
+                "type": "string",
+                "default": "",
+                "required": true
+            },
+            {
+                "displayName": "Description",
+                "name": "description",
+                "type": "string",
+                "default": ""
+            },
+            {
+                "displayName": "To",
+                "name": "to",
+                "type": "string",
+                "description": "Number you want to call",
+                "default": "",
+                "required": true
+            },
+            {
+                "displayName": "Callback URL",
+                "name": "callbackUrl",
+                "type": "string",
+                "description": "Webhook to get the events of ongoing calls in this workflow",
+                "placeholder": "Enter the URL",
+                "required": false
+            },
+            {
+                "displayName": "Main Hangup URL",
+                "name": "mainHangupUrl",
+                "type": "string",
+                "description": "Webhook to get the hangup event of ongoing calls in this workflow",
+                "placeholder": "Enter the URL",
+                "required": false
+            },
+            {
+                "displayName": "Record Session",
+                "name": "recordSession",
+                "type": "options",
+                "options": [
+                    {
+                        "displayName": "True",
+                        "name": "true"
+                    },
+                    {
+                        "displayName": "False",
+                        "name": "false"
+                    }
+                ],
+                "default": "true"
+            }
+        ],
+        "requiredCredential": true,
+        "iconUrl": "/gmail.svg"
+    },
+    {
+        "name": "Send Mail",
+        "description": "Sends an email via gmail",
+        "executionType": "action",
+        "nodeType": "CUSTOM",
+        "properties": [
+            {
+                "displayName": "Name",
+                "name": "name",
+                "type": "string",
+                "default": "",
+                "required": true
+            },
+            {
+                "displayName": "Description",
+                "name": "description",
+                "type": "string",
+                "default": ""
+            },
+            {
+                "displayName": "To",
+                "name": "to",
+                "type": "string",
+                "default": "",
+                "required": true
+            },
+            {
+                "displayName": "Subject",
+                "name": "subject",
+                "type": "string",
+                "default": "",
+                "required": true
+            },
+            {
+                "displayName": "Message",
+                "name": "message",
+                "type": "text",
+                "default": "",
+                "required": true
+            }
+        ],
+        "requiredCredential": true,
+        "iconUrl": "/gmail.svg"
+    },
+    {
+        "name": "Send Telegram Message",
+        "description": "Sends a text message",
+        "executionType": "action",
+        "nodeType": "CUSTOM",
+        "properties": [
+            {
+                "displayName": "Name",
+                "name": "name",
+                "type": "string",
+                "default": "",
+                "required": true
+            },
+            {
+                "displayName": "Description",
+                "name": "description",
+                "type": "string",
+                "default": ""
+            },
+            {
+                "displayName": "ChatID",
+                "name": "chatId",
+                "type": "string",
+                "default": "",
+                "required": true
+            },
+            {
+                "displayName": "Text",
+                "name": "text",
+                "type": "string",
+                "default": "",
+                "required": true
+            }
+        ],
+        "requiredCredential": true,
+        "iconUrl": "/telegram.svg"
+    },
+    {
+        "name": "Send SMS",
+        "description": "Sends a SMS via Twilio SMS service",
+        "executionType": "action",
+        "nodeType": "CUSTOM",
+        "properties": [
+            {
+                "displayName": "Name",
+                "name": "name",
+                "type": "string",
+                "default": "",
+                "required": true
+            },
+            {
+                "displayName": "Description",
+                "name": "description",
+                "type": "string",
+                "default": ""
+            },
+            {
+                "displayName": "From",
+                "name": "From",
+                "type": "string",
+                "default": "",
+                "required": true
+            },
+            {
+                "displayName": "To",
+                "name": "to",
+                "type": "string",
+                "default": "",
+                "required": true
+            }
+        ],
+        "requiredCredential": true,
+        "iconUrl": "/twilio.svg"
+    }
 ]
