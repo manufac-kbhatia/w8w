@@ -41,10 +41,10 @@ export const executeWorkflowManual = inngest.createFunction(
     });
 
     const adjacencyList = await step.run("Prepare adjacency list", () =>
-      getAdjList(workflow.connections)
+      getAdjList(workflow.connections),
     );
     const inDegrees = await step.run("Prepare InDegrees for each edges", () =>
-      getInDegrees(workflow.connections)
+      getInDegrees(workflow.connections),
     );
 
     const workflowState: WorkflowState = { workflowId };
@@ -67,10 +67,10 @@ export const executeWorkflowManual = inngest.createFunction(
       adjacencyList,
       step,
       publish,
-      workflowState
+      workflowState,
     );
     return workflowState;
-  }
+  },
 );
 
 export const executeWorkflowForm = inngest.createFunction(
@@ -118,10 +118,10 @@ export const executeWorkflowForm = inngest.createFunction(
     });
 
     const adjacencyList = await step.run("Prepare adjacency list", () =>
-      getAdjList(workflow.connections)
+      getAdjList(workflow.connections),
     );
     const inDegrees = await step.run("Prepare InDegrees for each edges", () =>
-      getInDegrees(workflow.connections)
+      getInDegrees(workflow.connections),
     );
 
     // const inDegreesEntry = Object.entries(inDegrees);
@@ -140,11 +140,11 @@ export const executeWorkflowForm = inngest.createFunction(
       adjacencyList,
       step,
       publish,
-      workflowState
+      workflowState,
     );
 
     return workflowState;
-  }
+  },
 );
 
 export const executeWorkflowWebhook = inngest.createFunction(
@@ -190,10 +190,10 @@ export const executeWorkflowWebhook = inngest.createFunction(
     });
 
     const adjacencyList = await step.run("Prepare adjacency list", () =>
-      getAdjList(workflow.connections)
+      getAdjList(workflow.connections),
     );
     const inDegrees = await step.run("Prepare InDegrees for each edges", () =>
-      getInDegrees(workflow.connections)
+      getInDegrees(workflow.connections),
     );
 
     const webhookTrigger = workflow.nodes.find((node) => node.id === webhookId);
@@ -210,9 +210,9 @@ export const executeWorkflowWebhook = inngest.createFunction(
       adjacencyList,
       step,
       publish,
-      workflowState
+      workflowState,
     );
 
     return workflowState;
-  }
+  },
 );

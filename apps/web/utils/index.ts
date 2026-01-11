@@ -48,7 +48,7 @@ export const checkMannualTriggerExist = (nodes: Node[]) => {
   const isMannualTriggerExist = nodes.find(
     (node) =>
       node.type === "CUSTOM" &&
-      (node as CustomNode).data.nodeSchema?.name === NodeNames.Manual
+      (node as CustomNode).data.nodeSchema?.name === NodeNames.Manual,
   );
   return isMannualTriggerExist ? true : false;
 };
