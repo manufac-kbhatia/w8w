@@ -65,7 +65,6 @@ export default function Layout({
 
   const handleSave = async () => {
     const nodesToTransform = getNodes() as INode[];
-    console.log("nodesToTransform", nodesToTransform);
     const transformedNodes: Prisma.NodeCreateManyInput[] = nodesToTransform
       .filter((n) => n.type != NodeType.INITIAL)
       .map((node) => {
@@ -84,10 +83,9 @@ export default function Layout({
         target: edge.target,
         sourceHandle: edge.sourceHandle ?? "main",
         targetHandle: edge.targetHandle ?? "main",
-      }),
+      })
     );
 
-    console.log("Transform nodes", transformedNodes);
     const saveWorkflow: {
       name: string;
       nodes: Prisma.NodeCreateManyInput[];

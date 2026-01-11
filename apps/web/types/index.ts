@@ -56,6 +56,7 @@ export const PropertyTypes = {
   number: "number",
   select: "option",
   string: "string",
+  text: "text",
   credentialsSelect: "credentialsSelect",
   filter: "filter",
   credentials: "credentials",

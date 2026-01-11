@@ -48,7 +48,7 @@ export const checkMannualTriggerExist = (nodes: Node[]) => {
   const isMannualTriggerExist = nodes.find(
     (node) =>
       node.type === "CUSTOM" &&
-      (node as CustomNode).data.nodeSchema?.name === NodeNames.Manual,
+      (node as CustomNode).data.nodeSchema?.name === NodeNames.Manual
   );
   return isMannualTriggerExist ? true : false;
 };
@@ -109,6 +109,7 @@ export const NodeNames = {
   Manual: "Manual Trigger",
   Webhook: "Webhook",
   Form: "Form",
+  Send_Mail: "Send Mail",
 } as const;
 
 export type NodeName = (typeof NodeNames)[keyof typeof NodeNames];

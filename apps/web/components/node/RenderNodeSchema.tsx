@@ -9,6 +9,7 @@ import {
   MultiSelect,
   Group,
   Button,
+  Textarea,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 
@@ -34,6 +35,7 @@ export function RenderNodeForm({
     mode: "uncontrolled",
     initialValues: data.parameters,
   });
+
   return (
     <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
       <Stack>
@@ -72,6 +74,21 @@ export function RenderNodeForm({
                   key={form.key(property.name)}
                   name={property.name}
                   readOnly={property.readOnly}
+                  {...form.getInputProps(property.name)}
+                />
+              );
+
+            case PropertyTypes.text:
+              return (
+                <Textarea
+                  key={form.key(property.name)}
+                  label={property.displayName}
+                  placeholder={property.placeholder}
+                  required={property.required}
+                  description={property.description}
+                  name={property.name}
+                  readOnly={property.readOnly}
+                  autosize
                   {...form.getInputProps(property.name)}
                 />
               );

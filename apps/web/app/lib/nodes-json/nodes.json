@@ -160,7 +160,7 @@
       {
         "displayName": "Message",
         "name": "message",
-        "type": "string",
+        "type": "text",
         "default": "",
         "required": true
       }

@@ -41,10 +41,10 @@ export const executeWorkflowManual = inngest.createFunction(
     });
 
     const adjacencyList = await step.run("Prepare adjacency list", () =>
-      getAdjList(workflow.connections),
+      getAdjList(workflow.connections)
     );
     const inDegrees = await step.run("Prepare InDegrees for each edges", () =>
-      getInDegrees(workflow.connections),
+      getInDegrees(workflow.connections)
     );
 
     const workflowState: WorkflowState = { workflowId };
@@ -67,17 +67,16 @@ export const executeWorkflowManual = inngest.createFunction(
       adjacencyList,
       step,
       publish,
-      workflowState,
+      workflowState
     );
     return workflowState;
-  },
+  }
 );
 
 export const executeWorkflowForm = inngest.createFunction(
   { id: "execute-workflow-form" },
   { event: "execute/workflow/form" },
   async ({ event, step, publish }) => {
-    console.log("event", event);
     const formId = event.data.formId as string | undefined;
     const workflowId = event.data.id as string | undefined;
     const formValues = event.data.formValues as
@@ -119,10 +118,10 @@ export const executeWorkflowForm = inngest.createFunction(
     });
 
     const adjacencyList = await step.run("Prepare adjacency list", () =>
-      getAdjList(workflow.connections),
+      getAdjList(workflow.connections)
     );
     const inDegrees = await step.run("Prepare InDegrees for each edges", () =>
-      getInDegrees(workflow.connections),
+      getInDegrees(workflow.connections)
     );
 
     // const inDegreesEntry = Object.entries(inDegrees);
@@ -141,18 +140,17 @@ export const executeWorkflowForm = inngest.createFunction(
       adjacencyList,
       step,
       publish,
-      workflowState,
+      workflowState
     );
 
     return workflowState;
-  },
+  }
 );
 
 export const executeWorkflowWebhook = inngest.createFunction(
   { id: "execute-workflow-webhook" },
   { event: "execute/workflow/webhook" },
   async ({ event, step, publish }) => {
-    console.log("event", event);
     const webhookId = event.data.webhookId as string | undefined;
     const workflowId = event.data.id as string | undefined;
     const webhookApiData = event.data.webhookApiData as
@@ -192,10 +190,10 @@ export const executeWorkflowWebhook = inngest.createFunction(
     });
 
     const adjacencyList = await step.run("Prepare adjacency list", () =>
-      getAdjList(workflow.connections),
+      getAdjList(workflow.connections)
     );
     const inDegrees = await step.run("Prepare InDegrees for each edges", () =>
-      getInDegrees(workflow.connections),
+      getInDegrees(workflow.connections)
     );
 
     const webhookTrigger = workflow.nodes.find((node) => node.id === webhookId);
@@ -212,9 +210,9 @@ export const executeWorkflowWebhook = inngest.createFunction(
       adjacencyList,
       step,
       publish,
-      workflowState,
+      workflowState
     );
 
     return workflowState;
-  },
+  }
 );
