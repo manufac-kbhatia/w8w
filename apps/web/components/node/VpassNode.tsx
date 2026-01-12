@@ -1,15 +1,16 @@
 "use client";
 import { type VpaasNode } from "@/utils";
 import {
-  ActionIcon,
-  Card,
-  Code,
-  Group,
-  Modal,
-  Stack,
-  Tabs,
-  Text,
-  Title,
+    ActionIcon,
+    Card,
+    Code,
+    Group,
+    Modal,
+    Stack,
+    Tabs,
+    Text,
+    ThemeIcon,
+    Title,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { SupportedCredential } from "@/types";
@@ -21,179 +22,192 @@ import { useInngestSubscription } from "@inngest/realtime/hooks";
 import { fetchRealtimeSubscriptionToken } from "@/app/actions/get-subscribe-token";
 import { useParams } from "next/navigation";
 import {
-  IconEditCircle,
-  IconEye,
-  IconInfoCircle,
-  IconTrash,
+    IconEditCircle,
+    IconEye,
+    IconInfoCircle,
+    IconPhoneCall,
+    IconPhoneX,
+    IconPlayerPlay,
+    IconSpeakerphone,
+    IconTrash,
 } from "@tabler/icons-react";
 import { RenderNodeForm } from "./RenderNodeSchema";
 import W8WBaseNode from "./W8WBaseNode";
 import { NodeStatus } from "../node-status-indicator";
 import {
-  getInstructionInXml,
-  InstructionField,
+    getInstructionInXml,
+    InstructionField,
+    Instrunctions,
 } from "../createVpaasInstrunction/utils";
 import CreateInstrunctions from "../createVpaasInstrunction";
 import { Reorder, useDragControls } from "framer-motion";
 
 export default function VpaasNode({ data, id, ...rest }: NodeProps<VpaasNode>) {
-  const { id: workflowId } = useParams<{ id: string }>();
-  const { updateNodeData, getNode } = useReactFlow();
-  const [opened, { close, open }] = useDisclosure();
-  const [selectedCredential, setSelectedCredendtial] = useState(
-    data.credentialId,
-  );
-  const [instructions, setInstructions] = useState<InstructionField[]>(
-    (data.meta?.instructions as InstructionField[] | undefined) ?? [],
-  );
+    const { id: workflowId } = useParams<{ id: string }>();
+    const { updateNodeData, getNode } = useReactFlow();
+    const [opened, { close, open }] = useDisclosure();
+    const [selectedCredential, setSelectedCredendtial] = useState(
+        data.credentialId,
+    );
+    const [instructions, setInstructions] = useState<InstructionField[]>(
+        (data.meta?.instructions as InstructionField[] | undefined) ?? [],
+    );
 
-  const { latestData } = useInngestSubscription({
-    refreshToken: () => fetchRealtimeSubscriptionToken(workflowId, id),
-  });
-
-  const [supportedCredentials, setSupportedCredentials] = useState<
-    SupportedCredential[]
-  >([]);
-  const controls = useDragControls();
-
-  const handleSubmit = (values: Record<string, unknown>) => {
-    updateNodeData(id, {
-      ...data,
-      parameters: values,
-      meta: { instructions },
-      credentialId: selectedCredential,
+    const { latestData } = useInngestSubscription({
+        refreshToken: () => fetchRealtimeSubscriptionToken(workflowId, id),
     });
-    close();
-  };
 
-  useEffect(() => {
-    const getSupportedCredentials = async () => {
-      const response = await axios.get(
-        `/api/credential/supported?name=${data.nodeSchema?.name}`,
-      );
-      const supportedCredentials = response.data
-        .supportedCredentials as SupportedCredential[];
+    const [supportedCredentials, setSupportedCredentials] = useState<
+        SupportedCredential[]
+    >([]);
+    const controls = useDragControls();
 
-      setSupportedCredentials(supportedCredentials);
+    const handleSubmit = (values: Record<string, unknown>) => {
+        updateNodeData(id, {
+            ...data,
+            parameters: values,
+            meta: { instructions },
+            credentialId: selectedCredential,
+        });
+        close();
     };
 
-    getSupportedCredentials();
-  }, [data.nodeSchema?.name]);
+    useEffect(() => {
+        const getSupportedCredentials = async () => {
+            const response = await axios.get(
+                `/api/credential/supported?name=${data.nodeSchema?.name}`,
+            );
+            const supportedCredentials = response.data
+                .supportedCredentials as SupportedCredential[];
 
-  const currentNode = getNode(id);
-  if (!currentNode) return;
+            setSupportedCredentials(supportedCredentials);
+        };
 
-  return (
-    <>
-      <W8WBaseNode
-        {...rest}
-        data={data}
-        id={id}
-        onDoubleClick={open}
-        onNodeEdit={open}
-        showToolbar={true}
-        status={latestData?.data.status as NodeStatus}
-      >
-        <Image
-          src={data.nodeSchema?.iconUrl ?? ""}
-          alt={data.nodeSchema?.name ?? ""}
-          width={20}
-          height={20}
-        />
-      </W8WBaseNode>
+        getSupportedCredentials();
+    }, [data.nodeSchema?.name]);
 
-      <Modal
-        centered
-        opened={opened}
-        onClose={close}
-        title={
-          <Stack gap={1}>
-            <Title component={"div"} order={1}>
-              {data.nodeSchema?.name}
-            </Title>
-            <Text c="dimmed">{data.nodeSchema?.description}</Text>
-          </Stack>
-        }
-      >
-        <Tabs defaultValue="Basics">
-          <Tabs.List>
-            <Tabs.Tab value="Basics" leftSection={<IconInfoCircle size={20} />}>
-              Basics
-            </Tabs.Tab>
-            <Tabs.Tab value="Design" leftSection={<IconEditCircle size={20} />}>
-              Design Instructions
-            </Tabs.Tab>
-            <Tabs.Tab value="Preview" leftSection={<IconEye size={20} />}>
-              Preview
-            </Tabs.Tab>
-          </Tabs.List>
+    const currentNode = getNode(id);
+    if (!currentNode) return;
 
-          <Tabs.Panel value="Basics" p="md">
-            <Stack>
-              <RenderNodeForm
+    return (
+        <>
+            <W8WBaseNode
+                {...rest}
                 data={data}
-                onSubmit={handleSubmit}
-                setSelectedCredendtial={setSelectedCredendtial}
-                selectedCredential={selectedCredential}
-                supportedCredentials={supportedCredentials}
-                onCancel={close}
-              />
-            </Stack>
-          </Tabs.Panel>
+                id={id}
+                onDoubleClick={open}
+                onNodeEdit={open}
+                showToolbar={true}
+                status={latestData?.data.status as NodeStatus}
+            >
+                <Image
+                    src={data.nodeSchema?.iconUrl ?? ""}
+                    alt={data.nodeSchema?.name ?? ""}
+                    width={20}
+                    height={20}
+                />
+            </W8WBaseNode>
 
-          <Tabs.Panel value="Design" p="md">
-            <CreateInstrunctions
-              onInstructionSave={(instruction) =>
-                setInstructions((prev) => [...prev, instruction])
-              }
-            />
-          </Tabs.Panel>
+            <Modal
+                centered
+                opened={opened}
+                onClose={close}
+                title={
+                    <Stack gap={1}>
+                        <Title component={"div"} order={1}>
+                            {data.nodeSchema?.name}
+                        </Title>
+                        <Text c="dimmed">{data.nodeSchema?.description}</Text>
+                    </Stack>
+                }
+            >
+                <Tabs defaultValue="Basics">
+                    <Tabs.List>
+                        <Tabs.Tab value="Basics" leftSection={<IconInfoCircle size={20} />}>
+                            Basics
+                        </Tabs.Tab>
+                        <Tabs.Tab value="Design" leftSection={<IconEditCircle size={20} />}>
+                            Design Instructions
+                        </Tabs.Tab>
+                        <Tabs.Tab value="Preview" leftSection={<IconEye size={20} />}>
+                            Preview
+                        </Tabs.Tab>
+                    </Tabs.List>
 
-          <Tabs.Panel value="Preview" p="md">
-            <Stack gap="md">
-              <Reorder.Group
-                axis="y"
-                values={instructions}
-                onReorder={setInstructions}
-                className="space-y-2"
-              >
-                {instructions.map((instruction) => (
-                  <Reorder.Item key={instruction.fieldId} value={instruction}>
-                    <Card
-                      withBorder
-                      shadow="sm"
-                      p="xs"
-                      className="cursor-pointer"
-                    >
-                      <Group justify="space-between">
-                        <Text>{instruction.instructionName}</Text>
-                        <ActionIcon
-                          variant="subtle"
-                          radius="sm"
-                          size="xs"
-                          onClick={() =>
-                            setInstructions((prev) =>
-                              prev.filter(
-                                (p) => p.fieldId !== instruction.fieldId,
-                              ),
-                            )
-                          }
-                        >
-                          <IconTrash />
-                        </ActionIcon>
-                      </Group>
-                    </Card>
-                  </Reorder.Item>
-                ))}
-              </Reorder.Group>
+                    <Tabs.Panel value="Basics" p="md">
+                        <Stack>
+                            <RenderNodeForm
+                                data={data}
+                                onSubmit={handleSubmit}
+                                setSelectedCredendtial={setSelectedCredendtial}
+                                selectedCredential={selectedCredential}
+                                supportedCredentials={supportedCredentials}
+                                onCancel={close}
+                            />
+                        </Stack>
+                    </Tabs.Panel>
 
-              <Code color="blue.9" c="white" block>
-                {getInstructionInXml(instructions)}
-              </Code>
-            </Stack>
-          </Tabs.Panel>
-        </Tabs>
-      </Modal>
-    </>
-  );
+                    <Tabs.Panel value="Design" p="md">
+                        <CreateInstrunctions
+                            onInstructionSave={(instruction) =>
+                                setInstructions((prev) => [...prev, instruction])
+                            }
+                        />
+                    </Tabs.Panel>
+
+                    <Tabs.Panel value="Preview" p="md">
+                        <Stack gap="md">
+                            <Reorder.Group
+                                axis="y"
+                                values={instructions}
+                                onReorder={setInstructions}
+                                className="space-y-2"
+                            >
+                                {instructions.map((instruction) => (
+                                    <Reorder.Item key={instruction.fieldId} value={instruction}>
+                                        <Card
+                                            withBorder
+                                            shadow="sm"
+                                            p="xs"
+                                            className="cursor-pointer"
+                                        >
+                                            <Group justify="space-between">
+                                                <Group>
+                                                    <ThemeIcon variant="subtle" size="xs" radius="md">
+                                                        {instruction.instructionName === Instrunctions.Play && <IconPlayerPlay />}
+                                                        {instruction.instructionName === Instrunctions.Dial && <IconPhoneCall />}
+                                                        {instruction.instructionName === Instrunctions.Speak && <IconSpeakerphone />}
+                                                        {instruction.instructionName === Instrunctions.Hangup && <IconPhoneX />}
+                                                    </ThemeIcon>
+                                                    <Text>{instruction.instructionName}</Text>
+                                                </Group>
+                                                <ActionIcon
+                                                    variant="subtle"
+                                                    radius="sm"
+                                                    size="xs"
+                                                    onClick={() =>
+                                                        setInstructions((prev) =>
+                                                            prev.filter(
+                                                                (p) => p.fieldId !== instruction.fieldId,
+                                                            ),
+                                                        )
+                                                    }
+                                                >
+                                                    <IconTrash />
+                                                </ActionIcon>
+                                            </Group>
+                                        </Card>
+                                    </Reorder.Item>
+                                ))}
+                            </Reorder.Group>
+
+                            <Code color="blue.9" c="white" block>
+                                {getInstructionInXml(instructions)}
+                            </Code>
+                        </Stack>
+                    </Tabs.Panel>
+                </Tabs>
+            </Modal>
+        </>
+    );
 }
