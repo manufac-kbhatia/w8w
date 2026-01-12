@@ -10,13 +10,17 @@
         "name": "name",
         "type": "string",
         "default": "",
-        "required": true
+        "required": true,
+        "description": "A friendly name to identify this manual trigger",
+        "placeholder": "Manual Trigger"
       },
       {
         "displayName": "Description",
         "name": "description",
         "type": "string",
-        "default": ""
+        "default": "",
+        "description": "Additional details explaining when or why this trigger is used",
+        "placeholder": "Triggered manually by the user"
       }
     ],
     "requiredCredential": false,
@@ -33,19 +37,25 @@
         "name": "name",
         "type": "string",
         "default": "",
-        "required": true
+        "required": true,
+        "description": "A friendly name to identify this timer node",
+        "placeholder": "Delay Timer"
       },
       {
         "displayName": "Description",
         "name": "description",
         "type": "string",
-        "default": ""
+        "default": "",
+        "description": "Explanation of why this delay is added to the workflow",
+        "placeholder": "Wait before continuing the workflow"
       },
       {
         "displayName": "Delay",
         "name": "delay",
         "type": "number",
-        "default": "0"
+        "default": "0",
+        "description": "Time to wait before proceeding to the next step (in milliseconds)",
+        "placeholder": "5000"
       }
     ],
     "requiredCredential": false,
@@ -62,14 +72,18 @@
         "name": "name",
         "type": "string",
         "default": "",
-        "required": true
+        "required": true,
+        "description": "A friendly name to identify this webhook trigger",
+        "placeholder": "Incoming Webhook"
       },
       {
         "displayName": "Description",
         "name": "description",
         "type": "string",
         "default": "",
-        "required": true
+        "required": true,
+        "description": "Explanation of what event or system triggers this webhook",
+        "placeholder": "Triggered by external HTTP request"
       },
       {
         "displayName": "HTTP Method",
@@ -85,14 +99,18 @@
             "name": "POST"
           }
         ],
-        "default": "GET"
+        "default": "GET",
+        "description": "HTTP method that the webhook endpoint will accept",
+        "placeholder": "GET"
       },
       {
         "displayName": "Path",
         "name": "baseUrl",
         "type": "string",
         "default": "",
-        "readOnly": true
+        "readOnly": true,
+        "description": "Auto-generated webhook URL path used to receive requests",
+        "placeholder": "/webhook/your-path"
       }
     ],
     "requiredCredential": false,
@@ -106,19 +124,21 @@
     "properties": [
       {
         "displayName": "Name",
-        "description": "Name of the form will be shown to the shared user",
         "name": "name",
         "type": "string",
         "default": "",
-        "required": true
+        "required": true,
+        "description": "Title of the form shown to users",
+        "placeholder": "User Registration Form"
       },
       {
         "displayName": "Description",
-        "description": "Description of the form will be shown to the shared user",
         "name": "description",
         "type": "string",
         "default": "",
-        "required": true
+        "required": true,
+        "description": "Short explanation displayed to users before submitting the form",
+        "placeholder": "Please fill in the details below"
       }
     ],
     "requiredCredential": false,
@@ -135,36 +155,41 @@
         "name": "name",
         "type": "string",
         "default": "",
-        "required": true
+        "required": true,
+        "description": "A friendly name to identify this VPAAS action",
+        "placeholder": "Outbound Call"
       },
       {
         "displayName": "Description",
         "name": "description",
         "type": "string",
-        "default": ""
+        "default": "",
+        "description": "Additional details about this call automation step",
+        "placeholder": "Call customer for verification"
       },
       {
         "displayName": "To",
         "name": "to",
         "type": "string",
-        "description": "Number you want to call",
+        "description": "Destination phone number that will receive the call",
         "default": "",
-        "required": true
+        "required": true,
+        "placeholder": "+91XXXXXXXXXX"
       },
       {
         "displayName": "Callback URL",
         "name": "callbackUrl",
         "type": "string",
-        "description": "Webhook to get the events of ongoing calls in this workflow",
-        "placeholder": "Enter the URL",
+        "description": "Webhook URL to receive call events such as ringing or answered",
+        "placeholder": "https://example.com/callback",
         "required": false
       },
       {
         "displayName": "Main Hangup URL",
         "name": "mainHangupUrl",
         "type": "string",
-        "description": "Webhook to get the hangup event of ongoing calls in this workflow",
-        "placeholder": "Enter the URL",
+        "description": "Webhook URL triggered when the call ends",
+        "placeholder": "https://example.com/hangup",
         "required": false
       },
       {
@@ -181,7 +206,9 @@
             "name": "false"
           }
         ],
-        "default": "true"
+        "default": "true",
+        "description": "Enable or disable call recording for this session",
+        "placeholder": "true"
       }
     ],
     "requiredCredential": true,
@@ -198,34 +225,44 @@
         "name": "name",
         "type": "string",
         "default": "",
-        "required": true
+        "required": true,
+        "description": "A friendly name to identify this email action",
+        "placeholder": "Send Welcome Email"
       },
       {
         "displayName": "Description",
         "name": "description",
         "type": "string",
-        "default": ""
+        "default": "",
+        "description": "Additional context about the email being sent",
+        "placeholder": "Email sent after user signup"
       },
       {
         "displayName": "To",
         "name": "to",
         "type": "string",
         "default": "",
-        "required": true
+        "required": true,
+        "description": "Recipient email address",
+        "placeholder": "user@example.com"
       },
       {
         "displayName": "Subject",
         "name": "subject",
         "type": "string",
         "default": "",
-        "required": true
+        "required": true,
+        "description": "Subject line of the email",
+        "placeholder": "Welcome to our platform"
       },
       {
         "displayName": "Message",
         "name": "message",
         "type": "text",
         "default": "",
-        "required": true
+        "required": true,
+        "description": "Body content of the email",
+        "placeholder": "Hello {{name}}, welcome to our service!"
       }
     ],
     "requiredCredential": true,
@@ -242,27 +279,35 @@
         "name": "name",
         "type": "string",
         "default": "",
-        "required": true
+        "required": true,
+        "description": "A friendly name to identify this Telegram message action",
+        "placeholder": "Send Telegram Alert"
       },
       {
         "displayName": "Description",
         "name": "description",
         "type": "string",
-        "default": ""
+        "default": "",
+        "description": "Additional context about the Telegram message",
+        "placeholder": "Notify admin via Telegram"
       },
       {
         "displayName": "ChatID",
         "name": "chatId",
         "type": "string",
         "default": "",
-        "required": true
+        "required": true,
+        "description": "Telegram chat ID where the message will be sent",
+        "placeholder": "123456789"
       },
       {
         "displayName": "Text",
         "name": "text",
         "type": "string",
         "default": "",
-        "required": true
+        "required": true,
+        "description": "Message content to send via Telegram",
+        "placeholder": "Workflow execution completed successfully"
       }
     ],
     "requiredCredential": true,
@@ -279,27 +324,35 @@
         "name": "name",
         "type": "string",
         "default": "",
-        "required": true
+        "required": true,
+        "description": "A friendly name to identify this SMS action",
+        "placeholder": "Send OTP SMS"
       },
       {
         "displayName": "Description",
         "name": "description",
         "type": "string",
-        "default": ""
+        "default": "",
+        "description": "Additional context about the SMS being sent",
+        "placeholder": "OTP verification message"
       },
       {
         "displayName": "From",
         "name": "From",
         "type": "string",
         "default": "",
-        "required": true
+        "required": true,
+        "description": "Sender phone number registered with Twilio",
+        "placeholder": "+1XXXXXXXXXX"
       },
       {
         "displayName": "To",
         "name": "to",
         "type": "string",
         "default": "",
-        "required": true
+        "required": true,
+        "description": "Recipient phone number",
+        "placeholder": "+91XXXXXXXXXX"
       }
     ],
     "requiredCredential": true,
