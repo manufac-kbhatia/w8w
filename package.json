@@ -25,6 +25,7 @@
   ],
   "dependencies": {
     "@mantine/notifications": "^8.3.1",
-    "@tabler/icons-react": "^3.34.1"
+    "@tabler/icons-react": "^3.34.1",
+    "framer-motion": "^12.25.0"
   }
 }
