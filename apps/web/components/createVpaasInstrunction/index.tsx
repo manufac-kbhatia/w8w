@@ -63,9 +63,10 @@ export default function CreateInstrunctions({
     <Stack>
       <Stack>
         <Text size="md" fw={500}>
-          Select a instruction to add
+          Select an instruction to add
         </Text>
         <Select
+          placeholder="Select an instruction to add"
           data={Object.values(Instrunctions)}
           value={value}
           onChange={(value) => handleSelectInput(value as Instrunction)}

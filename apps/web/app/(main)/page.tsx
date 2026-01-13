@@ -5,6 +5,7 @@ import { Credentials } from "@/components/credentials";
 import { Tab, TABS } from "@/utils";
 import { Workflows } from "@/components/workflows";
 import { useSearchParams } from "next/navigation";
+import axios from "axios";
 
 export default function Page() {
   const [tab, setTab] = useState<Tab>(TABS.credential);

@@ -55,7 +55,7 @@ export function getPlayXml(config: PlayInstruction) {
 }
 
 export function getSpeakXml(config: SpeakInstruction) {
-  return `<Speak voiceId="${config.voiceId}" language="${config.language}">${config.text}</Speak>`;
+  return `<Speak voiceId="${config.voiceId}" language="${config.language}" accountId={from-credential}>${config.text}</Speak>`;
 }
 
 export function getDialXml(config: DialInstruction) {

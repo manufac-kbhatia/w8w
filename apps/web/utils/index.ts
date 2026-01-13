@@ -113,6 +113,7 @@ export const NodeNames = {
   Webhook: "Webhook",
   Form: "Form",
   Send_Mail: "Send Mail",
+  Vpaas: "VPAAS",
   Send_Telegram_Message: "Send Telegram Message",
 } as const;
 

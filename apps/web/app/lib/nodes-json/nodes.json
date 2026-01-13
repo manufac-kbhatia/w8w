@@ -177,12 +177,20 @@
         "placeholder": "+91XXXXXXXXXX"
       },
       {
+        "displayName": "Answer Url",
+        "name": "answerUrl",
+        "type": "string",
+        "description": "Answer URL to get next set of instructions after the first leg has been answered",
+        "placeholder": "https://example.com/callback",
+        "required": true
+      },
+      {
         "displayName": "Callback URL",
         "name": "callbackUrl",
         "type": "string",
         "description": "Webhook URL to receive call events such as ringing or answered",
         "placeholder": "https://example.com/callback",
-        "required": false
+        "required": true
       },
       {
         "displayName": "Main Hangup URL",
@@ -190,7 +198,7 @@
         "type": "string",
         "description": "Webhook URL triggered when the call ends",
         "placeholder": "https://example.com/hangup",
-        "required": false
+        "required": true
       },
       {
         "displayName": "Record Session",

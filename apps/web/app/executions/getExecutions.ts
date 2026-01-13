@@ -8,6 +8,7 @@ import { FormTriggerExecutionFunction } from "./functions/formTrigger";
 import { WebhookExecutionFunction } from "./functions/webhookTrigger";
 import { SendGmailActionExecution } from "./functions/send-mail-action";
 import { SendTelegramMessageActionExecution } from "./functions/send-telegram-message";
+import { VpaasActionExecutionFunction } from "./functions/vpaas-action";
 
 export type WorkflowState = Record<string, unknown>;
 
@@ -29,6 +30,7 @@ export const ExecutionFunctions: Record<NodeName, ExecutionFunction> = {
   [NodeNames.Form]: FormTriggerExecutionFunction,
   [NodeNames.Send_Mail]: SendGmailActionExecution,
   [NodeNames.Send_Telegram_Message]: SendTelegramMessageActionExecution,
+  [NodeNames.Vpaas]: VpaasActionExecutionFunction,
 };
 
 export function getExecutionFucntion(name: NodeName): ExecutionFunction {
